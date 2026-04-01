@@ -468,14 +468,30 @@ body {
   white-space: nowrap;
   box-shadow: 0 3px 8px rgba(0,0,0,0.2);
   opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   transform: translateY(6px);
-  transition: all 0.2s ease;
+  transition: opacity 0.8s ease, transform 0.8s ease, visibility 0s linear 0.8s;
 }
 
-.raichu-wrapper:hover .raichu-bubble,
-.raichu-bubble.show {
+.raichu-bubble.show,
+.raichu-bubble.hover-show {
   opacity: 1;
+  visibility: visible;
   transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0s;
+}
+
+
+/* Keep header on one line on mobile */
+.header h1 {
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .header h1 {
+    font-size: 1.6rem;
+  }
 }
 
 </style>
@@ -708,7 +724,7 @@ body {
       document.getElementById("toggleDescriptionBtn").textContent = "add summary";
       await loadItems();
       showRaichuMessage('good choice! ⚡');
-      if (status === 'finished') { showRaichuMessage('was it any good? 🤔'); }
+      if (status === 'finished') { showRaichuMessage('was it any good?'); }
       showRaichuMessage('good choice! ⚡');
     }
 
@@ -730,7 +746,7 @@ body {
       await loadItems();
 
       if (status === "finished") {
-        showRaichuMessage("was it any good? 🤔");
+        showRaichuMessage("was it any good?");
       }
     }
 
@@ -779,17 +795,24 @@ body {
 
     const raichuBubble = document.getElementById('raichuBubble');
     const raichuWrapper = document.querySelector('.raichu-wrapper');
+    let raichuTemporaryMessage = false;
 
     if (raichuWrapper && raichuBubble) {
       raichuWrapper.addEventListener('mouseenter', () => {
-        if (!raichuBubble.classList.contains('show')) {
+        if (!raichuTemporaryMessage) {
           raichuBubble.textContent = raichuBubble.dataset.default || 'hi gf 💛';
+          raichuBubble.classList.add('hover-show');
         }
       });
 
       raichuWrapper.addEventListener('mouseleave', () => {
-        if (!raichuBubble.classList.contains('show')) {
-          raichuBubble.textContent = '';
+        if (!raichuTemporaryMessage) {
+          raichuBubble.classList.remove('hover-show');
+          setTimeout(() => {
+            if (!raichuBubble.classList.contains('hover-show') && !raichuBubble.classList.contains('show')) {
+              raichuBubble.textContent = '';
+            }
+          }, 800);
         }
       });
     }
@@ -797,13 +820,23 @@ body {
     function showRaichuMessage(text) {
       const bubble = document.getElementById('raichuBubble');
       if (!bubble) return;
+
+      raichuTemporaryMessage = true;
+      bubble.classList.remove('hover-show');
       bubble.textContent = text;
       bubble.classList.add('show');
+
       clearTimeout(window._raichuTimer);
+      clearTimeout(window._raichuCleanupTimer);
+
       window._raichuTimer = setTimeout(() => {
         bubble.classList.remove('show');
-        bubble.textContent = '';
-      }, 2500);
+
+        window._raichuCleanupTimer = setTimeout(() => {
+          bubble.textContent = '';
+          raichuTemporaryMessage = false;
+        }, 800);
+      }, 3600);
     }
 
     function subscribeToChanges() {
