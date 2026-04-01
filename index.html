@@ -45,7 +45,13 @@
       margin-bottom: 30px;
     }
 
-    .search-box,
+    /* 🔧 SEARCH BOX (no background container) */
+    .search-box {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* keep add box styled */
     .add-box {
       background: #fff3bf;
       border: 3px solid #f39c12;
@@ -69,8 +75,31 @@
       background: white;
     }
 
+    /* ⚡ ANIMATED SEARCH INPUT */
     #searchInput {
       width: min(420px, 100%);
+      border: 3px solid #ff9f1c;
+      background: #fffdf5;
+      font-weight: bold;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+
+    #searchInput:focus {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255,159,28,0.9);
+      border-color: #e67e22;
+      outline: none;
+    }
+
+    #searchInput:not(:placeholder-shown) {
+      animation: pulse 0.4s ease;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1.05); }
     }
 
     button {
@@ -195,7 +224,7 @@
 
     <div class="toolbar">
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="search if it's been added!" />
+        <input type="text" id="searchInput" placeholder="⚡ search your queue..." />
       </div>
 
       <div class="add-box">
