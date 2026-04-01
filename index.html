@@ -256,12 +256,20 @@ body {
     }
 
     .summary-row {
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summary-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+}
 
     .summary-text {
       padding: 10px 12px;
@@ -606,9 +614,7 @@ body {
 
 
 .rating-row {
-  margin-top: 10px;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
 }
 
@@ -835,18 +841,49 @@ window.addEventListener("load", () => {
             </div>
           </div>
 
-          ${ratingHTML}
 
-          ${hasSummary ? `
-            <div class="summary-row">
+          <div class="summary-row">
+            ${hasSummary ? `
               <div class="summary-text" id="${type}-summary-${index}">${escapeHtml(item.description)}</div>
-              <button class="summary-link" onclick="toggleSummaryEditor('${type}', ${index})">edit summary</button>
-            </div>
-          ` : `
-            <div class="item-actions">
-              <button class="summary-link" onclick="toggleSummaryEditor('${type}', ${index})">add summary</button>
-            </div>
-          `}
+              <div class="summary-bottom">
+                <button class="summary-link" onclick="toggleSummaryEditor('${type}', ${index})">edit summary</button>
+
+                ${item.status === "finished" ? `
+                  <div class="rating-row">
+                    <div class="star-rating" aria-label="rating">
+                      ${[1,2,3,4,5].map(star => `
+                        <button
+                          type="button"
+                          class="star-btn ${item.rating >= star ? "active" : ""}"
+                          onclick="updateRating('${type}', ${index}, ${star})"
+                          aria-label="rate ${star} stars"
+                        >★</button>
+                      `).join("")}
+                    </div>
+                  </div>
+                ` : ""}
+              </div>
+            ` : `
+              <div class="summary-bottom">
+                <button class="summary-link" onclick="toggleSummaryEditor('${type}', ${index})">add summary</button>
+
+                ${item.status === "finished" ? `
+                  <div class="rating-row">
+                    <div class="star-rating" aria-label="rating">
+                      ${[1,2,3,4,5].map(star => `
+                        <button
+                          type="button"
+                          class="star-btn ${item.rating >= star ? "active" : ""}"
+                          onclick="updateRating('${type}', ${index}, ${star})"
+                          aria-label="rate ${star} stars"
+                        >★</button>
+                      `).join("")}
+                    </div>
+                  </div>
+                ` : ""}
+              </div>
+            `}
+          </div>
 
           <div class="summary-editor" id="${type}-editor-${index}">
             <textarea id="${type}-editor-input-${index}" placeholder="write a short summary or notes here.">${editorValue}</textarea>
