@@ -214,12 +214,24 @@
     let games = [];
 
     function getStatusClass(status) {
-      if (status === "want to watch") return "status-want";
-      if (status === "in progress") return "status-progress";
+      if (status === "want to watch" || status === "want to play") return "status-want";
+      if (status === "in progress" || status === "currently playing") return "status-progress";
       return "status-finished";
     }
 
     function createItemHTML(item, index, type) {
+      const options = type === "game"
+        ? `
+          <option value="want to play" ${item.status === "want to play" ? "selected" : ""}>want to play</option>
+          <option value="currently playing" ${item.status === "currently playing" ? "selected" : ""}>currently playing</option>
+          <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
+        `
+        : `
+          <option value="want to watch" ${item.status === "want to watch" ? "selected" : ""}>want to watch</option>
+          <option value="in progress" ${item.status === "in progress" ? "selected" : ""}>in progress</option>
+          <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
+        `;
+
       return `
         <div class="item">
           <div class="item-top">
@@ -227,9 +239,7 @@
           </div>
           <div class="controls">
             <select class="${getStatusClass(item.status)}" onchange="updateStatus('${type}', ${index}, this)">
-              <option value="want to watch" ${item.status === "want to watch" ? "selected" : ""}>want to watch</option>
-              <option value="in progress" ${item.status === "in progress" ? "selected" : ""}>in progress</option>
-              <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
+              ${options}
             </select>
             <button class="delete-btn" onclick="removeItem('${type}', ${index})">Delete</button>
           </div>
@@ -254,7 +264,7 @@
       const { data, error } = await supabaseClient
         .from("queue_items")
         .select("*")
-        .order("created_at", { ascending: true });
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error("Load error:", error);
@@ -274,9 +284,11 @@
 
       if (!title) return;
 
+      const defaultStatus = type === "game" ? "want to play" : "want to watch";
+
       const { error } = await supabaseClient
         .from("queue_items")
-        .insert([{ title, type, status: "want to watch" }]);
+        .insert([{ title, type, status: defaultStatus }]);
 
       if (error) {
         console.error("Insert error:", error);
