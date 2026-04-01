@@ -496,6 +496,27 @@ body {
   }
 }
 
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+.page-info {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
 </style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -535,11 +556,13 @@ body {
       <div class="section">
         <h2>🎬 watchlist</h2>
         <div id="movieList"></div>
+        <div class="pagination" id="moviePagination"></div>
       </div>
 
       <div class="section">
         <h2>🎮 games</h2>
         <div id="gameList"></div>
+        <div class="pagination" id="gamePagination"></div>
       </div>
     </div>
   </div>
@@ -559,6 +582,9 @@ body {
     let movies = [];
     let games = [];
     let searchTerm = "";
+    let moviePage = 1;
+    let gamePage = 1;
+    const ITEMS_PER_PAGE = 5;
 
     function getStatusClass(status) {
       if (status === "want to watch" || status === "want to play") return "status-want";
@@ -668,6 +694,34 @@ body {
       );
     }
 
+
+    function paginateItems(items, page) {
+      const totalPages = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
+      const safePage = Math.min(page, totalPages);
+      const start = (safePage - 1) * ITEMS_PER_PAGE;
+      return {
+        pageItems: items.slice(start, start + ITEMS_PER_PAGE),
+        totalPages,
+        currentPage: safePage
+      };
+    }
+
+    function renderPagination(type, currentPage, totalPages) {
+      const paginationEl = document.getElementById(type === "movie" ? "moviePagination" : "gamePagination");
+      if (!paginationEl) return;
+
+      if (totalPages <= 1) {
+        paginationEl.innerHTML = "";
+        return;
+      }
+
+      paginationEl.innerHTML = `
+        <button class="page-btn secondary-btn" ${currentPage === 1 ? "disabled" : ""} onclick="changePage('${type}', -1)">prev</button>
+        <span class="page-info">page ${currentPage} of ${totalPages}</span>
+        <button class="page-btn secondary-btn" ${currentPage === totalPages ? "disabled" : ""} onclick="changePage('${type}', 1)">next</button>
+      `;
+    }
+
     function render() {
       const movieList = document.getElementById("movieList");
       const gameList = document.getElementById("gameList");
@@ -675,13 +729,31 @@ body {
       const filteredMovies = filterItems(sortQueue(movies));
       const filteredGames = filterItems(sortQueue(games));
 
-      movieList.innerHTML = filteredMovies.length
-        ? filteredMovies.map((item) => createItemHTML(item, movies.findIndex(m => m.id === item.id), "movie")).join("")
+      const movieData = paginateItems(filteredMovies, moviePage);
+      const gameData = paginateItems(filteredGames, gamePage);
+
+      moviePage = movieData.currentPage;
+      gamePage = gameData.currentPage;
+
+      movieList.innerHTML = movieData.pageItems.length
+        ? movieData.pageItems.map((item) => createItemHTML(item, movies.findIndex(m => m.id === item.id), "movie")).join("")
         : `<div class="empty">no matching movies found ✨</div>`;
 
-      gameList.innerHTML = filteredGames.length
-        ? filteredGames.map((item) => createItemHTML(item, games.findIndex(g => g.id === item.id), "game")).join("")
+      gameList.innerHTML = gameData.pageItems.length
+        ? gameData.pageItems.map((item) => createItemHTML(item, games.findIndex(g => g.id === item.id), "game")).join("")
         : `<div class="empty">no matching games found 🎮</div>`;
+
+      renderPagination("movie", movieData.currentPage, movieData.totalPages);
+      renderPagination("game", gameData.currentPage, gameData.totalPages);
+    }
+
+    function changePage(type, direction) {
+      if (type === "movie") {
+        moviePage += direction;
+      } else {
+        gamePage += direction;
+      }
+      render();
     }
 
     async function loadItems() {
@@ -866,6 +938,8 @@ body {
     document.getElementById("addButton").addEventListener("click", addItem);
     document.getElementById("searchInput").addEventListener("input", (event) => {
       searchTerm = event.target.value.trim().toLowerCase();
+      moviePage = 1;
+      gamePage = 1;
       render();
     });
     document.getElementById("toggleDescriptionBtn").addEventListener("click", () => {
@@ -879,6 +953,7 @@ body {
     window.removeItem = removeItem;
     window.toggleSummaryEditor = toggleSummaryEditor;
     window.saveSummary = saveSummary;
+    window.changePage = changePage;
 
     loadItems();
     subscribeToChanges();</script>
