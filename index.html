@@ -519,6 +519,7 @@ body {
 
 
 .stats-bar{
+  white-space: pre;
   margin:12px 0 18px 0;
   margin-top:12px;
   text-align:center;
@@ -534,6 +535,7 @@ body {
 
 @media (max-width: 700px) {
   .stats-bar {
+    white-space: pre-line;
     line-height: 1.6;
   }
 }
@@ -547,7 +549,7 @@ body {
       <h1>⚡ raichu queue ⚡</h1>
     </div>
 
-    <div class="stats-bar" id="statsBar">⚡ loading stats and petting the raichu ...</div>
+    <div class="stats-bar" id="statsBar">⚡ loading stats...</div>
 
     <div class="toolbar">
       <div class="search-box">
@@ -597,10 +599,8 @@ function updateStats(){
   const finishedMovies = movies.filter(i=>i.status==="finished").length;
   const finishedGames = games.filter(i=>i.status==="finished").length;
   document.getElementById("statsBar").innerText =
-    window.innerWidth <= 700
-    ? `🎬 ${totalMovies} watchlist (${finishedMovies} finished)
-🎮 ${totalGames} games (${finishedGames} finished)`
-    : `🎬 ${totalMovies} watchlist (${finishedMovies} finished)   🎮 ${totalGames} games (${finishedGames} finished)`;
+    `🎬 ${totalMovies} watchlist (${finishedMovies} finished)
+🎮 ${totalGames} games (${finishedGames} finished)`;
 }
 
 updateStats();
@@ -1000,10 +1000,8 @@ function updateStats(){
   const finishedMovies = movies.filter(i=>i.status==="finished").length;
   const finishedGames = games.filter(i=>i.status==="finished").length;
   document.getElementById("statsBar").innerText =
-    window.innerWidth <= 700
-    ? `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)
-🎮 ${totalGames} games to play (${finishedGames} finished)`
-    : `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)   🎮 ${totalGames} games to play (${finishedGames} finished)`;
+    `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)
+🎮 ${totalGames} games to play (${finishedGames} finished)`;
 }
 
 updateStats();
