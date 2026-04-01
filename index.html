@@ -517,6 +517,20 @@ body {
   opacity: 0.8;
 }
 
+
+.stats-bar{
+  margin:12px 0 18px 0;
+  margin-top:12px;
+  text-align:center;
+  background:#eee0bd;
+  border:2px solid #b88a44;
+  border-radius:12px;
+  padding:8px 12px;
+  font-size:13px;
+  font-weight:500;
+  box-shadow:0 2px 6px rgba(0,0,0,0.06);
+}
+
 </style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -525,6 +539,8 @@ body {
     <div class="header">
       <h1>⚡ raichu queue ⚡</h1>
     </div>
+
+    <div class="stats-bar" id="statsBar">⚡ loading stats...</div>
 
     <div class="toolbar">
       <div class="search-box">
@@ -567,7 +583,18 @@ body {
     </div>
   </div>
 
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2">
+function updateStats(){
+  const totalMovies = movies.length;
+  const totalGames = games.length;
+  const finishedMovies = movies.filter(i=>i.status==="finished").length;
+  const finishedGames = games.filter(i=>i.status==="finished").length;
+  document.getElementById("statsBar").innerText =
+    `🎬 ${totalMovies} watchlist (${finishedMovies} finished)   🎮 ${totalGames} games (${finishedGames} finished)`;
+}
+
+updateStats();
+</script>
 
   <script>
     const SUPABASE_URL = "https://ncqcqtfnaamcrbhncocv.supabase.co";
@@ -753,7 +780,7 @@ body {
       } else {
         gamePage += direction;
       }
-      render();
+      render(); updateStats();
     }
 
     async function loadItems() {
@@ -768,7 +795,7 @@ body {
 
       movies = data.filter(item => item.type === "movie");
       games = data.filter(item => item.type === "game");
-      render();
+      render(); updateStats();
     }
 
     async function addItem() {
@@ -940,7 +967,7 @@ body {
       searchTerm = event.target.value.trim().toLowerCase();
       moviePage = 1;
       gamePage = 1;
-      render();
+      render(); updateStats();
     });
     document.getElementById("toggleDescriptionBtn").addEventListener("click", () => {
       const box = document.getElementById("descriptionBox");
@@ -956,7 +983,18 @@ body {
     window.changePage = changePage;
 
     loadItems();
-    subscribeToChanges();</script>
+    subscribeToChanges();
+function updateStats(){
+  const totalMovies = movies.length;
+  const totalGames = games.length;
+  const finishedMovies = movies.filter(i=>i.status==="finished").length;
+  const finishedGames = games.filter(i=>i.status==="finished").length;
+  document.getElementById("statsBar").innerText =
+    `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)   🎮 ${totalGames} games to play (${finishedGames} finished)`;
+}
+
+updateStats();
+</script>
   <footer class="footer">
   made with love for my gf 💛
 </footer>
