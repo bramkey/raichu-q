@@ -709,6 +709,17 @@ body {
 
       if (!title) return;
 
+      const normalizedTitle = title.toLowerCase();
+
+      const alreadyExists =
+        movies.some(item => item.title.toLowerCase() === normalizedTitle) ||
+        games.some(item => item.title.toLowerCase() === normalizedTitle);
+
+      if (alreadyExists) {
+        alert("⚠️ that's already in your queue!");
+        return;
+      }
+
       const defaultStatus = type === "game" ? "want to play" : "want to watch";
 
       const { error } = await supabaseClient
@@ -725,9 +736,7 @@ body {
       document.getElementById("descriptionBox").classList.remove("show");
       document.getElementById("toggleDescriptionBtn").textContent = "add summary";
       await loadItems();
-      showRaichuMessage('good choice! ⚡');
-      if (status === 'finished') { showRaichuMessage('was it any good?'); }
-      showRaichuMessage('good choice! ⚡');
+      showRaichuMessage("good choice! ⚡");
     }
 
     async function updateStatus(type, index, selectElement) {
