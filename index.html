@@ -198,99 +198,144 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <script>
-    let movies = [
-      { title: "Tangled", status: "want to watch" },
-      { title: "Spider-Verse", status: "in progress" }
-    ];
+  const SUPABASE_URL = "https://ncqcqtfnaamcrbhncocv.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_0XjUw1Y6h99mUso6uJT_uw_dt8sFSHh";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let games = [
-      { title: "Animal Crossing", status: "want to watch" },
-      { title: "Mario Kart", status: "finished" }
-    ];
+  let movies = [];
+  let games = [];
 
-    function getStatusClass(status) {
-      if (status === "want to watch") return "status-want";
-      if (status === "in progress") return "status-progress";
-      return "status-finished";
-    }
+  function getStatusClass(status) {
+    if (status === "want to watch") return "status-want";
+    if (status === "in progress") return "status-progress";
+    return "status-finished";
+  }
 
-    function createItemHTML(item, index, type) {
-      return `
-        <div class="item">
-          <div class="item-top">
-            <div class="title">${item.title}</div>
-          </div>
-          <div class="controls">
-            <select class="${getStatusClass(item.status)}" onchange="updateStatus('${type}', ${index}, this)">
-              <option value="want to watch" ${item.status === "want to watch" ? "selected" : ""}>want to watch</option>
-              <option value="in progress" ${item.status === "in progress" ? "selected" : ""}>in progress</option>
-              <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
-            </select>
-            <button class="delete-btn" onclick="removeItem('${type}', ${index})">Delete</button>
-          </div>
+  function createItemHTML(item, index, type) {
+    return `
+      <div class="item">
+        <div class="item-top">
+          <div class="title">${item.title}</div>
         </div>
-      `;
+        <div class="controls">
+          <select class="${getStatusClass(item.status)}" onchange="updateStatus('${type}', ${index}, this)">
+            <option value="want to watch" ${item.status === "want to watch" ? "selected" : ""}>want to watch</option>
+            <option value="in progress" ${item.status === "in progress" ? "selected" : ""}>in progress</option>
+            <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
+          </select>
+          <button class="delete-btn" onclick="removeItem('${type}', ${index})">Delete</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function render() {
+    const movieList = document.getElementById("movieList");
+    const gameList = document.getElementById("gameList");
+
+    movieList.innerHTML = movies.length
+      ? movies.map((item, i) => createItemHTML(item, i, "movie")).join("")
+      : `<div class="empty">no movies in your queue yet ✨</div>`;
+
+    gameList.innerHTML = games.length
+      ? games.map((item, i) => createItemHTML(item, i, "game")).join("")
+      : `<div class="empty">no games in your queue yet 🎮</div>`;
+  }
+
+  async function loadItems() {
+    const { data, error } = await supabase
+      .from("queue_items")
+      .select("*")
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.error("Load error:", error);
+      return;
     }
 
-    function render() {
-      const movieList = document.getElementById("movieList");
-      const gameList = document.getElementById("gameList");
-
-      movieList.innerHTML = movies.length
-        ? movies.map((item, i) => createItemHTML(item, i, "movie")).join("")
-        : `<div class="empty">no movies in your queue yet ✨</div>`;
-
-      gameList.innerHTML = games.length
-        ? games.map((item, i) => createItemHTML(item, i, "game")).join("")
-        : `<div class="empty">no games in your queue yet 🎮</div>`;
-    }
-
-    function addItem() {
-      const titleInput = document.getElementById("titleInput");
-      const typeInput = document.getElementById("typeInput");
-      const title = titleInput.value.trim();
-      const type = typeInput.value;
-
-      if (!title) return;
-
-      const newItem = {
-        title: title,
-        status: "want to watch"
-      };
-
-      if (type === "movie") {
-        movies.push(newItem);
-      } else {
-        games.push(newItem);
-      }
-
-      titleInput.value = "";
-      render();
-    }
-
-    function updateStatus(type, index, selectElement) {
-      const status = selectElement.value;
-
-      if (type === "movie") {
-        movies[index].status = status;
-      } else {
-        games[index].status = status;
-      }
-
-      selectElement.className = getStatusClass(status);
-    }
-
-    function removeItem(type, index) {
-      if (type === "movie") {
-        movies.splice(index, 1);
-      } else {
-        games.splice(index, 1);
-      }
-      render();
-    }
-
+    movies = data.filter(item => item.type === "movie");
+    games = data.filter(item => item.type === "game");
     render();
-  </script>
+  }
+
+  async function addItem() {
+    const titleInput = document.getElementById("titleInput");
+    const typeInput = document.getElementById("typeInput");
+    const title = titleInput.value.trim();
+    const type = typeInput.value;
+
+    if (!title) return;
+
+    const { error } = await supabase
+      .from("queue_items")
+      .insert([
+        {
+          title: title,
+          type: type,
+          status: "want to watch"
+        }
+      ]);
+
+    if (error) {
+      console.error("Insert error:", error);
+      return;
+    }
+
+    titleInput.value = "";
+  }
+
+  async function updateStatus(type, index, selectElement) {
+    const status = selectElement.value;
+    const item = type === "movie" ? movies[index] : games[index];
+
+    const { error } = await supabase
+      .from("queue_items")
+      .update({ status: status })
+      .eq("id", item.id);
+
+    if (error) {
+      console.error("Update error:", error);
+      return;
+    }
+
+    selectElement.className = getStatusClass(status);
+  }
+
+  async function removeItem(type, index) {
+    const item = type === "movie" ? movies[index] : games[index];
+
+    const { error } = await supabase
+      .from("queue_items")
+      .delete()
+      .eq("id", item.id);
+
+    if (error) {
+      console.error("Delete error:", error);
+    }
+  }
+
+  function subscribeToChanges() {
+    supabase
+      .channel("queue-items-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "queue_items" },
+        () => {
+          loadItems();
+        }
+      )
+      .subscribe();
+  }
+
+  window.addItem = addItem;
+  window.updateStatus = updateStatus;
+  window.removeItem = removeItem;
+
+  loadItems();
+  subscribeToChanges();
+</script>
 </body>
 </html>
