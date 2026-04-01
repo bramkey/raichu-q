@@ -604,6 +604,30 @@ function updateStats(){
 }
 
 updateStats();
+
+
+window.addEventListener("load", () => {
+  const bubble = document.getElementById("raichuBubble");
+  if (!bubble) return;
+
+  const defaultText = bubble.dataset.default || "hi gf 💛";
+
+  // show welcome message
+  bubble.textContent = "welcome back, i missed you! 💛";
+  bubble.classList.add("show");
+
+  // hide without switching back immediately
+  setTimeout(() => {
+    bubble.classList.remove("show");
+
+    // only restore default AFTER fully hidden
+    setTimeout(() => {
+      bubble.textContent = defaultText;
+    }, 800); // matches fade time
+  }, 2500);
+});
+
+
 </script>
 
   <script>
@@ -1005,6 +1029,30 @@ function updateStats(){
 }
 
 updateStats();
+
+
+window.addEventListener("load", () => {
+  const bubble = document.getElementById("raichuBubble");
+  if (!bubble) return;
+
+  const defaultText = bubble.dataset.default || "hi gf 💛";
+
+  // show welcome message
+  bubble.textContent = "welcome back, i missed you! 💛";
+  bubble.classList.add("show");
+
+  // hide without switching back immediately
+  setTimeout(() => {
+    bubble.classList.remove("show");
+
+    // only restore default AFTER fully hidden
+    setTimeout(() => {
+      bubble.textContent = defaultText;
+    }, 800); // matches fade time
+  }, 2500);
+});
+
+
 </script>
   <footer class="footer">
   made with love for my gf 💛
