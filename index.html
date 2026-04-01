@@ -173,7 +173,7 @@
   <div class="container">
     <div class="header">
       <h1>⚡ raichu queue ⚡</h1>
-      <p>for tracking our movies and games <i class="fa-solid fa-heart"></i></p>
+      <p>for tracking our movies and games</p>
     </div>
 
     <div class="add-box">
@@ -222,7 +222,7 @@
             <div class="title">${item.title}</div>
           </div>
           <div class="controls">
-            <select class="${getStatusClass(item.status)}" onchange="updateStatus('${type}', ${index}, this.value)">
+            <select class="${getStatusClass(item.status)}" onchange="updateStatus('${type}', ${index}, this)">
               <option value="want to watch" ${item.status === "want to watch" ? "selected" : ""}>want to watch</option>
               <option value="in progress" ${item.status === "in progress" ? "selected" : ""}>in progress</option>
               <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
@@ -269,13 +269,16 @@
       render();
     }
 
-    function updateStatus(type, index, status) {
+    function updateStatus(type, index, selectElement) {
+      const status = selectElement.value;
+
       if (type === "movie") {
         movies[index].status = status;
       } else {
         games[index].status = status;
       }
-      render();
+
+      selectElement.className = getStatusClass(status);
     }
 
     function removeItem(type, index) {
