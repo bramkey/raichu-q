@@ -586,6 +586,43 @@ body {
   }
 }
 
+
+.rating-row {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.star-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.star-btn {
+  background: none !important;
+  border: none !important;
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1;
+  color: #c8b38a;
+  cursor: pointer;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.star-btn:hover {
+  background: none !important;
+  color: #b98b47;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.star-btn.active {
+  color: #b98b47;
+}
+
 </style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -741,6 +778,22 @@ window.addEventListener("load", () => {
         : "";
       const hasSummary = item.description && item.description.trim();
       const editorValue = item.description ? escapeAttribute(item.description) : "";
+      const ratingHTML = item.status === "finished"
+        ? `
+          <div class="rating-row">
+            <div class="star-rating" aria-label="rating">
+              ${[1,2,3,4,5].map(star => `
+                <button
+                  type="button"
+                  class="star-btn ${item.rating >= star ? "active" : ""}"
+                  onclick="updateRating('${type}', ${index}, ${star})"
+                  aria-label="rate ${star} stars"
+                >★</button>
+              `).join("")}
+            </div>
+          </div>
+        `
+        : "";
 
       return `
         <div class="item ${finishedClass} ${getBorderClass(item.status)}">
@@ -756,6 +809,8 @@ window.addEventListener("load", () => {
               <button class="delete-btn" onclick="removeItem('${type}', ${index})">✕</button>
             </div>
           </div>
+
+          ${ratingHTML}
 
           ${hasSummary ? `
             <div class="summary-row">
@@ -1029,6 +1084,24 @@ window.addEventListener("load", () => {
       }, 3600);
     }
 
+
+    async function updateRating(type, index, value) {
+      const item = type === "movie" ? movies[index] : games[index];
+      const rating = Number(value);
+
+      const { error } = await supabaseClient
+        .from("queue_items")
+        .update({ rating })
+        .eq("id", item.id);
+
+      if (error) {
+        console.error("Rating update error:", error);
+        return;
+      }
+
+      await loadItems();
+    }
+
     function subscribeToChanges() {
       supabaseClient
         .channel("queue-items-live")
@@ -1060,6 +1133,7 @@ window.addEventListener("load", () => {
     window.removeItem = removeItem;
     window.toggleSummaryEditor = toggleSummaryEditor;
     window.saveSummary = saveSummary;
+    window.updateRating = updateRating;
     window.changePage = changePage;
 
     loadItems();
