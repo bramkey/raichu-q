@@ -1347,6 +1347,18 @@ window.addEventListener("load", () => {
       render();
     });
 
+
+    const toggleDescriptionBtn = document.getElementById("toggleDescriptionBtn");
+    const descriptionBox = document.getElementById("descriptionBox");
+
+    if (toggleDescriptionBtn && descriptionBox) {
+      toggleDescriptionBtn.addEventListener("click", () => {
+        descriptionBox.classList.toggle("show");
+        toggleDescriptionBtn.textContent =
+          descriptionBox.classList.contains("show") ? "hide summary" : "add summary";
+      });
+    }
+
     window.updateStatus = updateStatus;
     window.removeItem = removeItem;
     window.toggleSummaryEditor = toggleSummaryEditor;
