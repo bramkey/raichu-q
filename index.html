@@ -755,6 +755,31 @@ body {
   }
 }
 
+
+.queue-browser-box {
+  margin-top: 22px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 3px solid #b88a44;
+  border-radius: 24px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+}
+
+.queue-browser-box .search-box {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 700px) {
+  .queue-browser-box {
+    padding: 14px;
+    margin-top: 18px;
+  }
+
+  .queue-browser-box .search-box {
+    margin-bottom: 14px;
+  }
+}
+
 </style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -767,17 +792,7 @@ body {
     <div class="stats-bar" id="statsBar">⚡ loading stats and petting the raichu ...</div>
 
     <div class="toolbar">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="⚡ search the queue" />
-        <select id="statusFilter">
-          <option value="all">all statuses</option>
-          <option value="finished">finished</option>
-          <option value="in progress">in progress / currently playing</option>
-          <option value="want">want to watch / play</option>
-        </select>
-      </div>
-
-      <div class="add-box">
+<div class="add-box">
 
 <div class="raichu-wrapper">
   <div class="raichu-bubble" id="raichuBubble" data-default="hi gf 💛"></div>
@@ -798,17 +813,29 @@ body {
       </div>
     </div>
 
-    <div class="lists">
-      <div class="section">
-        <h2>🎬 watchlist</h2>
-        <div id="movieList"></div>
-        <div class="pagination" id="moviePagination"></div>
+    <div class="queue-browser-box">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="⚡ search the queue" />
+        <select id="statusFilter">
+          <option value="all">all statuses</option>
+          <option value="finished">finished</option>
+          <option value="in progress">in progress / currently playing</option>
+          <option value="want">want to watch / play</option>
+        </select>
       </div>
 
-      <div class="section">
-        <h2>🎮 games</h2>
-        <div id="gameList"></div>
-        <div class="pagination" id="gamePagination"></div>
+      <div class="lists">
+        <div class="section">
+          <h2>🎬 watchlist</h2>
+          <div id="movieList"></div>
+          <div class="pagination" id="moviePagination"></div>
+        </div>
+
+        <div class="section">
+          <h2>🎮 games</h2>
+          <div id="gameList"></div>
+          <div class="pagination" id="gamePagination"></div>
+        </div>
       </div>
     </div>
   </div>
