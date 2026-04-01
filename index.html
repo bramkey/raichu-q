@@ -45,13 +45,11 @@
       margin-bottom: 30px;
     }
 
-    /* 🔧 SEARCH BOX (no background container) */
     .search-box {
       display: flex;
       justify-content: center;
     }
 
-    /* keep add box styled */
     .add-box {
       background: #fff3bf;
       border: 3px solid #f39c12;
@@ -64,18 +62,34 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
 
-    input, select, button {
+    .description-box {
+      width: 100%;
+      display: none;
+      justify-content: center;
+    }
+
+    .description-box.show {
+      display: flex;
+    }
+
+    input, select, button, textarea {
       padding: 10px 12px;
       border-radius: 12px;
       border: 2px solid #d97b00;
       font-size: 14px;
+      font-family: inherit;
     }
 
-    input, select {
+    input, select, textarea {
       background: white;
     }
 
-    /* ⚡ ANIMATED SEARCH INPUT */
+    textarea {
+      width: min(520px, 100%);
+      min-height: 58px;
+      resize: vertical;
+    }
+
     #searchInput {
       width: min(420px, 100%);
       border: 3px solid #ff9f1c;
@@ -116,6 +130,16 @@
       transform: scale(1.03);
     }
 
+    .secondary-btn {
+      background: #fff0c4;
+      color: #8a5a00;
+      border: 2px solid #d97b00;
+    }
+
+    .secondary-btn:hover {
+      background: #ffe39b;
+    }
+
     .lists {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -143,6 +167,7 @@
       padding: 12px;
       margin-bottom: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
     }
 
     .item-top {
@@ -158,6 +183,10 @@
       word-break: break-word;
       flex: 1;
       min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .controls {
@@ -169,20 +198,142 @@
       flex-shrink: 0;
     }
 
+    .item-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .summary-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .summary-text {
+      padding: 10px 12px;
+      background: #fff9ea;
+      border: 2px solid #f0d080;
+      border-radius: 12px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .summary-link {
+      background: none !important;
+      border: none;
+      padding: 0;
+      margin-left: 4px;
+      color: #8c5a00;
+      font-size: 12px;
+      font-weight: normal;
+      text-decoration: underline;
+      cursor: pointer;
+      opacity: 0.65;
+      transition: opacity 0.2s ease;
+      box-shadow: none !important;
+    }
+
+    .summary-link:hover {
+      opacity: 0.85;
+      color: #8c5a00;
+      background: none !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .summary-editor {
+      margin-top: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      max-width: 100%;
+    }
+
+    .summary-editor.show {
+      display: flex;
+      width: 100%;
+      box-sizing: border-box;
+      align-items: flex-start;
+    }
+
+    .summary-editor textarea {
+      width: 100%;
+      max-width: 420px;
+      min-height: 50px;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 13px;
+      box-sizing: border-box;
+      align-self: flex-start;
+      resize: vertical;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .summary-row {
+      margin-top: 6px;
+    }
+
+    .summary-text {
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+
+    .summary-editor.show {
+      display: flex;
+      width: 100%;
+      box-sizing: border-box;
+      align-items: flex-start;
+    }
+
     .status-want {
-      background: #fff3cd;
       color: #8a5a00;
     }
 
     .status-progress {
-      background: #d6ecff;
       color: #005b96;
     }
 
     .status-finished {
-      background: #d4f8d4;
       color: #1e6b1e;
     }
+
+    .finished-item {
+      opacity: 0.72;
+      filter: grayscale(0.18);
+      border-left: 8px solid #4caf50;
+      background: #f3fff3;
+      transform: scale(0.985);
+    }
+
+    .finished-item .title-text {
+      text-decoration: line-through;
+    }
+
+    .finished-badge {
+      background: #4caf50;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .status-want-border { border-left: 8px solid #ffb703 !important; }
+    .status-progress-border { border-left: 8px solid #3498db !important; }
+    .status-finished-border { border-left: 8px solid #4caf50 !important; }
 
     .empty {
       text-align: center;
@@ -233,7 +384,12 @@
           <option value="movie">movie/show</option>
           <option value="game">game</option>
         </select>
+        <button type="button" class="secondary-btn" id="toggleDescriptionBtn">add summary</button>
         <button id="addButton">add to queue ⚡</button>
+
+        <div class="description-box" id="descriptionBox">
+          <textarea id="descriptionInput" placeholder="write a short summary or notes here..."></textarea>
+        </div>
       </div>
     </div>
 
@@ -272,6 +428,29 @@
       return "status-finished";
     }
 
+    function isFinishedStatus(status) {
+      return status === "finished";
+    }
+
+    function sortQueue(items) {
+      return [...items].sort((a, b) => {
+        const aFinished = isFinishedStatus(a.status) ? 1 : 0;
+        const bFinished = isFinishedStatus(b.status) ? 1 : 0;
+
+        if (aFinished !== bFinished) {
+          return aFinished - bFinished;
+        }
+
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+    }
+
+    function getBorderClass(status) {
+      if (status === "finished") return "status-finished-border";
+      if (status === "in progress" || status === "currently playing") return "status-progress-border";
+      return "status-want-border";
+    }
+
     function createItemHTML(item, index, type) {
       const options = type === "game"
         ? `
@@ -285,10 +464,20 @@
           <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
         `;
 
+      const finishedClass = item.status === "finished" ? "finished-item" : "";
+      const finishedBadge = item.status === "finished"
+        ? '<span class="finished-badge">Finished ✓</span>'
+        : "";
+      const hasSummary = item.description && item.description.trim();
+      const editorValue = item.description ? escapeAttribute(item.description) : "";
+
       return `
-        <div class="item">
+        <div class="item ${finishedClass} ${getBorderClass(item.status)}">
           <div class="item-top">
-            <div class="title">${item.title}</div>
+            <div class="title">
+              <span class="title-text">${escapeHtml(item.title)}</span>
+              ${finishedBadge}
+            </div>
             <div class="controls">
               <select class="${getStatusClass(item.status)}" onchange="updateStatus('${type}', ${index}, this)">
                 ${options}
@@ -296,21 +485,57 @@
               <button class="delete-btn" onclick="removeItem('${type}', ${index})">Delete</button>
             </div>
           </div>
+
+          ${hasSummary ? `
+            <div class="summary-row">
+              <div class="summary-text" id="${type}-summary-${index}">${escapeHtml(item.description)}</div>
+              <button class="summary-link" onclick="toggleSummaryEditor('${type}', ${index})">edit summary</button>
+            </div>
+          ` : `
+            <div class="item-actions">
+              <button class="summary-link" onclick="toggleSummaryEditor('${type}', ${index})">add summary</button>
+            </div>
+          `}
+
+          <div class="summary-editor" id="${type}-editor-${index}">
+            <textarea id="${type}-editor-input-${index}" placeholder="write a short summary or notes here...">${editorValue}</textarea>
+            <div class="item-actions">
+              <button onclick="saveSummary('${type}', ${index})">save summary</button>
+              <button class="secondary-btn" onclick="toggleSummaryEditor('${type}', ${index})">cancel</button>
+            </div>
+          </div>
         </div>
       `;
     }
 
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    function escapeAttribute(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
     function filterItems(items) {
       if (!searchTerm) return items;
-      return items.filter(item => item.title.toLowerCase().includes(searchTerm));
+      return items.filter(item =>
+        item.title.toLowerCase().includes(searchTerm) ||
+        (item.description || "").toLowerCase().includes(searchTerm)
+      );
     }
 
     function render() {
       const movieList = document.getElementById("movieList");
       const gameList = document.getElementById("gameList");
 
-      const filteredMovies = filterItems(movies);
-      const filteredGames = filterItems(games);
+      const filteredMovies = filterItems(sortQueue(movies));
+      const filteredGames = filterItems(sortQueue(games));
 
       movieList.innerHTML = filteredMovies.length
         ? filteredMovies.map((item) => createItemHTML(item, movies.findIndex(m => m.id === item.id), "movie")).join("")
@@ -324,8 +549,7 @@
     async function loadItems() {
       const { data, error } = await supabaseClient
         .from("queue_items")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .select("*");
 
       if (error) {
         console.error("Load error:", error);
@@ -340,8 +564,10 @@
     async function addItem() {
       const titleInput = document.getElementById("titleInput");
       const typeInput = document.getElementById("typeInput");
+      const descriptionInput = document.getElementById("descriptionInput");
       const title = titleInput.value.trim();
       const type = typeInput.value;
+      const description = descriptionInput.value.trim();
 
       if (!title) return;
 
@@ -349,7 +575,7 @@
 
       const { error } = await supabaseClient
         .from("queue_items")
-        .insert([{ title, type, status: defaultStatus }]);
+        .insert([{ title, type, status: defaultStatus, description }]);
 
       if (error) {
         console.error("Insert error:", error);
@@ -357,6 +583,9 @@
       }
 
       titleInput.value = "";
+      descriptionInput.value = "";
+      document.getElementById("descriptionBox").classList.remove("show");
+      document.getElementById("toggleDescriptionBtn").textContent = "add summary";
       await loadItems();
     }
 
@@ -394,6 +623,30 @@
       await loadItems();
     }
 
+    function toggleSummaryEditor(type, index) {
+      const el = document.getElementById(`${type}-editor-${index}`);
+      if (!el) return;
+      el.classList.toggle("show");
+    }
+
+    async function saveSummary(type, index) {
+      const item = type === "movie" ? movies[index] : games[index];
+      const input = document.getElementById(`${type}-editor-input-${index}`);
+      const description = input.value.trim();
+
+      const { error } = await supabaseClient
+        .from("queue_items")
+        .update({ description })
+        .eq("id", item.id);
+
+      if (error) {
+        console.error("Summary update error:", error);
+        return;
+      }
+
+      await loadItems();
+    }
+
     function subscribeToChanges() {
       supabaseClient
         .channel("queue-items-live")
@@ -412,9 +665,17 @@
       searchTerm = event.target.value.trim().toLowerCase();
       render();
     });
+    document.getElementById("toggleDescriptionBtn").addEventListener("click", () => {
+      const box = document.getElementById("descriptionBox");
+      box.classList.toggle("show");
+      document.getElementById("toggleDescriptionBtn").textContent =
+        box.classList.contains("show") ? "hide summary" : "add summary";
+    });
 
     window.updateStatus = updateStatus;
     window.removeItem = removeItem;
+    window.toggleSummaryEditor = toggleSummaryEditor;
+    window.saveSummary = saveSummary;
 
     loadItems();
     subscribeToChanges();
