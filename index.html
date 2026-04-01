@@ -531,6 +531,13 @@ body {
   box-shadow:0 2px 6px rgba(0,0,0,0.06);
 }
 
+
+@media (max-width: 700px) {
+  .stats-bar {
+    line-height: 1.6;
+  }
+}
+
 </style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -590,7 +597,10 @@ function updateStats(){
   const finishedMovies = movies.filter(i=>i.status==="finished").length;
   const finishedGames = games.filter(i=>i.status==="finished").length;
   document.getElementById("statsBar").innerText =
-    `🎬 ${totalMovies} watchlist (${finishedMovies} finished)   🎮 ${totalGames} games (${finishedGames} finished)`;
+    window.innerWidth <= 700
+    ? `🎬 ${totalMovies} watchlist (${finishedMovies} finished)
+🎮 ${totalGames} games (${finishedGames} finished)`
+    : `🎬 ${totalMovies} watchlist (${finishedMovies} finished)   🎮 ${totalGames} games (${finishedGames} finished)`;
 }
 
 updateStats();
@@ -990,7 +1000,10 @@ function updateStats(){
   const finishedMovies = movies.filter(i=>i.status==="finished").length;
   const finishedGames = games.filter(i=>i.status==="finished").length;
   document.getElementById("statsBar").innerText =
-    `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)   🎮 ${totalGames} games to play (${finishedGames} finished)`;
+    window.innerWidth <= 700
+    ? `🎬 ${totalMovies} watchlist (${finishedMovies} finished)
+🎮 ${totalGames} games (${finishedGames} finished)`
+    : `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)   🎮 ${totalGames} games to play (${finishedGames} finished)`;
 }
 
 updateStats();
