@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Raichu Queue ⚡</title>
+  <title>raichu queue ⚡</title>
   <style>
     body {
       margin: 0;
@@ -172,27 +172,27 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>⚡ Raichu Queue ⚡</h1>
-      <p>Track the movies you want to watch and the games you want to play</p>
+      <h1>⚡ raichu queue ⚡</h1>
+      <p>for tracking our movies and games <i class="fa-solid fa-heart"></i></p>
     </div>
 
     <div class="add-box">
-      <input type="text" id="titleInput" placeholder="Add a movie or game..." />
+      <input type="text" id="titleInput" placeholder="add a movie/show or game here!" />
       <select id="typeInput">
-        <option value="movie">Movie</option>
-        <option value="game">Game</option>
+        <option value="movie">movie/show</option>
+        <option value="game">game</option>
       </select>
-      <button onclick="addItem()">Add to Queue ⚡</button>
+      <button onclick="addItem()">add to queue ⚡</button>
     </div>
 
     <div class="lists">
       <div class="section">
-        <h2>🎬 Movie Queue</h2>
+        <h2>🎬 movies</h2>
         <div id="movieList"></div>
       </div>
 
       <div class="section">
-        <h2>🎮 Game Queue</h2>
+        <h2>🎮 games</h2>
         <div id="gameList"></div>
       </div>
     </div>
@@ -200,18 +200,18 @@
 
   <script>
     let movies = [
-      { title: "Tangled", status: "Want to Watch" },
-      { title: "Spider-Verse", status: "In Progress" }
+      { title: "Tangled", status: "want to watch" },
+      { title: "Spider-Verse", status: "in progress" }
     ];
 
     let games = [
-      { title: "Animal Crossing", status: "Want to Watch" },
-      { title: "Mario Kart", status: "Finished" }
+      { title: "Animal Crossing", status: "want to watch" },
+      { title: "Mario Kart", status: "finished" }
     ];
 
     function getStatusClass(status) {
-      if (status === "Want to Watch") return "status-want";
-      if (status === "In Progress") return "status-progress";
+      if (status === "want to watch") return "status-want";
+      if (status === "in progress") return "status-progress";
       return "status-finished";
     }
 
@@ -223,9 +223,9 @@
           </div>
           <div class="controls">
             <select class="${getStatusClass(item.status)}" onchange="updateStatus('${type}', ${index}, this.value)">
-              <option value="Want to Watch" ${item.status === "Want to Watch" ? "selected" : ""}>Want to Watch</option>
-              <option value="In Progress" ${item.status === "In Progress" ? "selected" : ""}>In Progress</option>
-              <option value="Finished" ${item.status === "Finished" ? "selected" : ""}>Finished</option>
+              <option value="want to watch" ${item.status === "want to watch" ? "selected" : ""}>want to watch</option>
+              <option value="in progress" ${item.status === "in progress" ? "selected" : ""}>in progress</option>
+              <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
             </select>
             <button class="delete-btn" onclick="removeItem('${type}', ${index})">Delete</button>
           </div>
@@ -239,11 +239,11 @@
 
       movieList.innerHTML = movies.length
         ? movies.map((item, i) => createItemHTML(item, i, "movie")).join("")
-        : `<div class="empty">No movies in your queue yet ✨</div>`;
+        : `<div class="empty">no movies in your queue yet ✨</div>`;
 
       gameList.innerHTML = games.length
         ? games.map((item, i) => createItemHTML(item, i, "game")).join("")
-        : `<div class="empty">No games in your queue yet 🎮</div>`;
+        : `<div class="empty">no games in your queue yet 🎮</div>`;
     }
 
     function addItem() {
@@ -256,7 +256,7 @@
 
       const newItem = {
         title: title,
-        status: "Want to Watch"
+        status: "want to watch"
       };
 
       if (type === "movie") {
