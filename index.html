@@ -191,6 +191,8 @@ body {
     }
 
     .item {
+      position: relative;
+      overflow: visible;
       background: white;
       border-left: 8px solid #c6a05b;
       border-radius: 16px;
@@ -373,12 +375,29 @@ body {
     }
 
     .delete-btn {
-      background: #c77777;
-    }
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #c77777;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
 
     .delete-btn:hover {
-      background: #a85b5b;
-    }
+  background: #a85b5b;
+}
 
     @media (max-width: 700px) {
       .lists {
@@ -410,9 +429,24 @@ body {
 }
 
 .delete-btn {
-  padding: 5px 8px;
-  font-size: 12px;
-  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #c77777;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 /* footer */
@@ -538,6 +572,11 @@ body {
     white-space: pre-line;
     line-height: 1.6;
   }
+}
+
+
+.item:hover .delete-btn {
+  opacity: 1;
 }
 
 </style>
