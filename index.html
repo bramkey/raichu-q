@@ -74,9 +74,27 @@ body {
     }
 
     .search-box {
-      display: flex;
-      justify-content: center;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#statusFilter {
+  min-width: 170px;
+  background: #fffdf5;
+}
+
+@media (max-width: 700px) {
+  .search-box {
+    flex-direction: column;
+  }
+
+  #statusFilter {
+    width: min(420px, 100%);
+  }
+}
 
     .add-box {
       background: #eee0bd;
@@ -637,6 +655,12 @@ body {
     <div class="toolbar">
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="⚡ search the queue" />
+        <select id="statusFilter">
+          <option value="all">all statuses</option>
+          <option value="finished">finished</option>
+          <option value="in progress">in progress / currently playing</option>
+          <option value="want">want to watch / play</option>
+        </select>
       </div>
 
       <div class="add-box">
@@ -726,6 +750,7 @@ window.addEventListener("load", () => {
     let movies = [];
     let games = [];
     let searchTerm = "";
+    let statusFilter = "all";
     let moviePage = 1;
     let gamePage = 1;
     const ITEMS_PER_PAGE = 5;
@@ -849,11 +874,27 @@ window.addEventListener("load", () => {
     }
 
     function filterItems(items) {
-      if (!searchTerm) return items;
-      return items.filter(item =>
-        item.title.toLowerCase().includes(searchTerm) ||
-        (item.description || "").toLowerCase().includes(searchTerm)
-      );
+      return items.filter(item => {
+        const title = String(item.title || "").toLowerCase();
+        const description = String(item.description || "").toLowerCase();
+        const status = String(item.status || "").toLowerCase();
+
+        const matchesSearch =
+          !searchTerm ||
+          title.includes(searchTerm) ||
+          description.includes(searchTerm);
+
+        let matchesStatus = true;
+        if (statusFilter === "finished") {
+          matchesStatus = status === "finished";
+        } else if (statusFilter === "in progress") {
+          matchesStatus = status === "in progress" || status === "currently playing";
+        } else if (statusFilter === "want") {
+          matchesStatus = status === "want to watch" || status === "want to play";
+        }
+
+        return matchesSearch && matchesStatus;
+      });
     }
 
 
@@ -907,6 +948,7 @@ window.addEventListener("load", () => {
 
       renderPagination("movie", movieData.currentPage, movieData.totalPages);
       renderPagination("game", gameData.currentPage, gameData.totalPages);
+      updateStats();
     }
 
     function changePage(type, direction) {
@@ -997,6 +1039,9 @@ window.addEventListener("load", () => {
 
     async function removeItem(type, index) {
       const item = type === "movie" ? movies[index] : games[index];
+
+      const confirmed = window.confirm(`are you sure you want to delete "${item.title}"?`);
+      if (!confirmed) return;
 
       const { error } = await supabaseClient
         .from("queue_items")
@@ -1120,13 +1165,14 @@ window.addEventListener("load", () => {
       searchTerm = event.target.value.trim().toLowerCase();
       moviePage = 1;
       gamePage = 1;
-      render(); updateStats();
+      render();
     });
-    document.getElementById("toggleDescriptionBtn").addEventListener("click", () => {
-      const box = document.getElementById("descriptionBox");
-      box.classList.toggle("show");
-      document.getElementById("toggleDescriptionBtn").textContent =
-        box.classList.contains("show") ? "hide summary" : "add summary";
+
+    document.getElementById("statusFilter").addEventListener("change", (event) => {
+      statusFilter = event.target.value;
+      moviePage = 1;
+      gamePage = 1;
+      render();
     });
 
     window.updateStatus = updateStatus;
