@@ -1001,8 +1001,8 @@ function updateStats(){
   const finishedGames = games.filter(i=>i.status==="finished").length;
   document.getElementById("statsBar").innerText =
     window.innerWidth <= 700
-    ? `🎬 ${totalMovies} watchlist (${finishedMovies} finished)
-🎮 ${totalGames} games (${finishedGames} finished)`
+    ? `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)
+🎮 ${totalGames} games to play (${finishedGames} finished)`
     : `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)   🎮 ${totalGames} games to play (${finishedGames} finished)`;
 }
 
