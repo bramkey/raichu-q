@@ -364,7 +364,28 @@
         justify-content: flex-start;
       }
     }
-  </style>
+  
+/* 🔧 Smaller item controls */
+.controls select {
+  padding: 6px 8px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+.controls button {
+  padding: 5px 8px;
+  font-size: 12px;
+  border-radius: 8px;
+  line-height: 1;
+}
+
+.delete-btn {
+  padding: 5px 8px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+</style>
 </head>
 <body>
   <div class="container">
@@ -482,7 +503,7 @@
               <select class="${getStatusClass(item.status)}" onchange="updateStatus('${type}', ${index}, this)">
                 ${options}
               </select>
-              <button class="delete-btn" onclick="removeItem('${type}', ${index})">Delete</button>
+              <button class="delete-btn" onclick="removeItem('${type}', ${index})">✕</button>
             </div>
           </div>
 
