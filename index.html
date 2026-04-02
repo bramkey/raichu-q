@@ -981,6 +981,63 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+@media (max-width: 700px) {
+  .container,
+  .queue-browser-box,
+  .section,
+  .item,
+  .stats-bar,
+  .add-box {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  .container {
+    width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
+    overflow-x: hidden;
+  }
+
+  .queue-browser-box,
+  .section,
+  .item {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .lists,
+  .item-top,
+  .controls,
+  .summary-row,
+  .summary-bottom {
+    min-width: 0;
+  }
+
+  .title,
+  .summary-text,
+  .controls select {
+    min-width: 0;
+  }
+
+  .queue-browser-box {
+    padding: 12px;
+    overflow: visible;
+  }
+
+  .section {
+    padding: 12px;
+    overflow-x: hidden;
+  }
+
+  .item {
+    margin-left: 0;
+    margin-right: 0;
+    overflow: visible;
+  }
+}
+
 </style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 </head>
