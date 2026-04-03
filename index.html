@@ -1389,6 +1389,27 @@ window.updateStatus = function(...args) {
     const ITEMS_PER_PAGE = 5;
     let activityLog = [];
 
+    function toLowerSafe(value) {
+      return String(value || "").toLowerCase();
+    }
+
+    function normalizeQueueItem(item) {
+      if (!item) return item;
+      return {
+        ...item,
+        title: toLowerSafe(item.title),
+        description: toLowerSafe(item.description)
+      };
+    }
+
+    function normalizeLogEntry(entry) {
+      if (!entry) return entry;
+      return {
+        ...entry,
+        message: toLowerSafe(entry.message)
+      };
+    }
+
     function renderLog() {
       const logBox = document.getElementById("logBox");
       if (!logBox) return;
@@ -1416,26 +1437,29 @@ window.updateStatus = function(...args) {
         return;
       }
 
-      activityLog = data || [];
+      activityLog = (data || []).map(normalizeLogEntry);
       renderLog();
     }
 
     async function saveActivityLog({ title, itemType, eventType, rating = null }) {
       if (!title) return false;
 
+      const normalizedTitle = toLowerSafe(title.trim());
       const dateOnly = new Date().toLocaleDateString();
       let message = "";
 
       if (eventType === "added") {
-        message = `added "${escapeHtml(title)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
+        message = `added "${escapeHtml(normalizedTitle)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
       } else if (eventType === "rated") {
-        message = `"${escapeHtml(title)}" on ${itemType === "game" ? "games" : "watchlist"} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
+        message = `"${escapeHtml(normalizedTitle)}" on ${itemType === "game" ? "games" : "watchlist"} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
       }
+
+      message = toLowerSafe(message);
 
       const { error } = await supabaseClient
         .from("activity_log")
         .insert([{
-          title,
+          title: normalizedTitle,
           item_type: itemType,
           event_type: eventType,
           rating,
@@ -1717,8 +1741,9 @@ window.updateStatus = function(...args) {
         return;
       }
 
-      movies = data.filter(item => item.type === "movie");
-      games = data.filter(item => item.type === "game");
+      const normalizedData = (data || []).map(normalizeQueueItem);
+      movies = normalizedData.filter(item => item.type === "movie");
+      games = normalizedData.filter(item => item.type === "game");
       render(); updateStats();
     }
 
@@ -1726,9 +1751,9 @@ window.updateStatus = function(...args) {
       const titleInput = document.getElementById("titleInput");
       const typeInput = document.getElementById("typeInput");
       const descriptionInput = document.getElementById("descriptionInput");
-      const title = titleInput.value.trim();
+      const title = toLowerSafe(titleInput.value.trim());
       const type = typeInput.value;
-      const description = descriptionInput.value.trim();
+      const description = toLowerSafe(descriptionInput.value.trim());
 
       if (!title) return;
 
@@ -1844,7 +1869,7 @@ window.updateStatus = function(...args) {
       const input = document.getElementById(`${type}-title-input-${index}`);
       if (!item || !input) return;
 
-      const title = input.value.trim();
+      const title = toLowerSafe(input.value.trim());
       if (!title) {
         alert("please enter a title.");
         return;
@@ -1876,7 +1901,7 @@ window.updateStatus = function(...args) {
     async function saveSummary(type, index) {
       const item = type === "movie" ? movies[index] : games[index];
       const input = document.getElementById(`${type}-editor-input-${index}`);
-      const description = input.value.trim();
+      const description = toLowerSafe(input.value.trim());
 
       const { error } = await supabaseClient
         .from("queue_items")
