@@ -7,6 +7,7 @@
   <title>raichu queue ⚡</title>
   <style>
     html, html, body {
+      background-image: linear-gradient(to right, rgba(244,239,228,0) 0%, rgba(244,239,228,0) calc(100% - 360px), #f8f1e4 calc(100% - 360px), #f8f1e4 100%);
   margin: 0;
   min-height: 100vh;
   font-family: "Poppins", Arial, sans-serif;
@@ -40,6 +41,7 @@ body {
     .container {
   max-width: 1100px;
   margin: 40px auto;
+  margin-right: calc(50% - 550px + 210px); /* shift left slightly for strip */
   padding: 25px;
   flex: 1 0 auto;
   width: 100%;
@@ -485,12 +487,12 @@ body {
 
 .footer {
   text-align: center;
-  margin-top: 40px;
-  padding: 15px;
-  padding-bottom: 15px; /* extra space from bottom */
+  margin-top: 20px;
+  padding: 10px 15px;
+  background: #f0e6d2; /* softer neutral tone */
+  border-top: 2px solid #d2b48c;
   font-size: 13px;
-  opacity: 0.7;
-  flex-shrink: 0;
+  opacity: 1;
 }    
     
 
@@ -1038,10 +1040,93 @@ body {
   }
 }
 
+
+/* activity log sidebar */
+.sidebar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 380px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  background: #f3ead7;
+  border: 3px solid #b88a44;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.sidebar h3 {
+  margin: 0 0 10px 0;
+  font-family: "Fredoka", cursive;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+#logBox {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.log-entry {
+  background: #fffdf5;
+  border: 2px solid #cfb27a;
+  border-radius: 12px;
+  padding: 8px 10px;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+@media (max-width: 1500px) {
+  .sidebar {
+    left: auto;
+    right: 12px;
+  }
+}
+
+@media (max-width: 1380px) {
+  body {
+    background-image: none;
+  }
+
+  .container {
+    margin: 40px auto;
+  }
+
+  .sidebar {
+    position: static;
+    width: auto;
+    max-height: none;
+    margin: 16px 12px 0 12px;
+  }
+}
+
+
+/* right side background strip */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 420px;
+  height: 100%;
+  background: #f8f1e4;
+  z-index: -1;
+}
+
 </style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="sidebar" id="logSidebar">
+    <h3>activity log ⚡</h3>
+    <div id="logBox"><div class="log-entry" style="opacity:0.6;">nothing new added yet</div></div>
+  </div>
+
   <div class="container">
     <div class="header">
       <h1>⚡ raichu queue ⚡</h1>
@@ -1201,6 +1286,40 @@ window.updateStatus = function(...args) {
     let moviePage = 1;
     let gamePage = 1;
     const ITEMS_PER_PAGE = 5;
+    let activityLog = [];
+
+    function renderLog() {
+      const logBox = document.getElementById("logBox");
+      if (!logBox) return;
+
+      if (activityLog.length === 0) {
+        logBox.innerHTML = '<div class="log-entry" style="opacity:0.6;">nothing new added yet</div>';
+        return;
+      }
+
+      logBox.innerHTML = activityLog
+        .map(entry => `<div class="log-entry">${entry}</div>`)
+        .join("");
+    }
+
+    function addLogEntry(title, type) {
+      if (!title) return;
+      const label = type === "game" ? "games" : "watchlist";
+      const dateOnly = new Date().toLocaleDateString();
+      activityLog.unshift(`added "${escapeHtml(title)}" in ${label} • ${dateOnly}`);
+      activityLog = activityLog.slice(0, 5);
+      renderLog();
+    }
+
+    function addRatingLogEntry(title, type, rating) {
+      if (!title || !rating) return;
+      const label = type === "game" ? "game" : "movie";
+      const dateOnly = new Date().toLocaleDateString();
+      activityLog.unshift(`"${escapeHtml(title)}" on ${label === "game" ? "games" : "watchlist"} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`);
+      activityLog = activityLog.slice(0, 5);
+      renderLog();
+    }
+
 
     function getStatusClass(status) {
       if (status === "want to watch" || status === "want to play") return "status-want";
@@ -1494,6 +1613,7 @@ window.updateStatus = function(...args) {
       document.getElementById("descriptionBox").classList.remove("show");
       document.getElementById("toggleDescriptionBtn").textContent = "add summary";
       await loadItems();
+      addLogEntry(title, type);
       showRaichuMessage("good choice! ⚡");
     }
 
@@ -1616,6 +1736,8 @@ window.updateStatus = function(...args) {
       const item = type === "movie" ? movies[index] : games[index];
       const rating = Number(value);
 
+      if (!item) return;
+
       const { error } = await supabaseClient
         .from("queue_items")
         .update({ rating })
@@ -1627,6 +1749,10 @@ window.updateStatus = function(...args) {
       }
 
       await loadItems();
+
+      if (item.status === "finished") {
+        addRatingLogEntry(item.title, type, rating);
+      }
     }
 
     async function togglePriority(type, index, value) {
@@ -1660,6 +1786,7 @@ function subscribeToChanges() {
     }
 
     document.getElementById("addButton").addEventListener("click", addItem);
+    renderLog();
     document.getElementById("searchInput").addEventListener("input", (event) => {
       searchTerm = event.target.value.trim().toLowerCase();
       moviePage = 1;
@@ -1767,6 +1894,9 @@ window.updateStatus = function(...args) {
   <footer class="footer">
   made with love for my gf 💛
 </footer>
+
+
+  
 
 </body>
 </html>
