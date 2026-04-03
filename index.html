@@ -247,6 +247,45 @@ body {
       flex-wrap: wrap;
     }
 
+    .title-button {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      font-weight: inherit;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: none !important;
+      transform: none !important;
+      min-width: 0;
+    }
+
+    .title-button:hover {
+      background: none !important;
+      color: inherit;
+      box-shadow: none !important;
+      transform: none !important;
+      text-decoration: underline;
+    }
+
+    .title-editor {
+      margin-top: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .title-editor.show {
+      display: flex;
+    }
+
+    .title-editor input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
     .controls {
       display: flex;
       gap: 8px;
@@ -1058,11 +1097,44 @@ body {
   box-sizing: border-box;
 }
 
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
 .sidebar h3 {
-  margin: 0 0 10px 0;
+  margin: 0;
   font-family: "Fredoka", cursive;
   font-size: 1.2rem;
   text-align: center;
+  flex: 1;
+}
+
+.log-toggle-btn {
+  background: #eadcb9;
+  color: #7a5a34;
+  border: 2px solid #9b6f35;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.log-toggle-btn:hover {
+  background: #dcc38d;
+}
+
+.sidebar.collapsed {
+  max-height: none;
+  overflow: hidden;
+}
+
+.sidebar.collapsed #logBox {
+  display: none;
 }
 
 #logBox {
@@ -1137,7 +1209,10 @@ body::before {
 </head>
 <body>
   <div class="sidebar" id="logSidebar">
-    <h3>activity log ⚡</h3>
+    <div class="sidebar-header">
+      <h3>activity log ⚡</h3>
+      <button type="button" class="log-toggle-btn" id="logToggleBtn" aria-expanded="true">collapse</button>
+    </div>
     <div id="logBox"><div class="log-entry" style="opacity:0.6;">nothing new added yet :(</div></div>
   </div>
 
@@ -1448,7 +1523,9 @@ window.updateStatus = function(...args) {
         <div class="item ${finishedClass} ${getBorderClass(item.status)}">
           <div class="item-top">
             <div class="title">
-              <span class="title-text">${escapeHtml(item.title)}</span>
+              <button type="button" class="title-button" onclick="toggleTitleEditor('${type}', ${index})" aria-label="edit title for ${escapeHtml(item.title)}">
+                <span class="title-text">${escapeHtml(item.title)}</span>
+              </button>
               ${finishedBadge}
             </div>
             <div class="controls">
@@ -1460,6 +1537,20 @@ window.updateStatus = function(...args) {
             </div>
           </div>
 
+
+          <div class="title-editor" id="${type}-title-editor-${index}">
+            <input
+              type="text"
+              id="${type}-title-input-${index}"
+              value="${escapeAttribute(item.title)}"
+              placeholder="edit title"
+              onkeydown="handleTitleEditKey(event, '${type}', ${index})"
+            />
+            <div class="item-actions">
+              <button onclick="saveTitle('${type}', ${index})">save title</button>
+              <button class="secondary-btn" onclick="toggleTitleEditor('${type}', ${index})">cancel</button>
+            </div>
+          </div>
 
           <div class="summary-row">
             ${hasSummary ? `
@@ -1720,6 +1811,68 @@ window.updateStatus = function(...args) {
       el.classList.toggle("show");
     }
 
+    function toggleTitleEditor(type, index) {
+      const el = document.getElementById(`${type}-title-editor-${index}`);
+      const input = document.getElementById(`${type}-title-input-${index}`);
+      const item = type === "movie" ? movies[index] : games[index];
+      if (!el || !input || !item) return;
+
+      const willShow = !el.classList.contains("show");
+      el.classList.toggle("show");
+
+      if (willShow) {
+        input.value = item.title || "";
+        requestAnimationFrame(() => {
+          input.focus();
+          input.select();
+        });
+      }
+    }
+
+    function handleTitleEditKey(event, type, index) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        saveTitle(type, index);
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        toggleTitleEditor(type, index);
+      }
+    }
+
+    async function saveTitle(type, index) {
+      const item = type === "movie" ? movies[index] : games[index];
+      const input = document.getElementById(`${type}-title-input-${index}`);
+      if (!item || !input) return;
+
+      const title = input.value.trim();
+      if (!title) {
+        alert("please enter a title.");
+        return;
+      }
+
+      const normalizedTitle = title.toLowerCase();
+      const duplicateExists = [...movies, ...games].some(queueItem =>
+        queueItem.id !== item.id && String(queueItem.title || "").toLowerCase() === normalizedTitle
+      );
+
+      if (duplicateExists) {
+        alert("⚠️ that's already in your queue!");
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from("queue_items")
+        .update({ title })
+        .eq("id", item.id);
+
+      if (error) {
+        console.error("Title update error:", error);
+        return;
+      }
+
+      await loadItems();
+    }
+
     async function saveSummary(type, index) {
       const item = type === "movie" ? movies[index] : games[index];
       const input = document.getElementById(`${type}-editor-input-${index}`);
@@ -1854,6 +2007,27 @@ function subscribeToChanges() {
         .subscribe();
     }
 
+    function setActivityLogCollapsed(collapsed) {
+      const sidebar = document.getElementById("logSidebar");
+      const toggleBtn = document.getElementById("logToggleBtn");
+      if (!sidebar || !toggleBtn) return;
+
+      sidebar.classList.toggle("collapsed", collapsed);
+      toggleBtn.textContent = collapsed ? "expand" : "collapse";
+      toggleBtn.setAttribute("aria-expanded", String(!collapsed));
+      localStorage.setItem("activityLogCollapsed", collapsed ? "true" : "false");
+    }
+
+    const logToggleBtn = document.getElementById("logToggleBtn");
+    if (logToggleBtn) {
+      const savedCollapsed = localStorage.getItem("activityLogCollapsed") === "true";
+      setActivityLogCollapsed(savedCollapsed);
+      logToggleBtn.addEventListener("click", () => {
+        const sidebar = document.getElementById("logSidebar");
+        setActivityLogCollapsed(!sidebar.classList.contains("collapsed"));
+      });
+    }
+
     document.getElementById("addButton").addEventListener("click", addItem);
     loadActivityLog();
     document.getElementById("searchInput").addEventListener("input", (event) => {
@@ -1885,6 +2059,9 @@ function subscribeToChanges() {
     window.updateStatus = updateStatus;
     window.removeItem = removeItem;
     window.toggleSummaryEditor = toggleSummaryEditor;
+    window.toggleTitleEditor = toggleTitleEditor;
+    window.handleTitleEditKey = handleTitleEditKey;
+    window.saveTitle = saveTitle;
     window.saveSummary = saveSummary;
     window.updateRating = updateRating;
     window.togglePriority = togglePriority;
