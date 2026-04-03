@@ -1,1549 +1,1544 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="raichu.ico">
-  <title>raichu queue ⚡</title>
-  <style>
-    html, html, body {
-      background-image: linear-gradient(to right, rgba(244,239,228,0) 0%, rgba(244,239,228,0) calc(100% - 360px), #f8f1e4 calc(100% - 360px), #f8f1e4 100%);
-  margin: 0;
-  min-height: 100vh;
-  font-family: "Poppins", Arial, sans-serif;
-  background: inherit;
-  color: #5e4730;
-  display: flex;
-  flex-direction: column;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: "Poppins", Arial, sans-serif;
-  background: linear-gradient(to bottom, #f4efe4, #dfc38a);
-  color: #5e4730;
-  display: flex;
-  flex-direction: column;
-  text-transform: lowercase;
-}
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Poppins", Arial, sans-serif;
-      background: linear-gradient(to bottom, #f4efe4, #dfc38a);
-      color: #5e4730;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .container {
-  max-width: 1100px;
-  margin: 40px auto;
-  margin-right: calc(50% - 550px + 210px); /* shift left slightly for strip */
-  padding: 25px;
-  flex: 1 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-    .header {
-      text-align: center;
-      background: #d7b46a;
-      border: 4px solid #9b6f35;
-      border-radius: 25px;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
-      margin-bottom: 25px;
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-
-    .header p {
-      margin-top: 8px;
-      font-size: 1rem;
-    }
-
-    .toolbar {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 30px;
-    }
-
-    .search-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-#statusFilter {
-  min-width: 170px;
-  background: #fffdf5;
-}
-
-@media (max-width: 700px) {
-  .lists { flex-direction: column; }
-  .search-box {
-    flex-direction: column;
-  }
-
-  #statusFilter {
-    width: min(420px, 100%);
-  }
-}
-
-    .add-box {
-  position: relative;
-  position: relative;
-      background: #eee0bd;
-      border: 3px solid #b88a44;
-      border-radius: 20px;
-      padding: 18px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-    }
-
-    .description-box {
-      width: 100%;
-      display: none;
-      justify-content: center;
-    }
-
-    .description-box.show {
-      display: flex;
-    }
-
-    input, select, button, textarea {
-
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 2px solid #9b6f35;
-      font-size: 14px;
-      font-family: inherit;
-    }
-
-    input, select, textarea {
-      background: white;
-    }
-
-    textarea {
-      width: min(520px, 100%);
-      min-height: 58px;
-      resize: vertical;
-    }
-
-    #searchInput {
-      width: min(420px, 100%);
-      border: 3px solid #b98b47;
-      background: #fffdf5;
-      font-weight: bold;
-      transition: all 0.25s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    #searchInput:focus {
-      transform: scale(1.015);
-      box-shadow: 0 0 6px rgba(185, 139, 71, 0.28);
-      border-color: #9f7340;
-      outline: none;
-    }
-
-    #searchInput:not(:placeholder-shown) {
-      animation: pulse 0.4s ease;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-      100% { transform: scale(1.015); }
-    }
-
-    button {
-      background: #b98b47;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
-      border: none;
-    }
-
-    button:hover {
-      background: #9f7340;
-      transform: scale(1.03);
-    }
-
-    .secondary-btn {
-      background: #eadcb9;
-      color: #7a5a34;
-      border: 2px solid #9b6f35;
-    }
-
-    .secondary-btn:hover {
-      background: #dcc38d;
-    }
-
-    .lists {
-  display: flex;
-  gap: 20px;
-  align-items: stretch;
-}
-
-    .section {
-      background: #f3ead7;
-      border: 3px solid #b88a44;
-      border-radius: 22px;
-      padding: 18px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-    
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-    .section h2 {
-      text-align: center;
-      margin-top: 0;
-      font-size: 1.5rem;
-    }
-
-    .item {
-      position: relative;
-      overflow: visible;
-      background: white;
-      border-left: 8px solid #c6a05b;
-      border-radius: 16px;
-      padding: 12px;
-      margin-bottom: 12px;
-      box-shadow: 0 1px 5px rgba(0,0,0,0.06);
-      transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
-    }
-
-    .item-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .title {
-      font-weight: bold;
-      font-size: 1rem;
-      word-break: break-word;
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .title-button {
-      background: none;
-      border: none;
-      padding: 0;
-      margin: 0;
-      font: inherit;
-      color: inherit;
-      font-weight: inherit;
-      text-align: left;
-      cursor: pointer;
-      box-shadow: none !important;
-      transform: none !important;
-      min-width: 0;
-    }
-
-    .title-button:hover {
-      background: none !important;
-      color: inherit;
-      box-shadow: none !important;
-      transform: none !important;
-      text-decoration: underline;
-    }
-
-    .title-editor {
-      margin-top: 10px;
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .title-editor.show {
-      display: flex;
-    }
-
-    .title-editor input {
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .controls {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .item-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    .summary-row {
-  margin-top: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.summary-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 8px;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-    .summary-text {
-      padding: 10px 12px;
-      background: #f3ecdf;
-      border: 2px solid #cfb27a;
-      border-radius: 12px;
-      line-height: 1.4;
-      white-space: pre-wrap;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .summary-link {
-      background: none !important;
-      border: none;
-      padding: 0;
-      margin-left: 4px;
-      color: #7a5a34;
-      font-size: 12px;
-      font-weight: normal;
-      text-decoration: underline;
-      cursor: pointer;
-      opacity: 0.65;
-      transition: opacity 0.2s ease;
-      box-shadow: none !important;
-    }
-
-    .summary-link:hover {
-      opacity: 0.85;
-      color: #7a5a34;
-      background: none !important;
-      transform: none !important;
-      box-shadow: none !important;
-    }
-
-    .summary-editor {
-      margin-top: 6px;
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      max-width: 100%;
-    }
-
-    .summary-editor.show {
-      display: flex;
-      width: 100%;
-      box-sizing: border-box;
-      align-items: flex-start;
-    }
-
-    .summary-editor textarea {
-      width: 100%;
-      max-width: 420px;
-      min-height: 50px;
-      border-radius: 10px;
-      padding: 8px;
-      font-size: 13px;
-      box-sizing: border-box;
-      align-self: flex-start;
-      resize: vertical;
-    }
-
-    .item-actions {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .summary-row {
-      margin-top: 6px;
-    }
-
-    .summary-text {
-      padding: 8px 10px;
-      font-size: 13px;
-    }
-
-    .summary-editor.show {
-      display: flex;
-      width: 100%;
-      box-sizing: border-box;
-      align-items: flex-start;
-    }
-
-    .status-want {
-      color: #7a5a34;
-    }
-
-    .status-progress {
-      color: #005b96;
-    }
-
-    .status-finished {
-      color: #1e6b1e;
-    }
-
-    .finished-item {
-      opacity: 0.72;
-      filter: grayscale(0.18);
-      border-left: 8px solid #4caf50;
-      background: #f3fff3;
-      transform: scale(0.985);
-    }
-
-    .finished-item .title-text {
-      text-decoration: line-through;
-    }
-
-    .finished-badge {
-      background: #4caf50;
-      color: white;
-      font-size: 12px;
-      font-weight: bold;
-      padding: 4px 8px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-
-    .status-want-border { border-left: 8px solid #c6a05b !important; }
-    .status-progress-border { border-left: 8px solid #3498db !important; }
-    .status-finished-border { border-left: 8px solid #4caf50 !important; }
-
-    .empty {
-      text-align: center;
-      opacity: 0.7;
-      font-style: italic;
-      padding: 10px 0;
-    }
-
-    .delete-btn {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #c77777;
-  color: white;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  font-size: 10px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-    .delete-btn:hover {
-  background: #a85b5b;
-}
-
-    @media (max-width: 700px) {
-      .lists {
-        grid-template-columns: 1fr;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="raichu.ico" />
+    <title>raichu queue ⚡</title>
+    <style>
+      /* ===== site-wide base styles + color/theme setup ===== */
+      html,
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Poppins", Arial, sans-serif;
+        color: #5e4730;
       }
 
-      .item-top {
+      body {
+        background: linear-gradient(to bottom, #f4efe4, #dfc38a);
+        display: flex;
         flex-direction: column;
+        text-transform: lowercase;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 40px auto;
+        margin-right: calc(
+          50% - 550px + 210px
+        ); /* shift left slightly for strip */
+        padding: 25px;
+        flex: 1 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .header {
+        text-align: center;
+        background: #d7b46a;
+        border: 4px solid #9b6f35;
+        border-radius: 25px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 25px;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 2.5rem;
+      }
+
+      .header p {
+        margin-top: 8px;
+        font-size: 1rem;
+      }
+
+      /* ===== top input area for adding new queue items ===== */
+      .toolbar {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 30px;
+      }
+
+      .search-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      #statusFilter {
+        min-width: 170px;
+        background: #fffdf5;
+      }
+
+      @media (max-width: 700px) {
+        /* ===== main two-column layout for watchlist + games ===== */
+      .lists {
+          flex-direction: column;
+        }
+        .search-box {
+          flex-direction: column;
+        }
+
+        #statusFilter {
+          width: min(420px, 100%);
+        }
+      }
+
+      .add-box {
+        position: relative;
+        background: #eee0bd;
+        border: 3px solid #b88a44;
+        border-radius: 20px;
+        padding: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      .description-box {
+        width: 100%;
+        display: none;
+        justify-content: center;
+      }
+
+      .description-box.show {
+        display: flex;
+      }
+
+      input,
+      select,
+      button,
+      textarea {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 2px solid #9b6f35;
+        font-size: 14px;
+        font-family: inherit;
+      }
+
+      input,
+      select,
+      textarea {
+        background: white;
+      }
+
+      textarea {
+        width: min(520px, 100%);
+        min-height: 58px;
+        resize: vertical;
+      }
+
+      #searchInput {
+        width: min(420px, 100%);
+        border: 3px solid #b98b47;
+        background: #fffdf5;
+        font-weight: bold;
+        transition: all 0.25s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      #searchInput:focus {
+        transform: scale(1.015);
+        box-shadow: 0 0 6px rgba(185, 139, 71, 0.28);
+        border-color: #9f7340;
+        outline: none;
+      }
+
+      #searchInput:not(:placeholder-shown) {
+        animation: pulse 0.4s ease;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+        100% {
+          transform: scale(1.015);
+        }
+      }
+
+      button {
+        background: #b98b47;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+        border: none;
+      }
+
+      button:hover {
+        background: #9f7340;
+        transform: scale(1.03);
+      }
+
+      .secondary-btn {
+        background: #eadcb9;
+        color: #7a5a34;
+        border: 2px solid #9b6f35;
+      }
+
+      .secondary-btn:hover {
+        background: #dcc38d;
+      }
+
+      .lists {
+        display: flex;
+        gap: 20px;
         align-items: stretch;
       }
 
+      .section {
+        background: #f3ead7;
+        border: 3px solid #b88a44;
+        border-radius: 22px;
+        padding: 18px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .section h2 {
+        text-align: center;
+        margin-top: 0;
+        font-size: 1.5rem;
+      }
+
+      /* ===== individual queue card styling ===== */
+      .item {
+        position: relative;
+        overflow: visible;
+        background: white;
+        border-left: 8px solid #c6a05b;
+        border-radius: 16px;
+        padding: 12px;
+        margin-bottom: 12px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.06);
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .item-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .title {
+        font-weight: bold;
+        font-size: 1rem;
+        word-break: break-word;
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .title-button {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        color: inherit;
+        font-weight: inherit;
+        text-align: left;
+        cursor: pointer;
+        box-shadow: none !important;
+        transform: none !important;
+        min-width: 0;
+      }
+
+      .title-button:hover {
+        background: none !important;
+        color: inherit;
+        box-shadow: none !important;
+        transform: none !important;
+        text-decoration: underline;
+      }
+
+      .title-editor {
+        margin-top: 10px;
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .title-editor.show {
+        display: flex;
+      }
+
+      .title-editor input {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
       .controls {
-        justify-content: flex-start;
-      }
-    }
-  
-/* 🔧 Smaller item controls */
-.controls select {
-  padding: 6px 8px;
-  font-size: 12px;
-  border-radius: 8px;
-}
-
-.controls button {
-  padding: 5px 8px;
-  font-size: 12px;
-  border-radius: 8px;
-  line-height: 1;
-}
-
-.delete-btn {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #c77777;
-  color: white;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  font-size: 10px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* footer */
-
-.footer {
-  text-align: center;
-  margin-top: 20px;
-  padding: 10px 15px;
-  background: #f0e6d2; /* softer neutral tone */
-  border-top: 2px solid #d2b48c;
-  font-size: 13px;
-  opacity: 1;
-}    
-    
-
-/* Header font styling */
-.header h1, .section h2 {
-  font-family: "Fredoka", cursive;
-  letter-spacing: 0.5px;
-}
-
-
-/* Make title input longer */
-#titleInput {
-  width: min(600px, 100%);
-}
-
-
-/* raichu sitting on add box */
-.raichu-wrapper {
-  position: absolute;
-  top: -65px;
-  right: 10px;
-  z-index: 10;
-}
-
-.add-box {
-  position: relative;
-  position: relative;
-}
-
-.raichu-float {
-  width: 85px;
-  height: 85px;
-}
-
-.raichu-bubble {
-  position: absolute;
-  bottom: 90px;
-  right: 0;
-  background: #ffffff;
-  color: #5e4730;
-  padding: 6px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  white-space: nowrap;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(8px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-
-
-
-/* Keep header on one line on mobile */
-.header h1 {
-  white-space: nowrap;
-}
-
-@media (max-width: 700px) {
-  .header h1 {
-    font-size: 1.6rem;
-  }
-}
-
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-  flex-wrap: wrap;
-}
-
-.page-btn {
-  padding: 6px 10px;
-  font-size: 12px;
-  border-radius: 8px;
-}
-
-.page-info {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
-
-.stats-bar{
-  white-space: pre;
-  margin:12px 0 18px 0;
-  margin-top:12px;
-  text-align:center;
-  background:#eee0bd;
-  border:2px solid #b88a44;
-  border-radius:12px;
-  padding:8px 12px;
-  font-size:13px;
-  font-weight:500;
-  box-shadow:0 2px 6px rgba(0,0,0,0.06);
-}
-
-
-@media (max-width: 700px) {
-  .stats-bar {
-    white-space: pre-line;
-    line-height: 1.6;
-  }
-}
-
-
-.item:hover .delete-btn {
-  opacity: 1;
-}
-
-
-@media (max-width: 700px) {
-  .delete-btn {
-    opacity: 1 !important;
-  }
-}
-
-
-.rating-row {
-  display: flex;
-  align-items: center;
-}
-
-.star-rating {
-  display: flex;
-  gap: 2px;
-}
-
-.star-btn {
-  background: none !important;
-  border: none !important;
-  padding: 0;
-  margin: 0;
-  font-size: 18px;
-  line-height: 1;
-  color: #c8b38a;
-  cursor: pointer;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-.star-btn:hover {
-  background: none !important;
-  color: #b98b47;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-.star-btn.active {
-  color: #b98b47;
-}
-
-
-/* mobile cleanup */
-@media (max-width: 700px) {
-  .container {
-    padding: 18px;
-    margin: 22px auto;
-  }
-
-  .header {
-    padding: 18px 14px;
-    margin-bottom: 18px;
-  }
-
-  .stats-bar {
-    margin: 8px 0 14px 0;
-    padding: 10px 12px;
-  }
-
-  .search-box {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  #searchInput,
-  #statusFilter,
-  #titleInput {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .toolbar {
-    gap: 12px;
-    margin-bottom: 22px;
-  }
-
-  .add-box {
-  position: relative;
-    padding: 16px 14px 14px 14px;
-    gap: 12px;
-  }
-
-  .add-box > input,
-  .add-box > select,
-  .add-box > button {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .raichu-wrapper {
-    top: -52px;
-    right: 14px;
-    z-index: 12;
-  }
-
-  .raichu-float {
-    width: 62px;
-    height: 62px;
-  }
-
-  .raichu-bubble {
-  position: absolute;
-  bottom: 90px;
-  right: 0;
-  background: #ffffff;
-  color: #5e4730;
-  padding: 6px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  white-space: nowrap;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(8px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-  .item {
-    padding: 14px 12px 12px 12px;
-  }
-
-  .item-top {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .controls {
-    width: 100%;
-    justify-content: flex-start;
-    padding-right: 14px;
-    box-sizing: border-box;
-  }
-
-  .controls select {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .summary-bottom {
-    align-items: flex-start;
-  }
-
-  .rating-row {
-    width: 100%;
-    justify-content: flex-end;
-  }
-
-  .section {
-    padding: 14px;
-  }
-
-  .delete-btn {
-    opacity: 1 !important;
-  }
-}
-
-
-.queue-browser-box {
-  position: relative;
-  width: 100%;
-  margin-top: 22px;
-  padding: 18px;
-  background: #f4e3c2;
-  border: 3px solid #b88a44;
-  border-radius: 24px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-}
-
-.queue-browser-box .search-box {
-  margin-bottom: 18px;
-}
-
-@media (max-width: 700px) {
-  .queue-browser-box {
-  width: 100%;
-    padding: 14px;
-    margin-top: 18px;
-  }
-
-  .queue-browser-box .search-box {
-    margin-bottom: 14px;
-  }
-}
-
-
-.section > #movieList,
-.section > #gameList {
-  flex: 1;
-}
-
-.priority-toggle {
-  background:#eadcb9;
-  border:2px solid #9b6f35;
-  border-radius:8px;
-  font-size:12px;
-  padding:4px 6px;
-  cursor:pointer;
-}
-.priority-toggle.active {
-  background:#d7b46a;
-}
-
-.stats-bar,
-.add-box,
-.top-controls {
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-
-.add-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: nowrap;
-}
-
-.add-row > input {
-  flex: 1;
-  min-width: 0;
-}
-
-.add-row > select,
-.add-row > button {
-  flex-shrink: 0;
-}
-
-.description-box {
-  width: 100%;
-  margin-top: 8px;
-}
-
-@media (max-width: 700px) {
-  .add-row {
-    flex-wrap: wrap;
-  }
-
-  .add-row > input,
-  .add-row > select,
-  .add-row > button {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-}
-
-
-.controls-row {
-  margin-top: 8px;
-}
-
-
-.controls-row {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-.controls-row select,
-.controls-row button {
-  min-width: 110px;
-}
-
-
-.raichu-container {
-  position: absolute;
-  top: -58px;
-  right: 14px;
-  width: 82px;
-  pointer-events: auto;
-  z-index: 10;
-}
-
-.raichu-img {
-  width: 82px;
-  height: 82px;
-  display: block;
-}
-
-.raichu-bubble {
-  position: absolute;
-  bottom: 90px;
-  right: 0;
-  background: #ffffff;
-  color: #5e4730;
-  padding: 6px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  white-space: nowrap;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(8px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-
-
-
-@media (max-width: 700px) {
-  .raichu-container {
-    top: -52px;
-    right: 14px;
-    z-index: 12;
-  }
-
-  .raichu-img {
-    width: 62px;
-    height: 62px;
-  }
-
-  .raichu-bubble {
-  position: absolute;
-  bottom: 90px;
-  right: 0;
-  background: #ffffff;
-  color: #5e4730;
-  padding: 6px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  white-space: nowrap;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(8px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-}
-
-
-@media (max-width: 700px) {
-  .queue-browser-box .raichu-container {
-    top: -44px;
-    right: 12px;
-    width: 58px;
-    z-index: 12;
-  }
-
-  .queue-browser-box .raichu-img {
-    width: 58px;
-    height: 58px;
-  }
-
-  .queue-browser-box .raichu-bubble {
-  position: absolute;
-  bottom: 90px;
-  right: 0;
-  background: #ffffff;
-  color: #5e4730;
-  padding: 6px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  white-space: nowrap;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(8px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-}
-
-
-
-.raichu-container:hover .raichu-bubble {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (max-width: 700px) {
-  .container,
-  .queue-browser-box,
-  .section,
-  .item,
-  .stats-bar,
-  .add-box {
-    box-sizing: border-box;
-    max-width: 100%;
-  }
-
-  .container {
-    width: 100%;
-    padding-left: 12px;
-    padding-right: 12px;
-    overflow-x: hidden;
-  }
-
-  .queue-browser-box,
-  .section,
-  .item {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .lists,
-  .item-top,
-  .controls,
-  .summary-row,
-  .summary-bottom {
-    min-width: 0;
-  }
-
-  .title,
-  .summary-text,
-  .controls select {
-    min-width: 0;
-  }
-
-  .queue-browser-box {
-    padding: 12px;
-    overflow: visible;
-  }
-
-  .section {
-    padding: 12px;
-    overflow-x: hidden;
-  }
-
-  .item {
-    margin-left: 0;
-    margin-right: 0;
-    overflow: visible;
-  }
-}
-
-
-/* activity log sidebar */
-.sidebar {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 380px;
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
-  background: #f3ead7;
-  border: 3px solid #b88a44;
-  border-radius: 20px;
-  padding: 16px;
-   0 3px 8px rgba(0,0,0,0.06);
-  z-index: 1000;
-  box-sizing: border-box;
-}
-
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.sidebar h3 {
-  margin: 0;
-  font-family: "Fredoka", cursive;
-  font-size: 1.2rem;
-  text-align: center;
-  flex: 1;
-}
-
-.log-toggle-btn {
-  background: #eadcb9;
-  color: #7a5a34;
-  border: 2px solid #9b6f35;
-  border-radius: 10px;
-  padding: 6px 10px;
-  font-size: 12px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.log-toggle-btn:hover {
-  background: #dcc38d;
-}
-
-.sidebar.collapsed {
-  max-height: none;
-  overflow: hidden;
-}
-
-.sidebar.collapsed #logBox {
-  display: none;
-}
-
-#logBox {
-  font-size: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.log-entry {
-  background: #fffdf5;
-  border: 2px solid #cfb27a;
-  border-radius: 12px;
-  padding: 8px 10px;
-  line-height: 1.35;
-  word-break: break-word;
-}
-
-@media (max-width: 1500px) {
-  .sidebar {
-    left: auto;
-    right: 12px;
-  }
-}
-
-@media (max-width: 1380px) {
-  body {
-    background-image: none;
-  }
-
-  .container {
-    margin: 40px auto;
-  }
-
-  .sidebar {
-    position: static;
-    width: auto;
-    max-height: none;
-    margin: 16px 12px 0 12px;
-  }
-}
-
-
-/* right side background strip */
-body::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 420px;
-  height: 100%;
-  background: #f8f1e4;
-  z-index: -2;
-}
-
-
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 420px;
-  height: 100%;
-  background: transparent;
-  box-shadow: inset 2px 0 6px rgba(0,0,0,0.18);
-  pointer-events: none;
-  z-index: -1;
-}
-
-</style>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
-</head>
-<body>
-  <div class="sidebar" id="logSidebar">
-    <div class="sidebar-header">
-      <h3>activity log ⚡</h3>
-      <button type="button" class="log-toggle-btn" id="logToggleBtn" aria-expanded="true">collapse</button>
-    </div>
-    <div id="logBox"><div class="log-entry" style="opacity:0.6;">nothing new added yet :(</div></div>
-  </div>
-
-  <div class="container">
-    <div class="header">
-      <h1>⚡ raichu queue ⚡</h1>
-    </div>
-
-    <div class="stats-bar" id="statsBar">⚡ loading stats and petting the raichu ...</div>
-
-    <div class="toolbar">
-<div class="add-box">
-        
-<div class="add-row">
-  <input type="text" id="titleInput" placeholder="add a movie/show or game" />
-</div>
-
-<div class="add-row controls-row">
-  <select id="typeInput">
-    <option value="movie">movie/show</option>
-    <option value="game">game</option>
-  </select>
-  <button type="button" class="secondary-btn" id="toggleDescriptionBtn">add summary</button>
-  <button id="addButton">add to queue ⚡</button>
-</div>
-
-
-        <div class="description-box" id="descriptionBox">
-          <textarea id="descriptionInput" placeholder="write a short summary or notes here."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <div class="queue-browser-box">
-      <div class="raichu-container" id="raichu">
-        <img src="raichu.ico" class="raichu-img" />
-        <div class="raichu-bubble" id="raichuBubble" data-default="hi gf">hi gf</div>
-      </div>
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="⚡ search the queue" />
-        <select id="statusFilter">
-          <option value="all">all statuses</option>
-          <option value="finished">finished</option>
-          <option value="in progress">in progress / currently playing</option>
-          <option value="want">want to watch / play</option>
-        </select>
-      </div>
-
-      <div class="lists">
-        <div class="section">
-          <h2>🎬 watchlist</h2>
-          <div id="movieList"></div>
-          <div class="pagination" id="moviePagination"></div>
-        </div>
-
-        <div class="section">
-          <h2>🎮 games</h2>
-          <div id="gameList"></div>
-          <div class="pagination" id="gamePagination"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://unpkg.com/@supabase/supabase-js@2">
-function updateStats(){
-  const totalMovies = movies.length;
-  const totalGames = games.length;
-  const finishedMovies = movies.filter(i=>i.status==="finished").length;
-  const finishedGames = games.filter(i=>i.status==="finished").length;
-  document.getElementById("statsBar").innerText =
-    `🎬 ${totalMovies} watchlist (${finishedMovies} finished)
-🎮 ${totalGames} games (${finishedGames} finished)`;
-}
-
-updateStats();
-
-
-window.addEventListener("load", () => {
-  const bubble = document.getElementById("raichuBubble");
-  if (!bubble) return;
-
-  const defaultText = bubble.dataset.default || "hi gf 💛";
-
-  // show welcome message
-  bubble.textContent = "welcome back, i missed you! 💛";
-  bubble.style.opacity = "1"; bubble.style.transform="translateY(0)";
-
-  // hide without switching back immediately
-  setTimeout(() => {
-    bubble.style.opacity = ""; bubble.style.transform="";
-
-    // only restore default AFTER fully hidden
-    setTimeout(() => {
-      bubble.textContent = defaultText;
-    }, 800); // matches fade time
-  }, 2500);
-});
-
-
-
-function showRaichuMessage(text) {
-  const bubble = document.getElementById("raichuBubble");
-  if (!bubble) return;
-
-  bubble.textContent = text;
-  bubble.style.opacity = "1"; bubble.style.transform="translateY(0)";
-
-  clearTimeout(window.raichuTimeout);
-  window.raichuTimeout = setTimeout(() => {
-    bubble.style.opacity = ""; bubble.style.transform="";
-    bubble.textContent = bubble.dataset.default || "hi gf";
-  }, 2000);
-}
-
-window.addEventListener("load", () => {
-  showRaichuMessage("welcome back, i missed you!");
-});
-
-const originalAdd = window.addItem;
-window.addItem = function(...args) {
-  showRaichuMessage("good choice!");
-  return originalAdd.apply(this, args);
-};
-
-const originalUpdateStatus = window.updateStatus;
-window.updateStatus = function(...args) {
-  const status = args[2];
-  if (status === "finished") {
-    showRaichuMessage("was it any good?");
-  }
-  return originalUpdateStatus.apply(this, args);
-};
-
-
-}
-
-
-
-
-
-
-
-</script>
-
-  <script>
-    const SUPABASE_URL = "https://ncqcqtfnaamcrbhncocv.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_0XjUw1Y6h99mUso6uJT_uw_dt8sFSHh";
-
-    if (!window.supabase) {
-      console.error("Supabase library failed to load.");
-    }
-
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    // required Supabase table:
-    // public.activity_log
-    // columns:
-    // id bigint generated always as identity primary key
-    // title text not null
-    // item_type text not null
-    // event_type text not null
-    // rating integer null
-    // message text not null
-    // created_at timestamptz not null default now()
-
-
-    let movies = [];
-    let games = [];
-    let searchTerm = "";
-    let statusFilter = "all";
-    let moviePage = 1;
-    let gamePage = 1;
-    const ITEMS_PER_PAGE = 5;
-    let activityLog = [];
-
-    function toLowerSafe(value) {
-      return String(value || "").toLowerCase();
-    }
-
-    function normalizeQueueItem(item) {
-      if (!item) return item;
-      return {
-        ...item,
-        title: toLowerSafe(item.title),
-        description: toLowerSafe(item.description)
-      };
-    }
-
-    function normalizeLogEntry(entry) {
-      if (!entry) return entry;
-      return {
-        ...entry,
-        message: toLowerSafe(entry.message)
-      };
-    }
-
-    function renderLog() {
-      const logBox = document.getElementById("logBox");
-      if (!logBox) return;
-
-      if (activityLog.length === 0) {
-        logBox.innerHTML = '<div class="log-entry" style="opacity:0.6;">nothing new added yet :(</div>';
-        return;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: center;
+        flex-shrink: 0;
       }
 
-      logBox.innerHTML = activityLog
-        .map(entry => `<div class="log-entry">${entry.message || entry}</div>`)
-        .join("");
-    }
-
-    async function loadActivityLog() {
-      const { data, error } = await supabaseClient
-        .from("activity_log")
-        .select("message, created_at")
-        .order("created_at", { ascending: false })
-        .limit(5);
-
-      if (error) {
-        console.error("Error loading activity log:", error);
-        renderLog();
-        return;
+      .item-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
       }
 
-      activityLog = (data || []).map(normalizeLogEntry);
-      renderLog();
-    }
-
-    async function saveActivityLog({ title, itemType, eventType, rating = null }) {
-      if (!title) return false;
-
-      const normalizedTitle = toLowerSafe(title.trim());
-      const dateOnly = new Date().toLocaleDateString();
-      let message = "";
-
-      if (eventType === "added") {
-        message = `added "${escapeHtml(normalizedTitle)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
-      } else if (eventType === "rated") {
-        message = `"${escapeHtml(normalizedTitle)}" on ${itemType === "game" ? "games" : "watchlist"} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
+      .summary-row {
+        margin-top: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
       }
 
-      message = toLowerSafe(message);
-
-      const { error } = await supabaseClient
-        .from("activity_log")
-        .insert([{
-          title: normalizedTitle,
-          item_type: itemType,
-          event_type: eventType,
-          rating,
-          message
-        }]);
-
-      if (error) {
-        console.error("Error saving activity log:", error);
-        return false;
+      .summary-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+        width: 100%;
       }
 
-      return true;
-    }
+      .summary-text {
+        padding: 10px 12px;
+        background: #f3ecdf;
+        border: 2px solid #cfb27a;
+        border-radius: 12px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        flex: 1;
+        min-width: 0;
+      }
 
+      .summary-link {
+        background: none !important;
+        border: none;
+        padding: 0;
+        margin-left: 4px;
+        color: #7a5a34;
+        font-size: 12px;
+        font-weight: normal;
+        text-decoration: underline;
+        cursor: pointer;
+        opacity: 0.65;
+        transition: opacity 0.2s ease;
+        box-shadow: none !important;
+      }
 
-    function getStatusClass(status) {
-      if (status === "want to watch" || status === "want to play") return "status-want";
-      if (status === "in progress" || status === "currently playing") return "status-progress";
-      return "status-finished";
-    }
+      .summary-link:hover {
+        opacity: 0.85;
+        color: #7a5a34;
+        background: none !important;
+        transform: none !important;
+        box-shadow: none !important;
+      }
 
-    function isFinishedStatus(status) {
-      return status === "finished";
-    }
+      .summary-editor {
+        margin-top: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 6px;
+        max-width: 100%;
+      }
 
-    function sortQueue(items) {
-      return [...items].sort((a, b) => {
-        const aPriority = a.priority ? 1 : 0;
-        const bPriority = b.priority ? 1 : 0;
-        if (aPriority !== bPriority) return bPriority - aPriority;
-        const aFinished = isFinishedStatus(a.status) ? 1 : 0;
-        const bFinished = isFinishedStatus(b.status) ? 1 : 0;
+      .summary-editor.show {
+        display: flex;
+        width: 100%;
+        box-sizing: border-box;
+        align-items: flex-start;
+      }
 
-        if (aFinished !== bFinished) {
-          return aFinished - bFinished;
+      .summary-editor textarea {
+        width: 100%;
+        max-width: 420px;
+        min-height: 50px;
+        border-radius: 10px;
+        padding: 8px;
+        font-size: 13px;
+        box-sizing: border-box;
+        align-self: flex-start;
+        resize: vertical;
+      }
+
+      .item-actions {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .summary-row {
+        margin-top: 6px;
+      }
+
+      .summary-text {
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+
+      .summary-editor.show {
+        display: flex;
+        width: 100%;
+        box-sizing: border-box;
+        align-items: flex-start;
+      }
+
+      .status-want {
+        color: #7a5a34;
+      }
+
+      .status-progress {
+        color: #005b96;
+      }
+
+      .status-finished {
+        color: #1e6b1e;
+      }
+
+      .finished-item {
+        opacity: 0.72;
+        filter: grayscale(0.18);
+        border-left: 8px solid #4caf50;
+        background: #f3fff3;
+        transform: scale(0.985);
+      }
+
+      .finished-item .title-text {
+        text-decoration: line-through;
+      }
+
+      .finished-badge {
+        background: #4caf50;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 4px 8px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+
+      .status-want-border {
+        border-left: 8px solid #c6a05b !important;
+      }
+      .status-progress-border {
+        border-left: 8px solid #3498db !important;
+      }
+      .status-finished-border {
+        border-left: 8px solid #4caf50 !important;
+      }
+
+      .empty {
+        text-align: center;
+        opacity: 0.7;
+        font-style: italic;
+        padding: 10px 0;
+      }
+
+      .delete-btn {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #c77777;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .delete-btn:hover {
+        background: #a85b5b;
+      }
+
+      @media (max-width: 700px) {
+        .lists {
+          grid-template-columns: 1fr;
         }
 
-        return new Date(b.created_at) - new Date(a.created_at);
-      });
-    }
+        .item-top {
+          flex-direction: column;
+          align-items: stretch;
+        }
 
-    function getBorderClass(status) {
-      if (status === "finished") return "status-finished-border";
-      if (status === "in progress" || status === "currently playing") return "status-progress-border";
-      return "status-want-border";
-    }
+        .controls {
+          justify-content: flex-start;
+        }
+      }
 
-    function createItemHTML(item, index, type) {
-      const options = type === "game"
-        ? `
+      /* 🔧 Smaller item controls */
+      .controls select {
+        padding: 6px 8px;
+        font-size: 12px;
+        border-radius: 8px;
+      }
+
+      .controls button {
+        padding: 5px 8px;
+        font-size: 12px;
+        border-radius: 8px;
+        line-height: 1;
+      }
+
+      .delete-btn {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #c77777;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      /* footer */
+
+      /* ===== footer styling ===== */
+      .footer {
+        text-align: center;
+        margin-top: 20px;
+        padding: 10px 15px;
+        background: #f0e6d2; /* softer neutral tone */
+        border-top: 2px solid #d2b48c;
+        font-size: 13px;
+        opacity: 1;
+      }
+
+      /* Header font styling */
+      .header h1,
+      .section h2 {
+        font-family: "Fredoka", cursive;
+        letter-spacing: 0.5px;
+      }
+
+      /* Make title input longer */
+      #titleInput {
+        width: min(600px, 100%);
+      }
+
+      /* raichu sitting on add box */
+      .raichu-wrapper {
+        position: absolute;
+        top: -65px;
+        right: 10px;
+        z-index: 10;
+      }
+
+      .add-box {
+        position: relative;
+      }
+
+      .raichu-float {
+        width: 85px;
+        height: 85px;
+      }
+
+      .raichu-bubble {
+        position: absolute;
+        bottom: 90px;
+        right: 0;
+        background: #ffffff;
+        color: #5e4730;
+        padding: 6px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        white-space: nowrap;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(8px);
+        transition:
+          opacity 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      /* Keep header on one line on mobile */
+      .header h1 {
+        white-space: nowrap;
+      }
+
+      @media (max-width: 700px) {
+        .header h1 {
+          font-size: 1.6rem;
+        }
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+
+      .page-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 8px;
+      }
+
+      .page-info {
+        font-size: 12px;
+        opacity: 0.8;
+      }
+
+      .stats-bar {
+        white-space: pre;
+        margin: 12px 0 18px 0;
+        margin-top: 12px;
+        text-align: center;
+        background: #eee0bd;
+        border: 2px solid #b88a44;
+        border-radius: 12px;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      }
+
+      @media (max-width: 700px) {
+        .stats-bar {
+          white-space: pre-line;
+          line-height: 1.6;
+        }
+      }
+
+      .item:hover .delete-btn {
+        opacity: 1;
+      }
+
+      @media (max-width: 700px) {
+        .delete-btn {
+          opacity: 1 !important;
+        }
+      }
+
+      .rating-row {
+        display: flex;
+        align-items: center;
+      }
+
+      .star-rating {
+        display: flex;
+        gap: 2px;
+      }
+
+      .star-btn {
+        background: none !important;
+        border: none !important;
+        padding: 0;
+        margin: 0;
+        font-size: 18px;
+        line-height: 1;
+        color: #c8b38a;
+        cursor: pointer;
+        box-shadow: none !important;
+        transform: none !important;
+      }
+
+      .star-btn:hover {
+        background: none !important;
+        color: #b98b47;
+        box-shadow: none !important;
+        transform: none !important;
+      }
+
+      .star-btn.active {
+        color: #b98b47;
+      }
+
+      /* ===== mobile layout cleanup so cards and controls do not overflow ===== */
+      /* mobile cleanup */
+      @media (max-width: 700px) {
+        .container {
+          padding: 18px;
+          margin: 22px auto;
+        }
+
+        .header {
+          padding: 18px 14px;
+          margin-bottom: 18px;
+        }
+
+        .stats-bar {
+          margin: 8px 0 14px 0;
+          padding: 10px 12px;
+        }
+
+        .search-box {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 10px;
+        }
+
+        #searchInput,
+        #statusFilter,
+        #titleInput {
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+
+        .toolbar {
+          gap: 12px;
+          margin-bottom: 22px;
+        }
+
+        .add-box {
+          position: relative;
+          padding: 16px 14px 14px 14px;
+          gap: 12px;
+        }
+
+        .add-box > input,
+        .add-box > select,
+        .add-box > button {
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+
+        .raichu-wrapper {
+          top: -52px;
+          right: 14px;
+          z-index: 12;
+        }
+
+        .raichu-float {
+          width: 62px;
+          height: 62px;
+        }
+
+        .raichu-bubble {
+          position: absolute;
+          bottom: 90px;
+          right: 0;
+          background: #ffffff;
+          color: #5e4730;
+          padding: 6px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          white-space: nowrap;
+          box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(8px);
+          transition:
+            opacity 0.35s ease,
+            transform 0.35s ease;
+        }
+
+        .item {
+          padding: 14px 12px 12px 12px;
+        }
+
+        .item-top {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 10px;
+        }
+
+        .controls {
+          width: 100%;
+          justify-content: flex-start;
+          padding-right: 14px;
+          box-sizing: border-box;
+        }
+
+        .controls select {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .summary-bottom {
+          align-items: flex-start;
+        }
+
+        .rating-row {
+          width: 100%;
+          justify-content: flex-end;
+        }
+
+        .section {
+          padding: 14px;
+        }
+
+        .delete-btn {
+          opacity: 1 !important;
+        }
+      }
+
+      .queue-browser-box {
+        position: relative;
+        width: 100%;
+        margin-top: 22px;
+        padding: 18px;
+        background: #f4e3c2;
+        border: 3px solid #b88a44;
+        border-radius: 24px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      .queue-browser-box .search-box {
+        margin-bottom: 18px;
+      }
+
+      @media (max-width: 700px) {
+        .queue-browser-box {
+          width: 100%;
+          padding: 14px;
+          margin-top: 18px;
+        }
+
+        .queue-browser-box .search-box {
+          margin-bottom: 14px;
+        }
+      }
+
+      .section > #movieList,
+      .section > #gameList {
+        flex: 1;
+      }
+
+      .priority-toggle {
+        background: #eadcb9;
+        border: 2px solid #9b6f35;
+        border-radius: 8px;
+        font-size: 12px;
+        padding: 4px 6px;
+        cursor: pointer;
+      }
+      .priority-toggle.active {
+        background: #d7b46a;
+      }
+
+      .stats-bar,
+      .add-box,
+      .top-controls {
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .add-row {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: nowrap;
+      }
+
+      .add-row > input {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .add-row > select,
+      .add-row > button {
+        flex-shrink: 0;
+      }
+
+      .description-box {
+        width: 100%;
+        margin-top: 8px;
+      }
+
+      @media (max-width: 700px) {
+        .add-row {
+          flex-wrap: wrap;
+        }
+
+        .add-row > input,
+        .add-row > select,
+        .add-row > button {
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+      }
+
+      .controls-row {
+        margin-top: 8px;
+      }
+
+      .controls-row {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .controls-row select,
+      .controls-row button {
+        min-width: 110px;
+      }
+
+      .raichu-container {
+        position: absolute;
+        top: -58px;
+        right: 14px;
+        width: 82px;
+        pointer-events: auto;
+        z-index: 10;
+      }
+
+      .raichu-img {
+        width: 82px;
+        height: 82px;
+        display: block;
+      }
+
+      .raichu-bubble {
+        position: absolute;
+        bottom: 90px;
+        right: 0;
+        background: #ffffff;
+        color: #5e4730;
+        padding: 6px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        white-space: nowrap;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(8px);
+        transition:
+          opacity 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      @media (max-width: 700px) {
+        .raichu-container {
+          top: -52px;
+          right: 14px;
+          z-index: 12;
+        }
+
+        .raichu-img {
+          width: 62px;
+          height: 62px;
+        }
+
+        .raichu-bubble {
+          position: absolute;
+          bottom: 90px;
+          right: 0;
+          background: #ffffff;
+          color: #5e4730;
+          padding: 6px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          white-space: nowrap;
+          box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(8px);
+          transition:
+            opacity 0.35s ease,
+            transform 0.35s ease;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .queue-browser-box .raichu-container {
+          top: -44px;
+          right: 12px;
+          width: 58px;
+          z-index: 12;
+        }
+
+        .queue-browser-box .raichu-img {
+          width: 58px;
+          height: 58px;
+        }
+
+        .queue-browser-box .raichu-bubble {
+          position: absolute;
+          bottom: 90px;
+          right: 0;
+          background: #ffffff;
+          color: #5e4730;
+          padding: 6px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          white-space: nowrap;
+          box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(8px);
+          transition:
+            opacity 0.35s ease,
+            transform 0.35s ease;
+        }
+      }
+
+      .raichu-container:hover .raichu-bubble {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 700px) {
+        .container,
+        .queue-browser-box,
+        .section,
+        .item,
+        .stats-bar,
+        .add-box {
+          box-sizing: border-box;
+          max-width: 100%;
+        }
+
+        .container {
+          width: 100%;
+          padding-left: 12px;
+          padding-right: 12px;
+          overflow-x: hidden;
+        }
+
+        .queue-browser-box,
+        .section,
+        .item {
+          width: 100%;
+          min-width: 0;
+        }
+
+        .lists,
+        .item-top,
+        .controls,
+        .summary-row,
+        .summary-bottom {
+          min-width: 0;
+        }
+
+        .title,
+        .summary-text,
+        .controls select {
+          min-width: 0;
+        }
+
+        .queue-browser-box {
+          padding: 12px;
+          overflow: visible;
+        }
+
+        .section {
+          padding: 12px;
+          overflow-x: hidden;
+        }
+
+        .item {
+          margin-left: 0;
+          margin-right: 0;
+          overflow: visible;
+        }
+      }
+
+      /* ===== activity log sidebar and collapse behavior styling ===== */
+      /* activity log sidebar */
+      .sidebar {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 380px;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+        background: #f3ead7;
+        border: 3px solid #b88a44;
+        border-radius: 20px;
+        padding: 16px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+        z-index: 1000;
+        box-sizing: border-box;
+      }
+
+      .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .sidebar h3 {
+        margin: 0;
+        font-family: "Fredoka", cursive;
+        font-size: 1.2rem;
+        text-align: center;
+        flex: 1;
+      }
+
+      .log-toggle-btn {
+        background: #eadcb9;
+        color: #7a5a34;
+        border: 2px solid #9b6f35;
+        border-radius: 10px;
+        padding: 6px 10px;
+        font-size: 12px;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+
+      .log-toggle-btn:hover {
+        background: #dcc38d;
+      }
+
+      .sidebar.collapsed {
+        max-height: none;
+        overflow: hidden;
+      }
+
+      .sidebar.collapsed #logBox {
+        display: none;
+      }
+
+      #logBox {
+        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .log-entry {
+        background: #fffdf5;
+        border: 2px solid #cfb27a;
+        border-radius: 12px;
+        padding: 8px 10px;
+        line-height: 1.35;
+        word-break: break-word;
+      }
+
+      @media (max-width: 1500px) {
+        .sidebar {
+          left: auto;
+          right: 12px;
+        }
+      }
+
+      @media (max-width: 1380px) {
+        body {
+          background-image: none;
+        }
+
+        .container {
+          margin: 40px auto;
+        }
+
+        .sidebar {
+          position: static;
+          width: auto;
+          max-height: none;
+          margin: 16px 12px 0 12px;
+        }
+      }
+
+      /* right side background strip */
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 420px;
+        height: 100%;
+        background: #f8f1e4;
+        z-index: -2;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 420px;
+        height: 100%;
+        background: transparent;
+        box-shadow: inset 2px 0 6px rgba(0, 0, 0, 0.18);
+        pointer-events: none;
+        z-index: -1;
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- activity log sidebar: shows latest actions and can be collapsed -->
+    <div class="sidebar" id="logSidebar">
+      <div class="sidebar-header">
+        <h3>activity log ⚡</h3>
+        <button
+          type="button"
+          class="log-toggle-btn"
+          id="logToggleBtn"
+          aria-expanded="true"
+        >
+          collapse
+        </button>
+      </div>
+      <div id="logBox">
+        <div class="log-entry" style="opacity: 0.6">
+          nothing new added yet :(
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- main app area: header, stats, add form, search/filter, and both lists -->
+      <div class="header">
+        <h1>⚡ raichu queue ⚡</h1>
+      </div>
+
+      <div class="stats-bar" id="statsBar">
+        ⚡ loading stats and petting the raichu ...
+      </div>
+
+      <div class="toolbar">
+      <!-- add form: users create new movie/show or game entries here -->
+        <div class="add-box">
+          <div class="add-row">
+            <input
+              type="text"
+              id="titleInput"
+              placeholder="add a movie/show or game"
+            />
+          </div>
+
+          <div class="add-row controls-row">
+            <select id="typeInput">
+              <option value="movie">movie/show</option>
+              <option value="game">game</option>
+            </select>
+            <button
+              type="button"
+              class="secondary-btn"
+              id="toggleDescriptionBtn"
+            >
+              add summary
+            </button>
+            <button id="addButton">add to queue ⚡</button>
+          </div>
+
+          <div class="description-box" id="descriptionBox">
+            <textarea
+              id="descriptionInput"
+              placeholder="write a short summary or notes here."
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="queue-browser-box">
+      <!-- browsing area: raichu message, search/filter controls, and both paginated lists -->
+        <div class="raichu-container" id="raichu">
+          <img src="raichu.ico" class="raichu-img" />
+          <div class="raichu-bubble" id="raichuBubble" data-default="hi gf">
+            hi gf
+          </div>
+        </div>
+        <div class="search-box">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="⚡ search the queue"
+          />
+          <select id="statusFilter">
+            <option value="all">all statuses</option>
+            <option value="finished">finished</option>
+            <option value="in progress">in progress / currently playing</option>
+            <option value="want">want to watch / play</option>
+          </select>
+        </div>
+
+        <div class="lists">
+          <!-- left column: watchlist items -->
+          <div class="section">
+            <h2>🎬 watchlist</h2>
+            <div id="movieList"></div>
+            <div class="pagination" id="moviePagination"></div>
+          </div>
+
+          <!-- right column: game items -->
+          <div class="section">
+            <h2>🎮 games</h2>
+            <div id="gameList"></div>
+            <div class="pagination" id="gamePagination"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <script>
+      // ===== data setup + shared state =====
+      const SUPABASE_URL = "https://ncqcqtfnaamcrbhncocv.supabase.co";
+      const SUPABASE_KEY = "sb_publishable_0XjUw1Y6h99mUso6uJT_uw_dt8sFSHh";
+
+      if (!window.supabase) {
+        console.error("Supabase library failed to load.");
+      }
+
+      const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+      );
+
+      // required Supabase table:
+      // public.activity_log
+      // columns:
+      // id bigint generated always as identity primary key
+      // title text not null
+      // item_type text not null
+      // event_type text not null
+      // rating integer null
+      // message text not null
+      // created_at timestamptz not null default now()
+
+      let movies = [];
+      let games = [];
+      let searchTerm = "";
+      let statusFilter = "all";
+      let moviePage = 1;
+      let gamePage = 1;
+      const ITEMS_PER_PAGE = 5;
+      let activityLog = [];
+
+      // keeps all stored/displayed text lowercase so the site stays visually consistent
+      function toLowerSafe(value) {
+        return String(value || "").toLowerCase();
+      }
+
+      function normalizeQueueItem(item) {
+        if (!item) return item;
+        return {
+          ...item,
+          title: toLowerSafe(item.title),
+          description: toLowerSafe(item.description),
+        };
+      }
+
+      function normalizeLogEntry(entry) {
+        if (!entry) return entry;
+        return {
+          ...entry,
+          message: toLowerSafe(entry.message),
+        };
+      }
+
+      // updates the summary bar at the top with current totals and finished counts
+      function updateStats() {
+        const totalMovies = movies.length;
+        const totalGames = games.length;
+        const finishedMovies = movies.filter(
+          (item) => item.status === "finished",
+        ).length;
+        const finishedGames = games.filter(
+          (item) => item.status === "finished",
+        ).length;
+        document.getElementById("statsBar").innerText =
+          `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)
+🎮 ${totalGames} games to play (${finishedGames} finished)`;
+      }
+
+      // renders the activity log sidebar using the most recent saved log entries
+      function renderLog() {
+        const logBox = document.getElementById("logBox");
+        if (!logBox) return;
+
+        if (activityLog.length === 0) {
+          logBox.innerHTML =
+            '<div class="log-entry" style="opacity:0.6;">nothing new added yet :(</div>';
+          return;
+        }
+
+        logBox.innerHTML = activityLog
+          .map(
+            (entry) => `<div class="log-entry">${entry.message || entry}</div>`,
+          )
+          .join("");
+      }
+
+      // pulls recent activity log entries from supabase when the page loads or refreshes
+      async function loadActivityLog() {
+        const { data, error } = await supabaseClient
+          .from("activity_log")
+          .select("message, created_at")
+          .order("created_at", { ascending: false })
+          .limit(5);
+
+        if (error) {
+          console.error("Error loading activity log:", error);
+          renderLog();
+          return;
+        }
+
+        activityLog = (data || []).map(normalizeLogEntry);
+        renderLog();
+      }
+
+      // saves a human-readable activity message whenever users add, edit, rate, or remove items
+      async function saveActivityLog({
+        title,
+        itemType,
+        eventType,
+        rating = null,
+      }) {
+        if (!title) return false;
+
+        const normalizedTitle = toLowerSafe(title.trim());
+        const dateOnly = new Date().toLocaleDateString();
+        let message = "";
+
+        if (eventType === "added") {
+          message = `added "${escapeHtml(normalizedTitle)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
+        } else if (eventType === "rated") {
+          message = `"${escapeHtml(normalizedTitle)}" on ${itemType === "game" ? "games" : "watchlist"} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
+        }
+
+        message = toLowerSafe(message);
+
+        const { error } = await supabaseClient.from("activity_log").insert([
+          {
+            title: normalizedTitle,
+            item_type: itemType,
+            event_type: eventType,
+            rating,
+            message,
+          },
+        ]);
+
+        if (error) {
+          console.error("Error saving activity log:", error);
+          return false;
+        }
+
+        return true;
+      }
+
+      function getStatusClass(status) {
+        if (status === "want to watch" || status === "want to play")
+          return "status-want";
+        if (status === "in progress" || status === "currently playing")
+          return "status-progress";
+        return "status-finished";
+      }
+
+      function isFinishedStatus(status) {
+        return status === "finished";
+      }
+
+      function sortQueue(items) {
+        return [...items].sort((a, b) => {
+          const aPriority = a.priority ? 1 : 0;
+          const bPriority = b.priority ? 1 : 0;
+          if (aPriority !== bPriority) return bPriority - aPriority;
+          const aFinished = isFinishedStatus(a.status) ? 1 : 0;
+          const bFinished = isFinishedStatus(b.status) ? 1 : 0;
+
+          if (aFinished !== bFinished) {
+            return aFinished - bFinished;
+          }
+
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+      }
+
+      function getBorderClass(status) {
+        if (status === "finished") return "status-finished-border";
+        if (status === "in progress" || status === "currently playing")
+          return "status-progress-border";
+        return "status-want-border";
+      }
+
+      // builds the html for one queue card, including status, rating, priority, and edit controls
+      function createItemHTML(item, index, type) {
+        const options =
+          type === "game"
+            ? `
           <option value="want to play" ${item.status === "want to play" ? "selected" : ""}>want to play</option>
           <option value="currently playing" ${item.status === "currently playing" ? "selected" : ""}>currently playing</option>
           <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
         `
-        : `
+            : `
           <option value="want to watch" ${item.status === "want to watch" ? "selected" : ""}>want to watch</option>
           <option value="in progress" ${item.status === "in progress" ? "selected" : ""}>in progress</option>
           <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
         `;
 
-      const finishedClass = item.status === "finished" ? "finished-item" : "";
-      const finishedBadge = item.status === "finished"
-        ? '<span class="finished-badge">Finished ✓</span>'
-        : "";
-      const hasSummary = item.description && item.description.trim();
-      const editorValue = item.description ? escapeAttribute(item.description) : "";
-      const ratingHTML = item.status === "finished"
-        ? `
+        const finishedClass = item.status === "finished" ? "finished-item" : "";
+        const finishedBadge =
+          item.status === "finished"
+            ? '<span class="finished-badge">Finished ✓</span>'
+            : "";
+        const hasSummary = item.description && item.description.trim();
+        const editorValue = item.description
+          ? escapeAttribute(item.description)
+          : "";
+        const ratingHTML =
+          item.status === "finished"
+            ? `
           <div class="rating-row">
             <div class="star-rating" aria-label="rating">
-              ${[1,2,3,4,5].map(star => `
+              ${[1, 2, 3, 4, 5]
+                .map(
+                  (star) => `
                 <button
                   type="button"
                   class="star-btn ${item.rating >= star ? "active" : ""}"
                   onclick="updateRating('${type}', ${index}, ${star})"
                   aria-label="rate ${star} stars"
                 >★</button>
-              `).join("")}
+              `,
+                )
+                .join("")}
             </div>
           </div>
         `
-        : "";
+            : "";
 
-      return `
+        return `
         <div class="item ${finishedClass} ${getBorderClass(item.status)}">
           <div class="item-top">
             <div class="title">
@@ -1577,46 +1572,66 @@ window.updateStatus = function(...args) {
           </div>
 
           <div class="summary-row">
-            ${hasSummary ? `
+            ${
+              hasSummary
+                ? `
               <div class="summary-text" id="${type}-summary-${index}">${escapeHtml(item.description)}</div>
               <div class="summary-bottom">
                 <button class="summary-link" onclick="toggleSummaryEditor('${type}', ${index})">edit summary</button>
 
-                ${item.status === "finished" ? `
+                ${
+                  item.status === "finished"
+                    ? `
                   <div class="rating-row">
                     <div class="star-rating" aria-label="rating">
-                      ${[1,2,3,4,5].map(star => `
+                      ${[1, 2, 3, 4, 5]
+                        .map(
+                          (star) => `
                         <button
                           type="button"
                           class="star-btn ${item.rating >= star ? "active" : ""}"
                           onclick="updateRating('${type}', ${index}, ${star})"
                           aria-label="rate ${star} stars"
                         >★</button>
-                      `).join("")}
+                      `,
+                        )
+                        .join("")}
                     </div>
                   </div>
-                ` : ""}
+                `
+                    : ""
+                }
               </div>
-            ` : `
+            `
+                : `
               <div class="summary-bottom">
                 <button class="summary-link" onclick="toggleSummaryEditor('${type}', ${index})">add summary</button>
 
-                ${item.status === "finished" ? `
+                ${
+                  item.status === "finished"
+                    ? `
                   <div class="rating-row">
                     <div class="star-rating" aria-label="rating">
-                      ${[1,2,3,4,5].map(star => `
+                      ${[1, 2, 3, 4, 5]
+                        .map(
+                          (star) => `
                         <button
                           type="button"
                           class="star-btn ${item.rating >= star ? "active" : ""}"
                           onclick="updateRating('${type}', ${index}, ${star})"
                           aria-label="rate ${star} stars"
                         >★</button>
-                      `).join("")}
+                      `,
+                        )
+                        .join("")}
                     </div>
                   </div>
-                ` : ""}
+                `
+                    : ""
+                }
               </div>
-            `}
+            `
+            }
           </div>
 
           <div class="summary-editor" id="${type}-editor-${index}">
@@ -1628,547 +1643,502 @@ window.updateStatus = function(...args) {
           </div>
         </div>
       `;
-    }
-
-    function escapeHtml(text) {
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;");
-    }
-
-    function escapeAttribute(text) {
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;");
-    }
-
-    function filterItems(items) {
-      return items.filter(item => {
-        const title = String(item.title || "").toLowerCase();
-        const description = String(item.description || "").toLowerCase();
-        const status = String(item.status || "").toLowerCase();
-
-        const matchesSearch =
-          !searchTerm ||
-          title.includes(searchTerm) ||
-          description.includes(searchTerm);
-
-        let matchesStatus = true;
-        if (statusFilter === "finished") {
-          matchesStatus = status === "finished";
-        } else if (statusFilter === "in progress") {
-          matchesStatus = status === "in progress" || status === "currently playing";
-        } else if (statusFilter === "want") {
-          matchesStatus = status === "want to watch" || status === "want to play";
-        }
-
-        return matchesSearch && matchesStatus;
-      });
-    }
-
-
-    function paginateItems(items, page) {
-      const totalPages = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
-      const safePage = Math.min(page, totalPages);
-      const start = (safePage - 1) * ITEMS_PER_PAGE;
-      return {
-        pageItems: items.slice(start, start + ITEMS_PER_PAGE),
-        totalPages,
-        currentPage: safePage
-      };
-    }
-
-    function renderPagination(type, currentPage, totalPages) {
-      const paginationEl = document.getElementById(type === "movie" ? "moviePagination" : "gamePagination");
-      if (!paginationEl) return;
-
-      if (totalPages <= 1) {
-        paginationEl.innerHTML = "";
-        return;
       }
 
-      paginationEl.innerHTML = `
+      function escapeHtml(text) {
+        return String(text)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
+      }
+
+      function escapeAttribute(text) {
+        return String(text)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
+      }
+
+      // applies the live search box and status dropdown to whichever list is being displayed
+      function filterItems(items) {
+        return items.filter((item) => {
+          const title = String(item.title || "").toLowerCase();
+          const description = String(item.description || "").toLowerCase();
+          const status = String(item.status || "").toLowerCase();
+
+          const matchesSearch =
+            !searchTerm ||
+            title.includes(searchTerm) ||
+            description.includes(searchTerm);
+
+          let matchesStatus = true;
+          if (statusFilter === "finished") {
+            matchesStatus = status === "finished";
+          } else if (statusFilter === "in progress") {
+            matchesStatus =
+              status === "in progress" || status === "currently playing";
+          } else if (statusFilter === "want") {
+            matchesStatus =
+              status === "want to watch" || status === "want to play";
+          }
+
+          return matchesSearch && matchesStatus;
+        });
+      }
+
+      // splits long lists into pages so the ui stays compact and easier to scan
+      function paginateItems(items, page) {
+        const totalPages = Math.max(
+          1,
+          Math.ceil(items.length / ITEMS_PER_PAGE),
+        );
+        const safePage = Math.min(page, totalPages);
+        const start = (safePage - 1) * ITEMS_PER_PAGE;
+        return {
+          pageItems: items.slice(start, start + ITEMS_PER_PAGE),
+          totalPages,
+          currentPage: safePage,
+        };
+      }
+
+      // draws the prev/next controls for each list
+      function renderPagination(type, currentPage, totalPages) {
+        const paginationEl = document.getElementById(
+          type === "movie" ? "moviePagination" : "gamePagination",
+        );
+        if (!paginationEl) return;
+
+        if (totalPages <= 1) {
+          paginationEl.innerHTML = "";
+          return;
+        }
+
+        paginationEl.innerHTML = `
         <button class="page-btn secondary-btn" ${currentPage === 1 ? "disabled" : ""} onclick="changePage('${type}', -1)">prev</button>
         <span class="page-info">page ${currentPage} of ${totalPages}</span>
         <button class="page-btn secondary-btn" ${currentPage === totalPages ? "disabled" : ""} onclick="changePage('${type}', 1)">next</button>
       `;
-    }
-
-    function render() {
-      const movieList = document.getElementById("movieList");
-      const gameList = document.getElementById("gameList");
-
-      const filteredMovies = filterItems(sortQueue(movies));
-      const filteredGames = filterItems(sortQueue(games));
-
-      const movieData = paginateItems(filteredMovies, moviePage);
-      const gameData = paginateItems(filteredGames, gamePage);
-
-      moviePage = movieData.currentPage;
-      gamePage = gameData.currentPage;
-
-      movieList.innerHTML = movieData.pageItems.length
-        ? movieData.pageItems.map((item) => createItemHTML(item, movies.findIndex(m => m.id === item.id), "movie")).join("")
-        : `<div class="empty">no matching movies found ✨</div>`;
-
-      gameList.innerHTML = gameData.pageItems.length
-        ? gameData.pageItems.map((item) => createItemHTML(item, games.findIndex(g => g.id === item.id), "game")).join("")
-        : `<div class="empty">no matching games found 🎮</div>`;
-
-      renderPagination("movie", movieData.currentPage, movieData.totalPages);
-      renderPagination("game", gameData.currentPage, gameData.totalPages);
-      updateStats();
-    }
-
-    function changePage(type, direction) {
-      if (type === "movie") {
-        moviePage += direction;
-      } else {
-        gamePage += direction;
-      }
-      render(); updateStats();
-    }
-
-    async function loadItems() {
-      const { data, error } = await supabaseClient
-        .from("queue_items")
-        .select("*");
-
-      if (error) {
-        console.error("Load error:", error);
-        return;
       }
 
-      const normalizedData = (data || []).map(normalizeQueueItem);
-      movies = normalizedData.filter(item => item.type === "movie");
-      games = normalizedData.filter(item => item.type === "game");
-      render(); updateStats();
-    }
+      // main render pipeline: sorts, filters, paginates, and redraws both lists + stats
+      function render() {
+        const movieList = document.getElementById("movieList");
+        const gameList = document.getElementById("gameList");
 
-    async function addItem() {
-      const titleInput = document.getElementById("titleInput");
-      const typeInput = document.getElementById("typeInput");
-      const descriptionInput = document.getElementById("descriptionInput");
-      const title = toLowerSafe(titleInput.value.trim());
-      const type = typeInput.value;
-      const description = toLowerSafe(descriptionInput.value.trim());
+        const filteredMovies = filterItems(sortQueue(movies));
+        const filteredGames = filterItems(sortQueue(games));
 
-      if (!title) return;
+        const movieData = paginateItems(filteredMovies, moviePage);
+        const gameData = paginateItems(filteredGames, gamePage);
 
-      const normalizedTitle = title.toLowerCase();
+        moviePage = movieData.currentPage;
+        gamePage = gameData.currentPage;
 
-      const alreadyExists =
-        movies.some(item => item.title.toLowerCase() === normalizedTitle) ||
-        games.some(item => item.title.toLowerCase() === normalizedTitle);
+        movieList.innerHTML = movieData.pageItems.length
+          ? movieData.pageItems
+              .map((item) =>
+                createItemHTML(
+                  item,
+                  movies.findIndex((m) => m.id === item.id),
+                  "movie",
+                ),
+              )
+              .join("")
+          : `<div class="empty">no matching movies found ✨</div>`;
 
-      if (alreadyExists) {
-        alert("⚠️ that's already in your queue!");
-        return;
+        gameList.innerHTML = gameData.pageItems.length
+          ? gameData.pageItems
+              .map((item) =>
+                createItemHTML(
+                  item,
+                  games.findIndex((g) => g.id === item.id),
+                  "game",
+                ),
+              )
+              .join("")
+          : `<div class="empty">no matching games found 🎮</div>`;
+
+        renderPagination("movie", movieData.currentPage, movieData.totalPages);
+        renderPagination("game", gameData.currentPage, gameData.totalPages);
+        updateStats();
       }
 
-      const defaultStatus = type === "game" ? "want to play" : "want to watch";
-
-      const { error } = await supabaseClient
-        .from("queue_items")
-        .insert([{ title, type, status: defaultStatus, description }]);
-
-      if (error) {
-        console.error("Insert error:", error);
-        return;
-      }
-
-      titleInput.value = "";
-      descriptionInput.value = "";
-      document.getElementById("descriptionBox").classList.remove("show");
-      document.getElementById("toggleDescriptionBtn").textContent = "add summary";
-      await loadItems();
-      await saveActivityLog({ title, itemType: type, eventType: "added" });
-      await loadActivityLog();
-      showRaichuMessage("good choice! ⚡");
-    }
-
-    async function updateStatus(type, index, selectElement) {
-      const status = selectElement.value;
-      const item = type === "movie" ? movies[index] : games[index];
-
-      const { error } = await supabaseClient
-        .from("queue_items")
-        .update({ status })
-        .eq("id", item.id);
-
-      if (error) {
-        console.error("Update error:", error);
-        return;
-      }
-
-      selectElement.className = getStatusClass(status);
-      await loadItems();
-
-      if (status === "finished") {
-        showRaichuMessage("was it any good?");
-      }
-    }
-
-    async function removeItem(type, index) {
-      const item = type === "movie" ? movies[index] : games[index];
-
-      const confirmed = window.confirm(`are you sure you want to delete "${item.title}"?`);
-      if (!confirmed) return;
-
-      const { error } = await supabaseClient
-        .from("queue_items")
-        .delete()
-        .eq("id", item.id);
-
-      if (error) {
-        console.error("Delete error:", error);
-        return;
-      }
-
-      await loadItems();
-    }
-
-    function toggleSummaryEditor(type, index) {
-      const el = document.getElementById(`${type}-editor-${index}`);
-      if (!el) return;
-      el.classList.toggle("show");
-    }
-
-    function toggleTitleEditor(type, index) {
-      const el = document.getElementById(`${type}-title-editor-${index}`);
-      const input = document.getElementById(`${type}-title-input-${index}`);
-      const item = type === "movie" ? movies[index] : games[index];
-      if (!el || !input || !item) return;
-
-      const willShow = !el.classList.contains("show");
-      el.classList.toggle("show");
-
-      if (willShow) {
-        input.value = item.title || "";
-        requestAnimationFrame(() => {
-          input.focus();
-          input.select();
-        });
-      }
-    }
-
-    function handleTitleEditKey(event, type, index) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        saveTitle(type, index);
-      } else if (event.key === "Escape") {
-        event.preventDefault();
-        toggleTitleEditor(type, index);
-      }
-    }
-
-    async function saveTitle(type, index) {
-      const item = type === "movie" ? movies[index] : games[index];
-      const input = document.getElementById(`${type}-title-input-${index}`);
-      if (!item || !input) return;
-
-      const title = toLowerSafe(input.value.trim());
-      if (!title) {
-        alert("please enter a title.");
-        return;
-      }
-
-      const normalizedTitle = title.toLowerCase();
-      const duplicateExists = [...movies, ...games].some(queueItem =>
-        queueItem.id !== item.id && String(queueItem.title || "").toLowerCase() === normalizedTitle
-      );
-
-      if (duplicateExists) {
-        alert("⚠️ that's already in your queue!");
-        return;
-      }
-
-      const { error } = await supabaseClient
-        .from("queue_items")
-        .update({ title })
-        .eq("id", item.id);
-
-      if (error) {
-        console.error("Title update error:", error);
-        return;
-      }
-
-      await loadItems();
-    }
-
-    async function saveSummary(type, index) {
-      const item = type === "movie" ? movies[index] : games[index];
-      const input = document.getElementById(`${type}-editor-input-${index}`);
-      const description = toLowerSafe(input.value.trim());
-
-      const { error } = await supabaseClient
-        .from("queue_items")
-        .update({ description })
-        .eq("id", item.id);
-
-      if (error) {
-        console.error("Summary update error:", error);
-        return;
-      }
-
-      await loadItems();
-    }
-
-
-    
-
-    const raichuBubble = document.getElementById('raichuBubble');
-    const raichuWrapper = document.querySelector('.raichu-wrapper');
-    let raichuTemporaryMessage = false;
-
-    if (raichuWrapper && raichuBubble) {
-      raichuWrapper.addEventListener('mouseenter', () => {
-        if (!raichuTemporaryMessage) {
-          raichuBubble.textContent = raichuBubble.dataset.default || 'hi gf 💛';
-          raichuBubble.classList.add('hover-show');
+      function changePage(type, direction) {
+        if (type === "movie") {
+          moviePage += direction;
+        } else {
+          gamePage += direction;
         }
-      });
-
-      raichuWrapper.addEventListener('mouseleave', () => {
-        if (!raichuTemporaryMessage) {
-          raichuBubble.classList.remove('hover-show');
-          setTimeout(() => {
-            if (!raichuBubble.classList.contains('hover-show') && !raichuBubble.classList.contains('show')) {
-              raichuBubble.textContent = '';
-            }
-          }, 800);
-        }
-      });
-    }
-
-    function showRaichuMessage(text) {
-      const bubble = document.getElementById('raichuBubble');
-      if (!bubble) return;
-
-      raichuTemporaryMessage = true;
-      bubble.classList.remove('hover-show');
-      bubble.textContent = text;
-      bubble.classList.add('show');
-
-      clearTimeout(window._raichuTimer);
-      clearTimeout(window._raichuCleanupTimer);
-
-      window._raichuTimer = setTimeout(() => {
-        bubble.classList.remove('show');
-
-        window._raichuCleanupTimer = setTimeout(() => {
-          bubble.textContent = '';
-          raichuTemporaryMessage = false;
-        }, 800);
-      }, 3600);
-    }
-
-
-    async function updateRating(type, index, value) {
-      const item = type === "movie" ? movies[index] : games[index];
-      const rating = Number(value);
-
-      if (!item) return;
-
-      const { error } = await supabaseClient
-        .from("queue_items")
-        .update({ rating })
-        .eq("id", item.id);
-
-      if (error) {
-        console.error("Rating update error:", error);
-        return;
+        render();
+        updateStats();
       }
 
-      await loadItems();
+      // loads queue items from supabase, normalizes them, and refreshes the whole interface
+      async function loadItems() {
+        const { data, error } = await supabaseClient
+          .from("queue_items")
+          .select("*");
 
-      if (item.status === "finished") {
-        await saveActivityLog({
-          title: item.title,
-          itemType: type,
-          eventType: "rated",
-          rating
-        });
+        if (error) {
+          console.error("Load error:", error);
+          return;
+        }
+
+        const normalizedData = (data || []).map(normalizeQueueItem);
+        movies = normalizedData.filter((item) => item.type === "movie");
+        games = normalizedData.filter((item) => item.type === "game");
+        render();
+        updateStats();
+      }
+
+      // adds a new movie/show or game to the database, then refreshes the ui and activity log
+      async function addItem() {
+        const titleInput = document.getElementById("titleInput");
+        const typeInput = document.getElementById("typeInput");
+        const descriptionInput = document.getElementById("descriptionInput");
+        const title = toLowerSafe(titleInput.value.trim());
+        const type = typeInput.value;
+        const description = toLowerSafe(descriptionInput.value.trim());
+
+        if (!title) return;
+
+        const normalizedTitle = title.toLowerCase();
+
+        const alreadyExists =
+          movies.some((item) => item.title.toLowerCase() === normalizedTitle) ||
+          games.some((item) => item.title.toLowerCase() === normalizedTitle);
+
+        if (alreadyExists) {
+          alert("⚠️ that's already in your queue!");
+          return;
+        }
+
+        const defaultStatus =
+          type === "game" ? "want to play" : "want to watch";
+
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .insert([{ title, type, status: defaultStatus, description }]);
+
+        if (error) {
+          console.error("Insert error:", error);
+          return;
+        }
+
+        titleInput.value = "";
+        descriptionInput.value = "";
+        document.getElementById("descriptionBox").classList.remove("show");
+        document.getElementById("toggleDescriptionBtn").textContent =
+          "add summary";
+        await loadItems();
+        await saveActivityLog({ title, itemType: type, eventType: "added" });
         await loadActivityLog();
+        showRaichuMessage("good choice! ⚡");
       }
-    }
 
-    async function togglePriority(type, index, value) {
-  const item = type === "movie" ? movies[index] : games[index];
-  const priority = value === true || value === "true";
+      // updates an item status (want, in progress, finished) and re-renders the card state
+      async function updateStatus(type, index, selectElement) {
+        const status = selectElement.value;
+        const item = type === "movie" ? movies[index] : games[index];
 
-  const { error } = await supabaseClient
-    .from("queue_items")
-    .update({ priority })
-    .eq("id", item.id);
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .update({ status })
+          .eq("id", item.id);
 
-  if (error) {
-    console.error("Priority update error:", error);
-    return;
-  }
+        if (error) {
+          console.error("Update error:", error);
+          return;
+        }
 
-  await loadItems();
-}
+        selectElement.className = getStatusClass(status);
+        await loadItems();
 
-function subscribeToChanges() {
-      supabaseClient
-        .channel("site-live-updates")
-        .on(
-          "postgres_changes",
-          { event: "*", schema: "public", table: "queue_items" },
-          () => {
-            loadItems();
-          }
-        )
-        .on(
-          "postgres_changes",
-          { event: "*", schema: "public", table: "activity_log" },
-          () => {
-            loadActivityLog();
-          }
-        )
-        .subscribe();
-    }
+        if (status === "finished") {
+          showRaichuMessage("was it any good?");
+        }
+      }
 
-    function setActivityLogCollapsed(collapsed) {
-      const sidebar = document.getElementById("logSidebar");
-      const toggleBtn = document.getElementById("logToggleBtn");
-      if (!sidebar || !toggleBtn) return;
+      // deletes an item from the queue and records that action in the activity log
+      async function removeItem(type, index) {
+        const item = type === "movie" ? movies[index] : games[index];
 
-      sidebar.classList.toggle("collapsed", collapsed);
-      toggleBtn.textContent = collapsed ? "expand" : "collapse";
-      toggleBtn.setAttribute("aria-expanded", String(!collapsed));
-      localStorage.setItem("activityLogCollapsed", collapsed ? "true" : "false");
-    }
+        const confirmed = window.confirm(
+          `are you sure you want to delete "${item.title}"?`,
+        );
+        if (!confirmed) return;
 
-    const logToggleBtn = document.getElementById("logToggleBtn");
-    if (logToggleBtn) {
-      const savedCollapsed = localStorage.getItem("activityLogCollapsed") === "true";
-      setActivityLogCollapsed(savedCollapsed);
-      logToggleBtn.addEventListener("click", () => {
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .delete()
+          .eq("id", item.id);
+
+        if (error) {
+          console.error("Delete error:", error);
+          return;
+        }
+
+        await loadItems();
+      }
+
+      // shows or hides the inline summary editor for a single card
+      function toggleSummaryEditor(type, index) {
+        const el = document.getElementById(`${type}-editor-${index}`);
+        if (!el) return;
+        el.classList.toggle("show");
+      }
+
+      // opens or closes the inline title editor when a user clicks an item name
+      function toggleTitleEditor(type, index) {
+        const el = document.getElementById(`${type}-title-editor-${index}`);
+        const input = document.getElementById(`${type}-title-input-${index}`);
+        const item = type === "movie" ? movies[index] : games[index];
+        if (!el || !input || !item) return;
+
+        const willShow = !el.classList.contains("show");
+        el.classList.toggle("show");
+
+        if (willShow) {
+          input.value = item.title || "";
+          requestAnimationFrame(() => {
+            input.focus();
+            input.select();
+          });
+        }
+      }
+
+      function handleTitleEditKey(event, type, index) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          saveTitle(type, index);
+        } else if (event.key === "Escape") {
+          event.preventDefault();
+          toggleTitleEditor(type, index);
+        }
+      }
+
+      // saves a renamed title back to supabase and updates the activity log
+      async function saveTitle(type, index) {
+        const item = type === "movie" ? movies[index] : games[index];
+        const input = document.getElementById(`${type}-title-input-${index}`);
+        if (!item || !input) return;
+
+        const title = toLowerSafe(input.value.trim());
+        if (!title) {
+          alert("please enter a title.");
+          return;
+        }
+
+        const normalizedTitle = title.toLowerCase();
+        const duplicateExists = [...movies, ...games].some(
+          (queueItem) =>
+            queueItem.id !== item.id &&
+            String(queueItem.title || "").toLowerCase() === normalizedTitle,
+        );
+
+        if (duplicateExists) {
+          alert("⚠️ that's already in your queue!");
+          return;
+        }
+
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .update({ title })
+          .eq("id", item.id);
+
+        if (error) {
+          console.error("Title update error:", error);
+          return;
+        }
+
+        await loadItems();
+      }
+
+      // saves the edited summary/notes text for a queue item
+      async function saveSummary(type, index) {
+        const item = type === "movie" ? movies[index] : games[index];
+        const input = document.getElementById(`${type}-editor-input-${index}`);
+        const description = toLowerSafe(input.value.trim());
+
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .update({ description })
+          .eq("id", item.id);
+
+        if (error) {
+          console.error("Summary update error:", error);
+          return;
+        }
+
+        await loadItems();
+      }
+      // handles raichu speech bubble popups for friendly feedback after user actions
+      function showRaichuMessage(text) {
+        const bubble = document.getElementById("raichuBubble");
+        if (!bubble) return;
+
+        const defaultText = bubble.dataset.default || "hi gf";
+        bubble.textContent = text;
+        bubble.style.opacity = "1";
+        bubble.style.transform = "translateY(0)";
+
+        clearTimeout(window.raichuTimeout);
+        window.raichuTimeout = setTimeout(() => {
+          bubble.style.opacity = "";
+          bubble.style.transform = "";
+          setTimeout(() => {
+            bubble.textContent = defaultText;
+          }, 350);
+        }, 2200);
+      }
+
+      // updates the saved star rating for an item and refreshes the list
+      async function updateRating(type, index, value) {
+        const item = type === "movie" ? movies[index] : games[index];
+        const rating = Number(value);
+
+        if (!item) return;
+
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .update({ rating })
+          .eq("id", item.id);
+
+        if (error) {
+          console.error("Rating update error:", error);
+          return;
+        }
+
+        await loadItems();
+
+        if (item.status === "finished") {
+          await saveActivityLog({
+            title: item.title,
+            itemType: type,
+            eventType: "rated",
+            rating,
+          });
+          await loadActivityLog();
+        }
+      }
+
+      // toggles the priority star so users can mark favorites or higher-priority items
+      async function togglePriority(type, index, value) {
+        const item = type === "movie" ? movies[index] : games[index];
+        const priority = value === true || value === "true";
+
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .update({ priority })
+          .eq("id", item.id);
+
+        if (error) {
+          console.error("Priority update error:", error);
+          return;
+        }
+
+        await loadItems();
+      }
+
+      // listens for realtime supabase updates so the page stays in sync after changes
+      function subscribeToChanges() {
+        supabaseClient
+          .channel("site-live-updates")
+          .on(
+            "postgres_changes",
+            { event: "*", schema: "public", table: "queue_items" },
+            () => {
+              loadItems();
+            },
+          )
+          .on(
+            "postgres_changes",
+            { event: "*", schema: "public", table: "activity_log" },
+            () => {
+              loadActivityLog();
+            },
+          )
+          .subscribe();
+      }
+
+      // collapses or expands the activity log and remembers the choice with localStorage
+      function setActivityLogCollapsed(collapsed) {
         const sidebar = document.getElementById("logSidebar");
-        setActivityLogCollapsed(!sidebar.classList.contains("collapsed"));
-      });
-    }
+        const toggleBtn = document.getElementById("logToggleBtn");
+        if (!sidebar || !toggleBtn) return;
 
-    document.getElementById("addButton").addEventListener("click", addItem);
-    loadActivityLog();
-    document.getElementById("searchInput").addEventListener("input", (event) => {
-      searchTerm = event.target.value.trim().toLowerCase();
-      moviePage = 1;
-      gamePage = 1;
-      render();
-    });
+        sidebar.classList.toggle("collapsed", collapsed);
+        toggleBtn.textContent = collapsed ? "expand" : "collapse";
+        toggleBtn.setAttribute("aria-expanded", String(!collapsed));
+        localStorage.setItem(
+          "activityLogCollapsed",
+          collapsed ? "true" : "false",
+        );
+      }
 
-    document.getElementById("statusFilter").addEventListener("change", (event) => {
-      statusFilter = event.target.value;
-      moviePage = 1;
-      gamePage = 1;
-      render();
-    });
+      const logToggleBtn = document.getElementById("logToggleBtn");
+      if (logToggleBtn) {
+        const savedCollapsed =
+          localStorage.getItem("activityLogCollapsed") === "true";
+        setActivityLogCollapsed(savedCollapsed);
+        logToggleBtn.addEventListener("click", () => {
+          const sidebar = document.getElementById("logSidebar");
+          setActivityLogCollapsed(!sidebar.classList.contains("collapsed"));
+        });
+      }
 
+      // ===== startup event listeners + initial page load =====
+      document.getElementById("addButton").addEventListener("click", addItem);
+      loadActivityLog();
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", (event) => {
+          searchTerm = event.target.value.trim().toLowerCase();
+          moviePage = 1;
+          gamePage = 1;
+          render();
+        });
 
-    const toggleDescriptionBtn = document.getElementById("toggleDescriptionBtn");
-    const descriptionBox = document.getElementById("descriptionBox");
+      document
+        .getElementById("statusFilter")
+        .addEventListener("change", (event) => {
+          statusFilter = event.target.value;
+          moviePage = 1;
+          gamePage = 1;
+          render();
+        });
 
-    if (toggleDescriptionBtn && descriptionBox) {
-      toggleDescriptionBtn.addEventListener("click", () => {
-        descriptionBox.classList.toggle("show");
-        toggleDescriptionBtn.textContent =
-          descriptionBox.classList.contains("show") ? "hide summary" : "add summary";
-      });
-    }
+      const toggleDescriptionBtn = document.getElementById(
+        "toggleDescriptionBtn",
+      );
+      const descriptionBox = document.getElementById("descriptionBox");
 
-    window.updateStatus = updateStatus;
-    window.removeItem = removeItem;
-    window.toggleSummaryEditor = toggleSummaryEditor;
-    window.toggleTitleEditor = toggleTitleEditor;
-    window.handleTitleEditKey = handleTitleEditKey;
-    window.saveTitle = saveTitle;
-    window.saveSummary = saveSummary;
-    window.updateRating = updateRating;
-    window.togglePriority = togglePriority;
-    window.changePage = changePage;
+      if (toggleDescriptionBtn && descriptionBox) {
+        toggleDescriptionBtn.addEventListener("click", () => {
+          descriptionBox.classList.toggle("show");
+          toggleDescriptionBtn.textContent = descriptionBox.classList.contains(
+            "show",
+          )
+            ? "hide summary"
+            : "add summary";
+        });
+      }
 
-    loadItems();
-    loadActivityLog();
-    subscribeToChanges();
-function updateStats(){
-  const totalMovies = movies.length;
-  const totalGames = games.length;
-  const finishedMovies = movies.filter(i=>i.status==="finished").length;
-  const finishedGames = games.filter(i=>i.status==="finished").length;
-  document.getElementById("statsBar").innerText =
-    `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)
-🎮 ${totalGames} games to play (${finishedGames} finished)`;
-}
+      window.updateStatus = updateStatus;
+      window.removeItem = removeItem;
+      window.toggleSummaryEditor = toggleSummaryEditor;
+      window.toggleTitleEditor = toggleTitleEditor;
+      window.handleTitleEditKey = handleTitleEditKey;
+      window.saveTitle = saveTitle;
+      window.saveSummary = saveSummary;
+      window.updateRating = updateRating;
+      window.togglePriority = togglePriority;
+      window.changePage = changePage;
 
-updateStats();
-
-
-window.addEventListener("load", () => {
-  const bubble = document.getElementById("raichuBubble");
-  if (!bubble) return;
-
-  const defaultText = bubble.dataset.default || "hi gf 💛";
-
-  // show welcome message
-  bubble.textContent = "welcome back, i missed you! 💛";
-  bubble.style.opacity = "1"; bubble.style.transform="translateY(0)";
-
-  // hide without switching back immediately
-  setTimeout(() => {
-    bubble.style.opacity = ""; bubble.style.transform="";
-
-    // only restore default AFTER fully hidden
-    setTimeout(() => {
-      bubble.textContent = defaultText;
-    }, 800); // matches fade time
-  }, 2500);
-});
-
-
-
-function showRaichuMessage(text) {
-  const bubble = document.getElementById("raichuBubble");
-  if (!bubble) return;
-  bubble.textContent = text;
-  bubble.style.opacity = "1";
-
-  clearTimeout(window.raichuTimeout);
-  window.raichuTimeout = setTimeout(() => {
-    bubble.style.opacity = "0";
-  }, 2000);
-}
-
-window.addEventListener("load", () => {
-  showRaichuMessage("welcome back, i missed you!");
-});
-
-const originalAdd = window.addItem;
-window.addItem = function(...args) {
-  showRaichuMessage("good choice!");
-  return originalAdd.apply(this, args);
-};
-
-const originalUpdateStatus = window.updateStatus;
-window.updateStatus = function(...args) {
-  const status = args[2];
-  if (status === "finished") {
-    showRaichuMessage("was it any good?");
-  }
-  return originalUpdateStatus.apply(this, args);
-};
-
-</script>
-  <footer class="footer">
-  made with love for my gf 💛
-</footer>
-
-
-  
-
-</body>
+      loadItems();
+      loadActivityLog();
+      subscribeToChanges();
+    </script>
+    <footer class="footer">made with love for my gf 💛</footer>
+  </body>
 </html>
