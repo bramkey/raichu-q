@@ -1049,11 +1049,11 @@ body {
   width: 380px;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
-  background: #f3ead7;
-  border: 3px solid #b88a44;
-  border-radius: 20px;
-  padding: 16px;
-   0 3px 8px rgba(0,0,0,0.06);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
   z-index: 1000;
   box-sizing: border-box;
 }
@@ -1132,13 +1132,108 @@ body::before {
   z-index: -1;
 }
 
+
+/* auth */
+.auth-box {
+  max-width: 800px;
+  margin: 0 auto 18px auto;
+  background: #f3ead7;
+  border: 3px solid #b88a44;
+  border-radius: 20px;
+  padding: 14px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+}
+
+.auth-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.auth-row input {
+  flex: 1;
+  min-width: 180px;
+}
+
+.auth-status {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 13px;
+  color: #7a5a34;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 700px) {
+  .auth-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .auth-actions {
+    width: 100%;
+  }
+
+  .auth-actions button,
+  .auth-row input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+
+/* separate boxes inside sidebar */
+.sidebar .auth-box {
+  max-width: none;
+  margin: 0 0 14px 0;
+  background: #f3ead7;
+  border: 3px solid #b88a44;
+  border-radius: 20px;
+  padding: 14px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+}
+
+.sidebar .log-box {
+  background: #f3ead7;
+  border: 3px solid #b88a44;
+  border-radius: 20px;
+  padding: 14px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+}
+
+.sidebar .log-box h3 {
+  margin: 0 0 10px 0;
+}
+
 </style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  
   <div class="sidebar" id="logSidebar">
-    <h3>activity log ⚡</h3>
-    <div id="logBox"><div class="log-entry" style="opacity:0.6;">nothing new added yet :(</div></div>
+  <div class="auth-box">
+      <div class="auth-row">
+        <input type="email" id="emailInput" placeholder="email" />
+        <input type="password" id="passwordInput" placeholder="password" />
+      </div>
+      <div class="auth-actions" style="margin-top:8px; justify-content:center;">
+        <button type="button" id="signUpButton">sign up</button>
+        <button type="button" id="signInButton">log in</button>
+        <button type="button" class="secondary-btn" id="signOutButton">log out</button>
+      </div>
+      <div class="auth-status" id="authStatus">not logged in</div>
+    </div>
+
+    <div class="log-box">
+      <h3>activity log ⚡</h3>
+      <div id="logBox"><div class="log-entry" style="opacity:0.6;">nothing new added yet</div></div>
+    </div>
   </div>
 
   <div class="container">
@@ -1147,8 +1242,7 @@ body::before {
     </div>
 
     <div class="stats-bar" id="statsBar">⚡ loading stats and petting the raichu ...</div>
-
-    <div class="toolbar">
+<div class="toolbar">
 <div class="add-box">
         
 <div class="add-row">
@@ -1293,6 +1387,79 @@ window.updateStatus = function(...args) {
 
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    async function getCurrentUser() {
+      const { data, error } = await supabaseClient.auth.getUser();
+      if (error) {
+        console.error("Auth getUser error:", error);
+        return null;
+      }
+      return data.user || null;
+    }
+
+    function setAuthStatus(message) {
+      const authStatus = document.getElementById("authStatus");
+      if (authStatus) authStatus.textContent = message;
+    }
+
+    async function refreshAuthUI() {
+      const user = await getCurrentUser();
+      if (user) {
+        setAuthStatus(`logged in as ${user.email}`);
+      } else {
+        setAuthStatus("not logged in");
+      }
+    }
+
+    async function signUp() {
+      const email = (document.getElementById("emailInput")?.value || "").trim();
+      const password = document.getElementById("passwordInput")?.value || "";
+      if (!email || !password) {
+        alert("enter an email and password");
+        return;
+      }
+
+      const { error } = await supabaseClient.auth.signUp({ email, password });
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      alert("sign-up submitted. check your email if confirmation is enabled.");
+      refreshAuthUI();
+    }
+
+    async function signIn() {
+      const email = (document.getElementById("emailInput")?.value || "").trim();
+      const password = document.getElementById("passwordInput")?.value || "";
+      if (!email || !password) {
+        alert("enter an email and password");
+        return;
+      }
+
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      await refreshAuthUI();
+      await loadItems();
+      await loadActivityLog();
+    }
+
+    async function signOutUser() {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      await refreshAuthUI();
+      await loadItems();
+      await loadActivityLog();
+    }
+
+
     // required Supabase table:
     // public.activity_log
     // columns:
@@ -1303,6 +1470,7 @@ window.updateStatus = function(...args) {
     // rating integer null
     // message text not null
     // created_at timestamptz not null default now()
+    // user_id uuid null (recommended if you want each user to have separate data)
 
 
     let movies = [];
@@ -1319,7 +1487,7 @@ window.updateStatus = function(...args) {
       if (!logBox) return;
 
       if (activityLog.length === 0) {
-        logBox.innerHTML = '<div class="log-entry" style="opacity:0.6;">nothing new added yet :(</div>';
+        logBox.innerHTML = '<div class="log-entry" style="opacity:0.6;">nothing new added yet</div>';
         return;
       }
 
@@ -1329,11 +1497,19 @@ window.updateStatus = function(...args) {
     }
 
     async function loadActivityLog() {
-      const { data, error } = await supabaseClient
+      const user = await getCurrentUser();
+
+      let query = supabaseClient
         .from("activity_log")
         .select("message, created_at")
         .order("created_at", { ascending: false })
         .limit(5);
+
+      if (user) {
+        query = query.eq("user_id", user.id);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error("Error loading activity log:", error);
@@ -1357,6 +1533,8 @@ window.updateStatus = function(...args) {
         message = `"${escapeHtml(title)}" on ${itemType === "game" ? "games" : "watchlist"} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
       }
 
+      const user = await getCurrentUser();
+
       const { error } = await supabaseClient
         .from("activity_log")
         .insert([{
@@ -1364,7 +1542,8 @@ window.updateStatus = function(...args) {
           item_type: itemType,
           event_type: eventType,
           rating,
-          message
+          message,
+          user_id: user ? user.id : null
         }]);
 
       if (error) {
@@ -1855,6 +2034,17 @@ function subscribeToChanges() {
     }
 
     document.getElementById("addButton").addEventListener("click", addItem);
+    document.getElementById("signUpButton").addEventListener("click", signUp);
+    document.getElementById("signInButton").addEventListener("click", signIn);
+    document.getElementById("signOutButton").addEventListener("click", signOutUser);
+
+    supabaseClient.auth.onAuthStateChange(async () => {
+      await refreshAuthUI();
+      await loadItems();
+      await loadActivityLog();
+    });
+
+    refreshAuthUI();
     loadActivityLog();
     document.getElementById("searchInput").addEventListener("input", (event) => {
       searchTerm = event.target.value.trim().toLowerCase();
