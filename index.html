@@ -1293,6 +1293,18 @@ window.updateStatus = function(...args) {
 
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // required Supabase table:
+    // public.activity_log
+    // columns:
+    // id bigint generated always as identity primary key
+    // title text not null
+    // item_type text not null
+    // event_type text not null
+    // rating integer null
+    // message text not null
+    // created_at timestamptz not null default now()
+
+
     let movies = [];
     let games = [];
     let searchTerm = "";
@@ -1312,26 +1324,55 @@ window.updateStatus = function(...args) {
       }
 
       logBox.innerHTML = activityLog
-        .map(entry => `<div class="log-entry">${entry}</div>`)
+        .map(entry => `<div class="log-entry">${entry.message || entry}</div>`)
         .join("");
     }
 
-    function addLogEntry(title, type) {
-      if (!title) return;
-      const label = type === "game" ? "games" : "watchlist";
-      const dateOnly = new Date().toLocaleDateString();
-      activityLog.unshift(`added "${escapeHtml(title)}" in ${label} • ${dateOnly}`);
-      activityLog = activityLog.slice(0, 5);
+    async function loadActivityLog() {
+      const { data, error } = await supabaseClient
+        .from("activity_log")
+        .select("message, created_at")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      if (error) {
+        console.error("Error loading activity log:", error);
+        renderLog();
+        return;
+      }
+
+      activityLog = data || [];
       renderLog();
     }
 
-    function addRatingLogEntry(title, type, rating) {
-      if (!title || !rating) return;
-      const label = type === "game" ? "game" : "movie";
+    async function saveActivityLog({ title, itemType, eventType, rating = null }) {
+      if (!title) return false;
+
       const dateOnly = new Date().toLocaleDateString();
-      activityLog.unshift(`"${escapeHtml(title)}" on ${label === "game" ? "games" : "watchlist"} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`);
-      activityLog = activityLog.slice(0, 5);
-      renderLog();
+      let message = "";
+
+      if (eventType === "added") {
+        message = `added "${escapeHtml(title)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
+      } else if (eventType === "rated") {
+        message = `"${escapeHtml(title)}" on ${itemType === "game" ? "games" : "watchlist"} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
+      }
+
+      const { error } = await supabaseClient
+        .from("activity_log")
+        .insert([{
+          title,
+          item_type: itemType,
+          event_type: eventType,
+          rating,
+          message
+        }]);
+
+      if (error) {
+        console.error("Error saving activity log:", error);
+        return false;
+      }
+
+      return true;
     }
 
 
@@ -1627,7 +1668,8 @@ window.updateStatus = function(...args) {
       document.getElementById("descriptionBox").classList.remove("show");
       document.getElementById("toggleDescriptionBtn").textContent = "add summary";
       await loadItems();
-      addLogEntry(title, type);
+      await saveActivityLog({ title, itemType: type, eventType: "added" });
+      await loadActivityLog();
       showRaichuMessage("good choice! ⚡");
     }
 
@@ -1765,7 +1807,13 @@ window.updateStatus = function(...args) {
       await loadItems();
 
       if (item.status === "finished") {
-        addRatingLogEntry(item.title, type, rating);
+        await saveActivityLog({
+          title: item.title,
+          itemType: type,
+          eventType: "rated",
+          rating
+        });
+        await loadActivityLog();
       }
     }
 
@@ -1788,7 +1836,7 @@ window.updateStatus = function(...args) {
 
 function subscribeToChanges() {
       supabaseClient
-        .channel("queue-items-live")
+        .channel("site-live-updates")
         .on(
           "postgres_changes",
           { event: "*", schema: "public", table: "queue_items" },
@@ -1796,11 +1844,18 @@ function subscribeToChanges() {
             loadItems();
           }
         )
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "activity_log" },
+          () => {
+            loadActivityLog();
+          }
+        )
         .subscribe();
     }
 
     document.getElementById("addButton").addEventListener("click", addItem);
-    renderLog();
+    loadActivityLog();
     document.getElementById("searchInput").addEventListener("input", (event) => {
       searchTerm = event.target.value.trim().toLowerCase();
       moviePage = 1;
@@ -1836,6 +1891,7 @@ function subscribeToChanges() {
     window.changePage = changePage;
 
     loadItems();
+    loadActivityLog();
     subscribeToChanges();
 function updateStats(){
   const totalMovies = movies.length;
