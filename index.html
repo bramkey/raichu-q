@@ -2195,6 +2195,143 @@
   }
 }
 
+
+/* preview: queue/plans tabs inside sticky header, left of collapse button */
+.container > .site-sticky-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
+}
+
+.container > .site-sticky-header h1 {
+  flex: 1 1 auto !important;
+}
+
+.header-page-tabs {
+  margin: 0 58px 0 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  flex: 0 0 auto !important;
+}
+
+.header-page-tabs .page-tab {
+  min-height: 34px !important;
+  padding: 8px 16px !important;
+  font-size: 13px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10) !important;
+}
+
+@media (max-width: 700px) {
+  .container > .site-sticky-header {
+    gap: 8px !important;
+    padding: 12px 54px 12px 12px !important;
+  }
+
+  .container > .site-sticky-header h1 {
+    font-size: 1.25rem !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .header-page-tabs {
+    margin: 0 2px 0 0 !important;
+    gap: 5px !important;
+  }
+
+  .header-page-tabs .page-tab {
+    min-height: 28px !important;
+    padding: 6px 9px !important;
+    font-size: 11px !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+/* true 50/50 segmented pill with slanted color edge */
+.header-pill-tabs{
+  position:relative !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  width:124px !important;
+  overflow:hidden !important;
+  border-radius:999px !important;
+  border:2px solid #c8ab72 !important;
+  background:#eadcb9 !important;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08) !important;
+  padding:0 !important;
+}
+
+/* active color is drawn across the full pill so its slant averages to exactly 50% */
+.header-pill-tabs::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background:#b98b47 !important;
+  z-index:1 !important;
+  pointer-events:none !important;
+}
+
+/* queue active: top edge ends before center, bottom edge ends after center = visually equal half */
+.header-pill-tabs:has(.page-tab:first-child.active)::before{
+  clip-path:polygon(0 0, calc(50% - 7px) 0, calc(50% + 7px) 100%, 0 100%) !important;
+}
+
+/* plans active: opposite matching slant */
+.header-pill-tabs:has(.page-tab:last-child.active)::before{
+  clip-path:polygon(calc(50% - 7px) 0, 100% 0, 100% 100%, calc(50% + 7px) 100%) !important;
+}
+
+.header-pill-tabs .page-tab.pill-tab{
+  position:relative !important;
+  min-width:0 !important;
+  min-height:32px !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border:none !important;
+  background:transparent !important;
+  color:#7a5a34 !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+  line-height:1 !important;
+  z-index:2 !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+
+.header-pill-tabs .page-tab.pill-tab.active{
+  color:#fffdf5 !important;
+}
+
+@media (max-width:700px){
+  .header-pill-tabs{
+    width:100px !important;
+  }
+
+  .header-pill-tabs .page-tab.pill-tab{
+    min-height:28px !important;
+    font-size:11px !important;
+  }
+
+  .header-pill-tabs:has(.page-tab:first-child.active)::before{
+    clip-path:polygon(0 0, calc(50% - 5px) 0, calc(50% + 5px) 100%, 0 100%) !important;
+  }
+
+  .header-pill-tabs:has(.page-tab:last-child.active)::before{
+    clip-path:polygon(calc(50% - 5px) 0, 100% 0, 100% 100%, calc(50% + 5px) 100%) !important;
+  }
+}
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -2231,10 +2368,13 @@
       <!-- sticky full-width header band -->
       <div class="header site-sticky-header">
         <h1>⚡ raichu queue ⚡</h1>
-      </div>
-      <div class="page-tabs" role="tablist" aria-label="raichu queue pages">
-        <button type="button" class="page-tab active" data-page="queuePage" role="tab" aria-selected="true">queue</button>
-        <button type="button" class="page-tab" data-page="plansPage" role="tab" aria-selected="false">plans</button>
+
+        <div class="page-tabs header-page-tabs" role="tablist" aria-label="raichu queue pages">
+          <div class="header-pill-tabs">
+            <button type="button" class="page-tab pill-tab active" data-page="queuePage" role="tab" aria-selected="true">queue</button>
+<button type="button" class="page-tab pill-tab" data-page="plansPage" role="tab" aria-selected="false">plans</button>
+          </div>
+        </div>
       </div>
 
       <main class="app-page active" id="queuePage">
