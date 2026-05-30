@@ -2119,6 +2119,7 @@
         if (!entry) return entry;
         return {
           ...entry,
+          title: toLowerSafe(entry.title),
           message: toLowerSafe(entry.message),
         };
       }
@@ -2170,46 +2171,46 @@
       }
 
 
-      async function deleteActivityLogsForTitle(title) {
+            async function deleteActivityLogsForTitle(title) {
         const normalizedTitle = toLowerSafe(title).trim();
         if (!normalizedTitle) return;
 
+        // update the visible sidebar immediately
         activityLog = activityLog.filter((entry) => {
           const message = String(entry.message || entry || "").toLowerCase();
-          return !message.includes(normalizedTitle);
+          const entryTitle = String(entry.title || "").toLowerCase();
+          return entryTitle !== normalizedTitle && !message.includes(normalizedTitle);
         });
         renderLog();
 
-        try {
-          const escapedTitle = normalizedTitle.replaceAll('"', '\"');
+        // delete matching rows from Supabase activity_log
+        const { error: titleDeleteError } = await supabaseClient
+          .from("activity_log")
+          .delete()
+          .eq("title", normalizedTitle);
 
-          const byTitle = await supabaseClient
-            .from("activity_log")
-            .delete()
-            .eq("title", normalizedTitle);
-
-          if (byTitle.error) {
-            console.error("error deleting activity logs by title:", byTitle.error);
-          }
-
-          const byMessage = await supabaseClient
-            .from("activity_log")
-            .delete()
-            .ilike("message", `%${normalizedTitle}%`);
-
-          if (byMessage.error) {
-            console.error("error deleting activity logs by message:", byMessage.error);
-          }
-        } catch (error) {
-          console.error("error deleting activity log entries:", error);
+        if (titleDeleteError) {
+          console.error("error deleting activity log by title:", titleDeleteError);
         }
+
+        // fallback for older log rows where the title column may not match perfectly
+        const { error: messageDeleteError } = await supabaseClient
+          .from("activity_log")
+          .delete()
+          .ilike("message", `%${normalizedTitle}%`);
+
+        if (messageDeleteError) {
+          console.error("error deleting activity log by message:", messageDeleteError);
+        }
+
+        await loadActivityLog();
       }
 
       // pulls recent activity log entries from supabase when the page loads or refreshes
       async function loadActivityLog() {
         const { data, error } = await supabaseClient
           .from("activity_log")
-          .select("id, message, created_at")
+          .select("id, title, message, created_at")
           .order("created_at", { ascending: false })
           .limit(20);
 
@@ -2736,8 +2737,7 @@
 
         await loadItems();
         await deleteActivityLogsForTitle(item.title);
-        await loadActivityLog();
-      }
+}
 
       // shows or hides the inline summary editor for a single card
       function toggleSummaryEditor(type, index) {
@@ -3050,7 +3050,7 @@ saveActivityLog({ title, itemType: "plan", eventType: "added" }).then(loadActivi
         renderPlans();
       }
 
-            async function removePlan(index) {
+                  async function removePlan(index) {
         if (!plans[index]) return;
         const planTitle = plans[index].title;
         const confirmed = window.confirm(`delete "${planTitle}" from plans?`);
@@ -3060,7 +3060,6 @@ saveActivityLog({ title, itemType: "plan", eventType: "added" }).then(loadActivi
         savePlans();
         renderPlans();
         await deleteActivityLogsForTitle(planTitle);
-        await loadActivityLog();
       }
 
       // ===== startup event listeners + initial page load =====
