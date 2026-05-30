@@ -3151,6 +3151,65 @@
   }
 }
 
+
+/* draft tags populate immediately to the left of the add tag box */
+.plan-tag-input-group {
+  justify-content: flex-start !important;
+}
+
+.draft-tag-list {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+.draft-plan-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: #d7b46a !important;
+  color: #fffdf5 !important;
+  border: 1px solid #a88658 !important;
+  border-radius: 999px !important;
+  padding: 4px 8px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+.draft-tag-remove {
+  background: transparent !important;
+  color: #fffdf5 !important;
+  border: 0 !important;
+  width: 14px !important;
+  height: 14px !important;
+  padding: 0 !important;
+  margin-left: 4px !important;
+  box-shadow: none !important;
+  transform: none !important;
+  line-height: 1 !important;
+}
+
+
+/* final: keep hidden tag plus compact */
+.plan-tag-add {
+  width: 20px !important;
+  height: 20px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+}
+
+.plan-tag-empty {
+  width: 22px !important;
+  height: 22px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  justify-content: center !important;
+  font-size: 14px !important;
+}
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -4182,8 +4241,6 @@
             { event: "*", schema: "public", table: "plans" },
             () => {
               loadPlans();
-      setupDraftPlanTagInput();
-      setupPlanTagInputs();
             },
           )
           .subscribe();
@@ -4353,7 +4410,6 @@
       }
 
 
-
       let draftPlanTags = [];
 
       function getPlanTags(tags) {
@@ -4375,7 +4431,7 @@
                 type="button"
                 class="draft-tag-remove"
                 onclick="removeDraftPlanTag(${index})"
-                aria-label="remove ${escapeAttribute(tag)}"
+                aria-label="remove ${escapeAttribute(tag)} tag"
               >×</button>
             </span>
           `)
@@ -4385,6 +4441,7 @@
       function removeDraftPlanTag(index) {
         draftPlanTags.splice(index, 1);
         renderDraftPlanTags();
+
         const input = document.getElementById("planTagDraftInput");
         if (input) input.focus();
       }
@@ -4402,7 +4459,11 @@
 
         input.value = "";
         renderDraftPlanTags();
-        setTimeout(() => input.focus(), 0);
+
+        requestAnimationFrame(() => {
+          input.focus();
+        });
+
         return true;
       }
 
@@ -4414,22 +4475,27 @@
       function resetDraftPlanTags() {
         draftPlanTags = [];
         renderDraftPlanTags();
+
         const input = document.getElementById("planTagDraftInput");
         if (input) input.value = "";
       }
 
       function setupDraftPlanTagInput() {
         const input = document.getElementById("planTagDraftInput");
-        if (!input || input.dataset.tagReady === "true") return;
+        if (!input || input.dataset.ready === "true") return;
 
-        input.dataset.tagReady = "true";
+        input.dataset.ready = "true";
 
         input.addEventListener("keydown", (event) => {
           if (event.key !== "Enter") return;
+
           event.preventDefault();
           event.stopPropagation();
+
           addDraftPlanTagFromInput();
         });
+
+        renderDraftPlanTags();
       }
 
       async function addPlan() {
@@ -4623,6 +4689,7 @@
       }
 
       loadPlans();
+      setupDraftPlanTagInput();
 
       document.getElementById("addButton").addEventListener("click", addItem);
       loadActivityLog();
@@ -4677,6 +4744,7 @@
       window.savePlanTag = savePlanTag;
       window.clearPlanTag = clearPlanTag;
       window.removeDraftPlanTag = removeDraftPlanTag;
+      window.setupDraftPlanTagInput = setupDraftPlanTagInput;
 
 
       loadItems();
