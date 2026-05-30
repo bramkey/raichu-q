@@ -1878,6 +1878,27 @@
         }
       }
 
+
+.plans-search-box{
+  display:flex;
+  justify-content:center;
+  margin:0 auto 16px auto;
+}
+#planSearchInput{
+  width:min(420px,100%);
+  border:3px solid #b98b47;
+  background:#fffdf5;
+  font-weight:bold;
+}
+
+.sidebar-header{
+  justify-content:center !important;
+  padding-right:0 !important;
+}
+.sidebar h3{
+  text-align:center !important;
+  width:100%;
+}
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -2004,7 +2025,11 @@
 
       <main class="app-page" id="plansPage">
         <div class="plans-page-box">
-          <p class="plans-intro">ideas for the future :D</p>
+          
+
+          <div class="plans-search-box">
+            <input type="text" id="planSearchInput" placeholder="⚡ search plans" />
+          </div>
 
           <div class="plans-add-box">
             <input type="text" id="planInput" placeholder="add a plan" />
@@ -2013,7 +2038,7 @@
               <option value="food">food</option>
               <option value="places">places</option>
             </select>
-            <button type="button" id="addPlanButton">add an idea 💛</button>
+            <button type="button" id="addPlanButton">add a plan 💛</button>
           </div>
 
           <div class="plans-grid">
@@ -2158,7 +2183,9 @@
         const dateOnly = new Date().toLocaleDateString();
         let message = "";
 
-        if (eventType === "added") {
+        if (eventType === "added" && itemType === "plan") {
+          message = `added plan "${escapeHtml(normalizedTitle)}" • ${dateOnly}`;
+        } else if (eventType === "added") {
           message = `added "${escapeHtml(normalizedTitle)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
         } else if (eventType === "rated") {
           message = `"${escapeHtml(normalizedTitle)}" on ${itemType === "game" ? "games" : "watchlist"} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
@@ -2908,6 +2935,7 @@
         input.value = "";
         savePlans();
         renderPlans();
+        saveActivityLog({ title, itemType: "plan", eventType: "added" }).then(loadActivityLog);
       }
 
       function togglePlanDone(index) {
