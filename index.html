@@ -3324,6 +3324,163 @@
   display: inline-flex !important;
 }
 
+
+/* keep tag + on same line as tags */
+.plan-tag-row {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-wrap: nowrap !important;
+  width: auto !important;
+}
+
+.plan-tag-list {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+.plan-tag-add {
+  flex-shrink: 0 !important;
+  margin-left: 2px !important;
+  align-self: center !important;
+}
+
+
+/* tag delete button should not reserve space */
+.plan-tag-removable {
+  position: relative !important;
+  padding-right: 8px !important;
+}
+
+.plan-tag-delete {
+  position: absolute !important;
+  top: 50% !important;
+  right: -4px !important;
+  transform: translateY(-50%) scale(0.85) !important;
+
+  width: 14px !important;
+  height: 14px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease !important;
+}
+
+.plan-tag-removable:hover .plan-tag-delete {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateY(-50%) scale(1) !important;
+}
+
+
+/* move delete x to top-right corner of tag */
+.plan-tag-removable {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+.plan-tag-delete {
+  position: absolute !important;
+  top: -5px !important;
+  right: -5px !important;
+  transform: scale(0.8) !important;
+
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 999px !important;
+
+  background: #8b5e3c !important;
+  color: #fffdf5 !important;
+  border: 1px solid rgba(255,255,255,0.35) !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  font-size: 10px !important;
+  font-weight: 700 !important;
+
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+
+  z-index: 5 !important;
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease !important;
+}
+
+.plan-tag-removable:hover .plan-tag-delete {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: scale(1) !important;
+}
+
+
+/* prevent tag delete button from being clipped */
+.plan-item,
+.plan-content,
+.plan-tag-row,
+.plan-tag-list,
+.plan-tag-removable {
+  overflow: visible !important;
+}
+
+.plan-tag-row {
+  padding-top: 5px !important;
+}
+
+.plan-tag-list {
+  padding-top: 5px !important;
+}
+
+.plan-tag-delete {
+  top: -7px !important;
+  right: -7px !important;
+  z-index: 999 !important;
+}
+
+
+/* hover effect: grow slightly instead of changing color */
+.plan-tag-delete:hover {
+  background: #8b5e3c !important; /* keep same color */
+  color: #fffdf5 !important;
+  transform: scale(1.15) !important;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease !important;
+}
+
+
+/* remove reserved top space until a tag is actually hovered */
+.plan-tag-row,
+.plan-tag-list {
+  padding-top: 0 !important;
+}
+
+.plan-tag-removable {
+  overflow: visible !important;
+}
+
+.plan-tag-removable .plan-tag-delete {
+  top: -5px !important;
+}
+
+.plan-tag-removable:hover {
+  z-index: 10 !important;
+}
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
