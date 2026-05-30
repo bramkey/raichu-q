@@ -3257,6 +3257,73 @@
   background: rgba(255,255,255,0.3) !important;
 }
 
+
+/* click-to-edit plan titles */
+.plan-title {
+  cursor: pointer !important;
+}
+
+.plan-title:hover {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+.plan-title-editor {
+  display: none !important;
+  width: 100% !important;
+  margin-top: 2px !important;
+  padding: 4px 6px !important;
+  font-size: inherit !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+
+.plan-title-editor.show {
+  display: block !important;
+}
+
+
+/* in-place plan title editor with edit button */
+.plan-title-edit-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.plan-title.editing {
+  display: none !important;
+}
+
+.plan-title-editor {
+  display: none !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  margin-top: 0 !important;
+  padding: 5px 7px !important;
+  font-size: inherit !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+
+.plan-title-editor.show {
+  display: inline-flex !important;
+}
+
+.plan-title-save-btn {
+  display: none !important;
+  flex-shrink: 0 !important;
+  padding: 5px 8px !important;
+  font-size: 12px !important;
+  border-radius: 8px !important;
+  line-height: 1 !important;
+}
+
+.plan-title-save-btn.show {
+  display: inline-flex !important;
+}
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -3538,7 +3605,69 @@
       }
 
 
-            async function deleteActivityLogsForTitle(title) {
+      
+      async function updateActivityLogsForTitle(oldTitle, newTitle) {
+        const normalizedOldTitle = toLowerSafe(oldTitle).trim();
+        const normalizedNewTitle = toLowerSafe(newTitle).trim();
+
+        if (!normalizedOldTitle || !normalizedNewTitle || normalizedOldTitle === normalizedNewTitle) {
+          return;
+        }
+
+        activityLog = activityLog.map((entry) => {
+          const entryTitle = toLowerSafe(entry.title || "");
+          const entryMessage = String(entry.message || entry || "");
+
+          if (entryTitle === normalizedOldTitle || entryMessage.toLowerCase().includes(normalizedOldTitle)) {
+            return {
+              ...entry,
+              title: normalizedNewTitle,
+              message: entryMessage.replace(
+                new RegExp(normalizedOldTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
+                normalizedNewTitle,
+              ),
+            };
+          }
+
+          return entry;
+        });
+
+        renderLog();
+
+        const { data, error } = await supabaseClient
+          .from("activity_log")
+          .select("id, title, message")
+          .or(`title.eq.${normalizedOldTitle},message.ilike.%${normalizedOldTitle}%`);
+
+        if (error) {
+          console.error("error finding activity logs to update:", error);
+          return;
+        }
+
+        const matchingRows = data || [];
+
+        await Promise.all(
+          matchingRows.map((row) => {
+            const oldMessage = String(row.message || "");
+            const updatedMessage = oldMessage.replace(
+              new RegExp(normalizedOldTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
+              normalizedNewTitle,
+            );
+
+            return supabaseClient
+              .from("activity_log")
+              .update({
+                title: normalizedNewTitle,
+                message: updatedMessage,
+              })
+              .eq("id", row.id);
+          }),
+        );
+
+        await loadActivityLog();
+      }
+
+      async function deleteActivityLogsForTitle(title) {
         const normalizedTitle = toLowerSafe(title).trim();
         if (!normalizedTitle) return;
 
@@ -4414,7 +4543,28 @@
                     aria-label="mark ${escapeAttribute(plan.title)} as done"
                   />
                   <div class="plan-content">
-                    <span class="plan-title">${escapeHtml(plan.title)}</span>
+                    <div class="plan-title-edit-row" id="plan-title-row-${globalIndex}">
+                      <span
+                        class="plan-title"
+                        id="plan-title-text-${globalIndex}"
+                        onclick="togglePlanTitleEditor(${globalIndex})"
+                      >${escapeHtml(plan.title)}</span>
+
+                      <input
+                        type="text"
+                        class="plan-title-editor"
+                        id="plan-title-editor-${globalIndex}"
+                        value="${escapeAttribute(plan.title)}"
+                        onkeydown="if(event.key==='Enter'){savePlanTitle(${globalIndex})}"
+                      />
+
+                      <button
+                        type="button"
+                        class="plan-title-save-btn"
+                        id="plan-title-save-${globalIndex}"
+                        onclick="savePlanTitle(${globalIndex})"
+                      >edit</button>
+                    </div>
                     <div class="plan-tag-row">
                       ${
                         getPlanTags(plan.tags).length
@@ -4698,6 +4848,67 @@
         await loadPlans();
       }
 
+
+      function togglePlanTitleEditor(index) {
+        const titleText = document.getElementById(`plan-title-text-${index}`);
+        const input = document.getElementById(`plan-title-editor-${index}`);
+        const saveBtn = document.getElementById(`plan-title-save-${index}`);
+        if (!titleText || !input || !saveBtn) return;
+
+        titleText.classList.add("editing");
+        input.classList.add("show");
+        saveBtn.classList.add("show");
+
+        input.value = plans[index]?.title || input.value;
+        input.focus();
+        input.select();
+      }
+
+      async function savePlanTitle(index) {
+        if (!plans[index]) return;
+
+        const titleText = document.getElementById(`plan-title-text-${index}`);
+        const input = document.getElementById(`plan-title-editor-${index}`);
+        const saveBtn = document.getElementById(`plan-title-save-${index}`);
+        if (!input) return;
+
+        const newTitle = toLowerSafe(input.value.trim());
+        const currentPlan = plans[index];
+
+        if (!newTitle) {
+          input.value = currentPlan.title;
+          if (titleText) titleText.classList.remove("editing");
+          input.classList.remove("show");
+          if (saveBtn) saveBtn.classList.remove("show");
+          return;
+        }
+
+        if (newTitle === currentPlan.title) {
+          if (titleText) titleText.classList.remove("editing");
+          input.classList.remove("show");
+          if (saveBtn) saveBtn.classList.remove("show");
+          return;
+        }
+
+        plans[index].title = newTitle;
+        renderPlans();
+
+        const { error } = await supabaseClient
+          .from("plans")
+          .update({ title: newTitle })
+          .eq("id", currentPlan.id);
+
+        if (error) {
+          console.error("error updating plan title:", error);
+          await loadPlans();
+          alert("couldn't rename that plan right now.");
+          return;
+        }
+
+        await updateActivityLogsForTitle(currentPlan.title, newTitle);
+        await loadPlans();
+      }
+
       async function togglePlanDone(index) {
         if (!plans[index]) return;
 
@@ -4836,6 +5047,8 @@
       window.clearPlanTag = clearPlanTag;
       window.removeDraftPlanTag = removeDraftPlanTag;
       window.removePlanTag = removePlanTag;
+      window.togglePlanTitleEditor = togglePlanTitleEditor;
+      window.savePlanTitle = savePlanTitle;
       window.setupDraftPlanTagInput = setupDraftPlanTagInput;
 
 
