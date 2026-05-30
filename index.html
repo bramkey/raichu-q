@@ -1402,10 +1402,11 @@
       }
 
       .plan-item {
+        position: relative;
         background: #fffdf5;
         border: 2px solid #cfb27a;
         border-radius: 14px;
-        padding: 9px 10px;
+        padding: 12px 10px;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -1437,16 +1438,23 @@
 
       .plan-delete-btn {
         opacity: 0;
-        width: 20px;
-        height: 20px;
-        padding: 0;
-        border-radius: 50%;
+        transition: opacity 0.2s ease;
+        position: absolute;
+        top: -8px;
+        right: -8px;
         background: #c77777;
-        font-size: 11px;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       }
 
       .plan-item:hover .plan-delete-btn {
