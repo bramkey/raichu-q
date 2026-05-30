@@ -3481,6 +3481,17 @@
   z-index: 10 !important;
 }
 
+
+/* mobile: show tag delete buttons by default */
+@media (hover: none), (pointer: coarse) {
+  .plan-tag-delete {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: scale(1) !important;
+  }
+}
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
