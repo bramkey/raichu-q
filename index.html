@@ -2216,7 +2216,7 @@
         let message = "";
 
         if (eventType === "added" && itemType === "plan") {
-          const planCategory = category || "plans";
+          const planCategory = category;
           message = `"${escapeHtml(normalizedTitle)}" added to ${planCategory} • ${dateOnly}`;
         } else if (eventType === "added") {
           message = `added "${escapeHtml(normalizedTitle)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
