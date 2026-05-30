@@ -2332,6 +2332,368 @@
   }
 }
 
+
+/* plan tags */
+#planTagInput {
+  flex: 0.75;
+  min-width: 160px;
+}
+
+.plan-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.plan-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.plan-tag {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  width: fit-content;
+  background: #eadcb9;
+  color: #7a5a34;
+  border: 1px solid #c8ab72;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.plan-tag-add {
+  width: 20px !important;
+  height: 20px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  background: #eadcb9 !important;
+  color: #7a5a34 !important;
+  border: 1px solid #c8ab72 !important;
+  box-shadow: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  transform: none !important;
+}
+
+.plan-tag-add:hover {
+  background: #dcc38d !important;
+  transform: none !important;
+}
+
+.plan-tag-editor {
+  display: none;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.plan-tag-editor.show {
+  display: flex;
+}
+
+.plan-tag-editor input {
+  flex: 1;
+  min-width: 120px;
+  padding: 6px 8px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+.plan-tag-editor button {
+  padding: 6px 8px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+@media (max-width: 700px) {
+  #planTagInput {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+
+/* final header title left-edge alignment */
+.container > .site-sticky-header {
+  padding-left: 8px !important;
+}
+
+@media (max-width: 700px) {
+  .container > .site-sticky-header {
+    padding-left: 8px !important;
+  }
+}
+
+
+/* smaller plan tag input + plus tag placeholder */
+#planTagInput {
+  flex: 0 0 120px !important;
+  min-width: 120px !important;
+  max-width: 140px !important;
+}
+
+.plan-tag.plan-tag-empty {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  background: #eadcb9;
+  color: #7a5a34;
+}
+
+.plan-tag.plan-tag-empty:hover {
+  background: #dcc38d;
+}
+
+@media (max-width: 700px) {
+  #planTagInput {
+    flex: 0 0 auto !important;
+    width: 120px !important;
+    max-width: 120px !important;
+  }
+}
+
+
+/* dynamic multi-tag inputs for plans */
+.plan-tag-input-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex: 1 1 220px;
+  min-width: 180px;
+}
+
+.plan-tag-input-group .plan-tag-input {
+  width: 92px;
+  min-width: 92px;
+  max-width: 110px;
+  padding: 8px 9px;
+  font-size: 12px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.plan-tag-input-group .plan-tag-input:placeholder-shown {
+  opacity: 0.82;
+}
+
+.plan-tag-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 700px) {
+  .plan-tag-input-group {
+    width: 100%;
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .plan-tag-input-group .plan-tag-input {
+    width: 92px !important;
+    max-width: 110px !important;
+  }
+}
+
+
+/* plan add layout: tag boxes sit underneath main controls */
+.plan-main-row {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.plan-main-row input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.plan-tag-input-group {
+  width: 100% !important;
+  flex: 0 0 100% !important;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+
+/* stable plan add layout + draft tag pills */
+.plan-main-row {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.plan-main-row input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.plan-tag-input-group {
+  width: 100% !important;
+  flex: 0 0 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+  margin-top: 4px !important;
+}
+
+#planTagDraftInput,
+.plan-tag-input-group .plan-tag-input {
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 110px !important;
+  padding: 7px 9px !important;
+  font-size: 12px !important;
+  border-radius: 10px !important;
+  box-sizing: border-box !important;
+}
+
+.draft-tag-list {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+.draft-plan-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: #d7b46a !important;
+  color: #fffdf5 !important;
+  border: 1px solid #a88658 !important;
+  border-radius: 999px !important;
+  padding: 4px 8px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+.draft-tag-remove {
+  background: transparent !important;
+  color: #fffdf5 !important;
+  border: 0 !important;
+  width: 14px !important;
+  height: 14px !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.plan-tag-list {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+
+/* final working plan tag creation */
+.plan-main-row {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.plan-main-row input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.plan-tag-input-group {
+  width: 100% !important;
+  flex: 0 0 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+  margin-top: 4px !important;
+}
+
+#planTagDraftInput {
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 110px !important;
+  padding: 7px 9px !important;
+  font-size: 12px !important;
+  border-radius: 10px !important;
+  box-sizing: border-box !important;
+}
+
+.draft-tag-list,
+.plan-tag-list {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+.draft-plan-tag,
+.plan-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: #d7b46a !important;
+  color: #fffdf5 !important;
+  border: 1px solid #a88658 !important;
+  border-radius: 999px !important;
+  padding: 4px 8px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+.draft-tag-remove {
+  background: transparent !important;
+  color: #fffdf5 !important;
+  border: 0 !important;
+  width: 14px !important;
+  height: 14px !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+
+.plan-tag-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #7a5a34;
+  text-transform: lowercase;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -2463,13 +2825,21 @@
           
 
           <div class="plans-add-box">
-            <input type="text" id="planInput" placeholder="add a plan" />
-            <select id="planCategoryInput">
-              <option value="things">things</option>
-              <option value="food">food</option>
-              <option value="places">places</option>
-            </select>
-            <button type="button" id="addPlanButton">add a plan 💛</button>
+            <div class="plan-main-row">
+              <input type="text" id="planInput" placeholder="add a plan" />
+              <select id="planCategoryInput">
+                <option value="things">things</option>
+                <option value="food">food</option>
+                <option value="places">places</option>
+              </select>
+              <button type="button" id="addPlanButton">add a plan 💛</button>
+            </div>
+
+            <div class="plan-tag-input-group" id="planTagInputGroup">
+              <span class="plan-tag-label">tags:</span>
+              <div class="draft-tag-list" id="draftPlanTagList"></div>
+              <input type="text" id="planTagDraftInput" placeholder="add tag" />
+            </div>
           </div>
 
           <div class="plans-browser-box">
@@ -2498,7 +2868,12 @@
       </main>
     </div>
 
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2">
+      document.addEventListener("DOMContentLoaded", () => {
+        setupPlanTagInputs();
+      });
+      setupPlanTagInputs();
+    </script>
 
     <script>
       // ===== data setup + shared state =====
@@ -3355,6 +3730,7 @@
             { event: "*", schema: "public", table: "plans" },
             () => {
               loadPlans();
+      setupPlanTagInputs();
             },
           )
           .subscribe();
@@ -3400,6 +3776,7 @@
       // title text not null
       // category text not null
       // completed boolean not null default false
+      // tags text null
       // created_at timestamptz not null default now()
 
       const ACTIVE_PAGE_STORAGE_KEY = "raichuActivePage";
@@ -3412,6 +3789,7 @@
           ...plan,
           title: toLowerSafe(plan.title),
           category: toLowerSafe(plan.category || "things"),
+          tags: toLowerSafe(plan.tags || ""),
           done: Boolean(plan.completed),
         };
       }
@@ -3433,7 +3811,7 @@
       async function loadPlans() {
         const { data, error } = await supabaseClient
           .from("plans")
-          .select("id, title, category, completed, created_at")
+          .select("id, title, category, completed, tags, created_at")
           .order("created_at", { ascending: false });
 
         if (error) {
@@ -3456,7 +3834,8 @@
             const matchesCategory = plan.category === category;
             const matchesSearch =
               !planSearchTerm ||
-              String(plan.title || "").toLowerCase().includes(planSearchTerm);
+              String(plan.title || "").toLowerCase().includes(planSearchTerm) ||
+              String(plan.tags || "").toLowerCase().includes(planSearchTerm);
             return matchesCategory && matchesSearch;
           });
 
@@ -3477,7 +3856,41 @@
                     onchange="togglePlanDone(${globalIndex})"
                     aria-label="mark ${escapeAttribute(plan.title)} as done"
                   />
-                  <span class="plan-title">${escapeHtml(plan.title)}</span>
+                  <div class="plan-content">
+                    <span class="plan-title">${escapeHtml(plan.title)}</span>
+                    <div class="plan-tag-row">
+                      ${
+                        plan.tags
+                          ? `<div class="plan-tag-list">
+                              ${getPlanTags(plan.tags)
+                                .map((tag) => `<span class="plan-tag">${escapeHtml(tag)}</span>`)
+                                .join("")}
+                             </div>
+                             <button
+                               type="button"
+                               class="plan-tag-add"
+                               onclick="togglePlanTagEditor(${globalIndex})"
+                               aria-label="edit tags for ${escapeAttribute(plan.title)}"
+                             >+</button>`
+                          : `<button
+                               type="button"
+                               class="plan-tag plan-tag-empty"
+                               onclick="togglePlanTagEditor(${globalIndex})"
+                               aria-label="add tag for ${escapeAttribute(plan.title)}"
+                             >+</button>`
+                      }
+                    </div>
+                    <div class="plan-tag-editor" id="plan-tag-editor-${globalIndex}">
+                      <input
+                        type="text"
+                        id="plan-tag-input-${globalIndex}"
+                        value="${escapeAttribute(plan.tags || "")}"
+                        placeholder="add tags"
+                      />
+                      <button type="button" onclick="savePlanTag(${globalIndex})">save</button>
+                      <button type="button" class="secondary-btn" onclick="clearPlanTag(${globalIndex})">clear</button>
+                    </div>
+                  </div>
                   <button type="button" class="plan-delete-btn" onclick="removePlan(${globalIndex})" aria-label="delete ${escapeAttribute(plan.title)}">✕</button>
                 </div>
               `;
@@ -3492,6 +3905,7 @@
         if (!input || !categoryInput) return;
 
         const title = toLowerSafe(input.value.trim());
+        const tags = collectPlanTagInputs();
         const category = toLowerSafe(categoryInput.value || "things");
 
         if (!title) return;
@@ -3509,6 +3923,7 @@
           {
             title,
             category,
+            tags,
             completed: false,
           },
         ]);
@@ -3520,8 +3935,158 @@
         }
 
         input.value = "";
+        resetPlanTagInputs();
         await loadPlans();
         await logPlanAdded(title, category);
+      }
+
+
+
+      let draftPlanTags = [];
+
+      function getPlanTags(tags) {
+        return String(tags || "")
+          .split(",")
+          .map((tag) => toLowerSafe(tag).trim())
+          .filter(Boolean);
+      }
+
+      function renderDraftPlanTags() {
+        const list = document.getElementById("draftPlanTagList");
+        if (!list) return;
+
+        list.innerHTML = draftPlanTags
+          .map(
+            (tag, index) => `
+              <span class="draft-plan-tag">
+                ${escapeHtml(tag)}
+                <button
+                  type="button"
+                  class="draft-tag-remove"
+                  onclick="removeDraftPlanTag(${index})"
+                  aria-label="remove ${escapeAttribute(tag)} tag"
+                >×</button>
+              </span>
+            `
+          )
+          .join("");
+      }
+
+      function removeDraftPlanTag(index) {
+        draftPlanTags.splice(index, 1);
+        renderDraftPlanTags();
+
+        const input = document.getElementById("planTagDraftInput");
+        if (input) input.focus();
+      }
+
+      function addDraftPlanTagFromInput() {
+        const input = document.getElementById("planTagDraftInput");
+        if (!input) return false;
+
+        const tag = toLowerSafe(input.value.trim());
+        if (!tag) return false;
+
+        if (!draftPlanTags.includes(tag)) {
+          draftPlanTags.push(tag);
+        }
+
+        input.value = "";
+        renderDraftPlanTags();
+
+        setTimeout(() => input.focus(), 0);
+        return true;
+      }
+
+      function collectPlanTagInputs() {
+        addDraftPlanTagFromInput();
+        return draftPlanTags.join(", ");
+      }
+
+      function resetPlanTagInputs() {
+        draftPlanTags = [];
+        renderDraftPlanTags();
+
+        const input = document.getElementById("planTagDraftInput");
+        if (input) input.value = "";
+      }
+
+      function setupPlanTagInputs() {
+        const input = document.getElementById("planTagDraftInput");
+        if (!input || input.dataset.ready === "true") return;
+
+        input.dataset.ready = "true";
+
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            event.stopPropagation();
+            addDraftPlanTagFromInput();
+          }
+        });
+      }
+
+      function togglePlanTagEditor(index) {
+        const editor = document.getElementById(`plan-tag-editor-${index}`);
+        const input = document.getElementById(`plan-tag-input-${index}`);
+        if (!editor) return;
+
+        editor.classList.toggle("show");
+
+        if (editor.classList.contains("show") && input) {
+          input.focus();
+          input.select();
+        }
+      }
+
+      async function savePlanTag(index) {
+        if (!plans[index]) return;
+
+        const input = document.getElementById(`plan-tag-input-${index}`);
+        if (!input) return;
+
+        const plan = plans[index];
+        const newTags = toLowerSafe(input.value.trim());
+
+        plans[index].tags = newTags;
+        renderPlans();
+
+        const { error } = await supabaseClient
+          .from("plans")
+          .update({ tags: newTags })
+          .eq("id", plan.id);
+
+        if (error) {
+          console.error("error updating plan tag:", error);
+          await loadPlans();
+          alert("couldn't save that tag right now.");
+          return;
+        }
+
+        await loadPlans();
+      }
+
+      async function clearPlanTag(index) {
+        if (!plans[index]) return;
+
+        const plan = plans[index];
+
+        plans[index].tags = "";
+        renderPlans();
+
+        const { error } = await supabaseClient
+          .from("plans")
+          .update({ tags: "" })
+          .eq("id", plan.id);
+
+        if (error) {
+          console.error("error clearing plan tag:", error);
+          await loadPlans();
+          alert("couldn't clear that tag right now.");
+          return;
+        }
+
+        await loadPlans();
       }
 
       async function togglePlanDone(index) {
