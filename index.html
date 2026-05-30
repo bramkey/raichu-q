@@ -2156,6 +2156,31 @@
           .join("");
       }
 
+
+      async function deleteActivityLogsForTitle(title) {
+        const normalizedTitle = toLowerSafe(title).trim();
+        if (!normalizedTitle) return;
+
+        activityLog = activityLog.filter((entry) => {
+          const message = String(entry.message || entry || "").toLowerCase();
+          return !message.includes(`"${normalizedTitle}"`) && !message.includes(normalizedTitle);
+        });
+        renderLog();
+
+        try {
+          const { error } = await supabaseClient
+            .from("activity_log")
+            .delete()
+            .eq("title", normalizedTitle);
+
+          if (error) {
+            console.error("error deleting activity log entries:", error);
+          }
+        } catch (error) {
+          console.error("error deleting activity log entries:", error);
+        }
+      }
+
       // pulls recent activity log entries from supabase when the page loads or refreshes
       async function loadActivityLog() {
         const { data, error } = await supabaseClient
@@ -2183,7 +2208,11 @@
 
       async function logPlanAdded(title, category) {
         const normalizedTitle = toLowerSafe(title.trim());
-        const normalizedCategory = toLowerSafe(category || "plans");
+        const selectedCategory =
+          category ||
+          document.getElementById("planCategoryInput")?.value ||
+          "things";
+        const normalizedCategory = toLowerSafe(selectedCategory);
         const dateOnly = new Date().toLocaleDateString();
         const message = `"${escapeHtml(normalizedTitle)}" added to ${normalizedCategory} • ${dateOnly}`;
 
@@ -2216,8 +2245,11 @@
         let message = "";
 
         if (eventType === "added" && itemType === "plan") {
-          const planCategory = category;
-          message = `"${escapeHtml(normalizedTitle)}" added to ${planCategory} • ${dateOnly}`;
+          const planCategory =
+            category ||
+            document.getElementById("planCategoryInput")?.value ||
+            "things";
+          message = `"${escapeHtml(normalizedTitle)}" added to ${toLowerSafe(planCategory)} • ${dateOnly}`;
         } else if (eventType === "added") {
           message = `added "${escapeHtml(normalizedTitle)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
         } else if (eventType === "rated") {
@@ -2666,6 +2698,8 @@
         }
 
         await loadItems();
+        await deleteActivityLogsForTitle(item.title);
+        await loadActivityLog();
       }
 
       // shows or hides the inline summary editor for a single card
@@ -2979,13 +3013,17 @@ saveActivityLog({ title, itemType: "plan", eventType: "added" }).then(loadActivi
         renderPlans();
       }
 
-      function removePlan(index) {
+            async function removePlan(index) {
         if (!plans[index]) return;
-        const confirmed = window.confirm(`delete "${plans[index].title}" from plans?`);
+        const planTitle = plans[index].title;
+        const confirmed = window.confirm(`delete "${planTitle}" from plans?`);
         if (!confirmed) return;
+
         plans.splice(index, 1);
         savePlans();
         renderPlans();
+        await deleteActivityLogsForTitle(planTitle);
+        await loadActivityLog();
       }
 
       // ===== startup event listeners + initial page load =====
