@@ -2969,6 +2969,13 @@
               loadActivityLog();
             },
           )
+          .on(
+            "postgres_changes",
+            { event: "*", schema: "public", table: "plans" },
+            () => {
+              loadPlans();
+            },
+          )
           .subscribe();
       }
 
@@ -3004,11 +3011,29 @@
 
 
 
-      // ===== static page tabs + local plans page =====
-      const PLAN_STORAGE_KEY = "raichuPlans";
+      // ===== static page tabs + shared Supabase plans page =====
+      // required Supabase table:
+      // public.plans
+      // columns:
+      // id bigint generated always as identity primary key
+      // title text not null
+      // category text not null
+      // completed boolean not null default false
+      // created_at timestamptz not null default now()
+
       const ACTIVE_PAGE_STORAGE_KEY = "raichuActivePage";
       const planCategories = ["things", "food", "places"];
       let plans = [];
+
+      function normalizePlan(plan) {
+        if (!plan) return plan;
+        return {
+          ...plan,
+          title: toLowerSafe(plan.title),
+          category: toLowerSafe(plan.category || "things"),
+          done: Boolean(plan.completed),
+        };
+      }
 
       function setActivePage(pageId) {
         document.querySelectorAll(".app-page").forEach((page) => {
@@ -3024,22 +3049,24 @@
         localStorage.setItem(ACTIVE_PAGE_STORAGE_KEY, pageId);
       }
 
-      function loadPlans() {
-        try {
-          const savedPlans = JSON.parse(localStorage.getItem(PLAN_STORAGE_KEY) || "[]");
-          plans = Array.isArray(savedPlans) ? savedPlans : [];
-        } catch (error) {
-          console.error("error loading plans:", error);
+      async function loadPlans() {
+        const { data, error } = await supabaseClient
+          .from("plans")
+          .select("id, title, category, completed, created_at")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("error loading plans from supabase:", error);
           plans = [];
+          renderPlans();
+          return;
         }
+
+        plans = (data || []).map(normalizePlan);
         renderPlans();
       }
 
-      function savePlans() {
-        localStorage.setItem(PLAN_STORAGE_KEY, JSON.stringify(plans));
-      }
-
-            function renderPlans() {
+      function renderPlans() {
         planCategories.forEach((category) => {
           const list = document.getElementById(`${category}PlanList`);
           if (!list) return;
@@ -3053,7 +3080,7 @@
           });
 
           if (categoryPlans.length === 0) {
-            list.innerHTML = `<div class="empty">nothing here yet!</div>`;
+            list.innerHTML = `<div class="empty">nothing here yet ✨</div>`;
             return;
           }
 
@@ -3078,47 +3105,92 @@
         });
       }
 
-      function addPlan() {
+      async function addPlan() {
         const input = document.getElementById("planInput");
         const categoryInput = document.getElementById("planCategoryInput");
         if (!input || !categoryInput) return;
 
         const title = toLowerSafe(input.value.trim());
-        const category = categoryInput.value;
+        const category = toLowerSafe(categoryInput.value || "things");
 
         if (!title) return;
 
-        plans.unshift({
-          id: Date.now(),
-          title,
-          category,
-          done: false,
-        });
+        const duplicate = plans.some(
+          (plan) => plan.title === title && plan.category === category,
+        );
+
+        if (duplicate) {
+          alert("that plan is already in this category.");
+          return;
+        }
+
+        const { error } = await supabaseClient.from("plans").insert([
+          {
+            title,
+            category,
+            completed: false,
+          },
+        ]);
+
+        if (error) {
+          console.error("error adding plan to supabase:", error);
+          alert("couldn't add that plan right now.");
+          return;
+        }
 
         input.value = "";
-        savePlans();
-        renderPlans();
-        logPlanAdded(title, category);
-saveActivityLog({ title, itemType: "plan", eventType: "added" }).then(loadActivityLog);
+        await loadPlans();
+        await logPlanAdded(title, category);
       }
 
-      function togglePlanDone(index) {
+      async function togglePlanDone(index) {
         if (!plans[index]) return;
-        plans[index].done = !plans[index].done;
-        savePlans();
+
+        const plan = plans[index];
+        const newDoneValue = !plan.done;
+
+        plans[index].done = newDoneValue;
         renderPlans();
+
+        const { error } = await supabaseClient
+          .from("plans")
+          .update({ completed: newDoneValue })
+          .eq("id", plan.id);
+
+        if (error) {
+          console.error("error updating plan done status:", error);
+          plans[index].done = !newDoneValue;
+          renderPlans();
+          return;
+        }
+
+        await loadPlans();
       }
 
-                  async function removePlan(index) {
+      async function removePlan(index) {
         if (!plans[index]) return;
-        const planTitle = plans[index].title;
+        const plan = plans[index];
+        const planTitle = plan.title;
         const confirmed = window.confirm(`delete "${planTitle}" from plans?`);
         if (!confirmed) return;
 
-        plans.splice(index, 1);
-        savePlans();
+        plans = plans.filter((savedPlan) => savedPlan.id !== plan.id);
         renderPlans();
+
+        const { error } = await supabaseClient
+          .from("plans")
+          .delete()
+          .eq("id", plan.id);
+
+        if (error) {
+          console.error("error deleting plan from supabase:", error);
+          await loadPlans();
+          alert("couldn't delete that plan right now.");
+          return;
+        }
+
         await deleteActivityLogsForTitle(planTitle);
+        await loadPlans();
       }
 
       // ===== startup event listeners + initial page load =====
