@@ -1373,6 +1373,21 @@
         flex-shrink: 0;
       }
 
+      .plans-browser-box {
+        width: 100%;
+        margin-top: 20px;
+        padding: 18px;
+        background: #f4e3c2;
+        border: 3px solid #b88a44;
+        border-radius: 24px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+        box-sizing: border-box;
+      }
+
+      .plans-browser-box .plans-search-box {
+        margin-bottom: 18px;
+      }
+
       .plans-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1503,6 +1518,13 @@
         padding: 0 !important;
         box-shadow: none !important;
       }
+
+        .plans-browser-box {
+          width: 100%;
+          padding: 14px;
+          margin-top: 18px;
+          box-sizing: border-box;
+        }
 
         .plans-add-box input,
         .plans-add-box select,
@@ -2053,10 +2075,6 @@
         <div class="plans-page-box">
           
 
-          <div class="plans-search-box">
-            <input type="text" id="planSearchInput" placeholder="⚡ search plans" />
-          </div>
-
           <div class="plans-add-box">
             <input type="text" id="planInput" placeholder="add a plan" />
             <select id="planCategoryInput">
@@ -2067,21 +2085,27 @@
             <button type="button" id="addPlanButton">add a plan 💛</button>
           </div>
 
-          <div class="plans-grid">
-            <section class="plan-category">
-              <h2>things</h2>
-              <div class="plan-list" id="thingsPlanList"></div>
-            </section>
+          <div class="plans-browser-box">
+            <div class="plans-search-box">
+              <input type="text" id="planSearchInput" placeholder="⚡ search plans" />
+            </div>
 
-            <section class="plan-category">
-              <h2>food</h2>
-              <div class="plan-list" id="foodPlanList"></div>
-            </section>
+            <div class="plans-grid">
+              <section class="plan-category">
+                <h2>things</h2>
+                <div class="plan-list" id="thingsPlanList"></div>
+              </section>
 
-            <section class="plan-category">
-              <h2>places</h2>
-              <div class="plan-list" id="placesPlanList"></div>
-            </section>
+              <section class="plan-category">
+                <h2>food</h2>
+                <div class="plan-list" id="foodPlanList"></div>
+              </section>
+
+              <section class="plan-category">
+                <h2>places</h2>
+                <div class="plan-list" id="placesPlanList"></div>
+              </section>
+            </div>
           </div>
         </div>
       </main>
