@@ -2138,10 +2138,23 @@
 🎮 ${totalGames} games to play (${finishedGames} finished)`;
       }
 
+
+      function dedupeActivityEntries(entries) {
+        const seen = new Set();
+        return (entries || []).filter((entry) => {
+          const message = toLowerSafe(entry && entry.message ? entry.message : entry);
+          if (!message || seen.has(message)) return false;
+          seen.add(message);
+          return true;
+        });
+      }
+
       // renders the activity log sidebar using the most recent saved log entries
       function renderLog() {
         const logBox = document.getElementById("logBox");
         if (!logBox) return;
+
+        activityLog = dedupeActivityEntries(activityLog).slice(0, 5);
 
         if (activityLog.length === 0) {
           logBox.innerHTML =
@@ -2195,14 +2208,21 @@
           return;
         }
 
-        activityLog = (data || []).map(normalizeLogEntry);
+        activityLog = dedupeActivityEntries((data || []).map(normalizeLogEntry)).slice(0, 5);
         renderLog();
       }
 
       
       function addLocalActivityMessage(message) {
         const entry = normalizeLogEntry({ message });
-        activityLog = [entry, ...activityLog].slice(0, 5);
+        const normalizedMessage = toLowerSafe(entry.message);
+        activityLog = [
+          entry,
+          ...activityLog.filter((existing) => {
+            const existingMessage = toLowerSafe(existing && existing.message ? existing.message : existing);
+            return existingMessage !== normalizedMessage;
+          }),
+        ].slice(0, 5);
         renderLog();
       }
 
@@ -2215,6 +2235,12 @@
         const normalizedCategory = toLowerSafe(selectedCategory);
         const dateOnly = new Date().toLocaleDateString();
         const message = `"${escapeHtml(normalizedTitle)}" added to ${normalizedCategory} • ${dateOnly}`;
+
+        if (window.lastPlanLogMessage === message) return;
+        window.lastPlanLogMessage = message;
+        setTimeout(() => {
+          if (window.lastPlanLogMessage === message) window.lastPlanLogMessage = "";
+        }, 1500);
 
         addLocalActivityMessage(message);
 
