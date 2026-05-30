@@ -32,7 +32,8 @@
         flex: 1 0 auto;
         width: 100%;
         box-sizing: border-box;
-      }
+        position: relative;
+        }
 
       .header {
         text-align: center;
@@ -811,6 +812,7 @@
 
       .queue-browser-box {
         position: relative;
+        position: relative;
         width: 100%;
         margin-top: 22px;
         padding: 18px;
@@ -1078,6 +1080,7 @@
       /* ===== activity log sidebar and collapse behavior styling ===== */
       /* activity log sidebar */
       .sidebar {
+        top: 70px !important;
         position: fixed;
         top: 20px;
         right: 20px;
@@ -1093,12 +1096,94 @@
         box-sizing: border-box;
       }
 
+      .sidebar {
+        transition:
+          transform 0.28s ease,
+          opacity 0.2s ease;
+      }
+
+      body.sidebar-collapsed .container {
+        margin: 40px auto;
+        transition: margin 0.28s ease;
+      }
+
+      body.sidebar-collapsed::after,
+      body.sidebar-collapsed::before {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .sidebar.collapsed {
+        transform: translateX(calc(100% + 36px));
+        opacity: 0;
+        overflow: visible;
+      }
+
+      .sidebar.collapsed .sidebar-header h3,
+      .sidebar.collapsed #logBox {
+        display: none;
+      }
+
+      .sidebar.collapsed .log-toggle-btn {
+        position: fixed;
+        top: 22px;
+        right: 22px;
+        z-index: 1400;
+        opacity: 1;
+      }
+
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .menu-icon {
+        display: inline-block;
+        font-size: 18px;
+        line-height: 1;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        letter-spacing: -3px;
+      }
+
+      .log-toggle-btn {
+        position: fixed;
+        top: 22px;
+        right: 22px;
+        z-index: 1400;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #b98b47;
+        color: #fffdf5;
+        border: 2px solid #9b6f35;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16);
+      }
+
+      .log-toggle-btn:hover {
+        background: #9f7340;
+        transform: none;
+      }
+
       .sidebar-header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         gap: 10px;
         margin-bottom: 10px;
+        padding-right: 42px;
       }
 
       .sidebar h3 {
@@ -1124,14 +1209,6 @@
         background: #dcc38d;
       }
 
-      .sidebar.collapsed {
-        max-height: none;
-        overflow: hidden;
-      }
-
-      .sidebar.collapsed #logBox {
-        display: none;
-      }
 
       #logBox {
         font-size: 12px;
@@ -1183,6 +1260,7 @@
         height: 100%;
         background: #f8f1e4;
         z-index: -2;
+        transition: opacity 0.28s ease;
       }
 
       body::before {
@@ -1196,8 +1274,240 @@
         box-shadow: inset 2px 0 6px rgba(0, 0, 0, 0.18);
         pointer-events: none;
         z-index: -1;
+        transition: opacity 0.28s ease;
       }
     
+
+      /* ===== page tabs for switching between queue and plans ===== */
+      .page-tabs {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin: 0 auto 22px auto;
+        position: relative;
+        z-index: 5;
+      }
+
+      .page-tab {
+        background: #eadcb9;
+        color: #7a5a34;
+        border: 3px solid #b88a44;
+        border-radius: 999px;
+        padding: 10px 26px;
+        font-weight: bold;
+        line-height: 1;
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        transform: none !important;
+      }
+
+      .page-tab:hover {
+        background: #dcc38d;
+        transform: none !important;
+      }
+
+      .page-tab.active:hover {
+        background: #9f7340;
+      }
+
+      .page-tab.active:hover {
+        background: #f4e3c2;
+      }
+
+      .page-tab.active {
+        background: #b98b47;
+        color: #fffdf5;
+        border-color: #9b6f35;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.12);
+        transform: none !important;
+      }
+
+      
+      .app-page {
+        display: none;
+      }
+
+      .app-page.active {
+        display: block;
+      }
+
+
+      /* ===== plans page/category card styling ===== */
+      .plans-page-box {
+        background: #f4e3c2;
+        border: 3px solid #b88a44;
+        border-radius: 24px;
+        padding: 18px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      .plans-intro {
+        text-align: center;
+        margin: 0 0 16px 0;
+        font-size: 14px;
+        opacity: 0.85;
+      }
+
+      .plans-add-box {
+        background: #eee0bd;
+        border: 3px solid #b88a44;
+        border-radius: 20px;
+        padding: 16px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0 auto 20px auto;
+        max-width: 820px;
+        box-sizing: border-box;
+      }
+
+      .plans-add-box input {
+        flex: 1;
+        min-width: 220px;
+      }
+
+      .plans-add-box select,
+      .plans-add-box button {
+        flex-shrink: 0;
+      }
+
+      .plans-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .plan-category {
+        background: #f3ead7;
+        border: 3px solid #b88a44;
+        border-radius: 22px;
+        padding: 16px;
+        min-width: 0;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      .plan-category h2 {
+        text-align: center;
+        margin: 0 0 12px 0;
+        font-family: "Fredoka", cursive;
+        font-size: 1.35rem;
+      }
+
+      .plan-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .plan-item {
+        background: #fffdf5;
+        border: 2px solid #cfb27a;
+        border-radius: 14px;
+        padding: 9px 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        line-height: 1.35;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.04);
+      }
+
+      .plan-check {
+        width: 18px;
+        height: 18px;
+        accent-color: #b98b47;
+        flex-shrink: 0;
+      }
+
+      .plan-title {
+        flex: 1;
+        min-width: 0;
+        word-break: break-word;
+      }
+
+      .plan-item.done {
+        opacity: 0.65;
+        background: #f3fff3;
+      }
+
+      .plan-item.done .plan-title {
+        text-decoration: line-through;
+      }
+
+      .plan-delete-btn {
+        opacity: 0;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        border-radius: 50%;
+        background: #c77777;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .plan-item:hover .plan-delete-btn {
+        opacity: 1;
+      }
+
+      @media (max-width: 900px) {
+        .plans-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .page-tabs {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin: 0 auto 22px auto;
+        position: relative;
+        z-index: 5;
+      }
+
+        .page-tab {
+        background: #eadcb9;
+        color: #7a5a34;
+        border: 3px solid #b88a44;
+        border-radius: 999px;
+        padding: 10px 26px;
+        font-weight: bold;
+        line-height: 1;
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        transform: none !important;
+      }
+
+        .plans-page-box {
+          padding: 12px;
+        }
+
+        .plans-add-box input,
+        .plans-add-box select,
+        .plans-add-box button {
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+
+        .plan-delete-btn {
+          opacity: 1;
+        }
+      }
+
 /* MOBILE: remove right sidebar background strip */
 @media (max-width: 700px) {
   body::after,
@@ -1205,6 +1515,368 @@
     display: none !important;
   }
 }
+
+
+
+
+      /* sidebar slide behavior */
+      .sidebar {
+        transition:
+          transform 0.28s ease,
+          opacity 0.2s ease;
+      }
+
+      .sidebar.collapsed {
+        transform: translateX(calc(100% + 48px)) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+
+      body.sidebar-collapsed .container {
+        margin: 40px auto;
+        transition: margin 0.28s ease;
+      }
+
+      body.sidebar-collapsed::after,
+      body.sidebar-collapsed::before {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* toggle now belongs to the main content box, not the viewport */
+      
+
+      
+
+      @media (max-width: 700px) {
+        
+      }
+
+
+      
+
+      
+
+      @media (max-width: 700px) {
+        
+
+        
+      }
+
+
+      /* visible sidebar toggle on main content card */
+      
+
+      .queue-browser-box 
+
+      .queue-browser-box 
+
+      .queue-browser-box 
+
+      @media (max-width: 700px) {
+        
+      }
+
+
+      /* sidebar toggle positioned in the open space beside the main content header */
+      .container > .sidebar-floating-toggle {
+        position: absolute !important;
+        top: -36px !important;
+        right: 0 !important;
+        z-index: 99999 !important;
+        width: 42px !important;
+        height: 42px !important;
+        padding: 0 !important;
+        border-radius: 999px !important;
+        background: #b98b47 !important;
+        border: 2px solid #9b6f35 !important;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: none !important;
+      }
+
+      .container > .sidebar-floating-toggle:hover {
+        background: #9f7340 !important;
+        transform: none !important;
+      }
+
+      .container > .sidebar-floating-toggle .menu-lines {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .container > .sidebar-floating-toggle .menu-lines span {
+        display: block !important;
+        width: 17px !important;
+        height: 3px !important;
+        background: #fffdf5 !important;
+        border-radius: 999px !important;
+      }
+
+      @media (max-width: 1380px) {
+        .container > .sidebar-floating-toggle {
+        position: absolute !important;
+        top: -36px !important;
+        right: 0 !important;
+        z-index: 99999 !important;
+        width: 42px !important;
+        height: 42px !important;
+        padding: 0 !important;
+        border-radius: 999px !important;
+        background: #b98b47 !important;
+        border: 2px solid #9b6f35 !important;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: none !important;
+      }
+      }
+
+      @media (max-width: 700px) {
+        .container > .sidebar-floating-toggle {
+        position: absolute !important;
+        top: -36px !important;
+        right: 0 !important;
+        z-index: 99999 !important;
+        width: 42px !important;
+        height: 42px !important;
+        padding: 0 !important;
+        border-radius: 999px !important;
+        background: #b98b47 !important;
+        border: 2px solid #9b6f35 !important;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: none !important;
+      }
+
+        .container > .sidebar-floating-toggle .menu-lines span {
+          width: 14px !important;
+          height: 3px !important;
+        }
+      }
+
+
+      body.sidebar-collapsed .container > .sidebar-floating-toggle {
+        right: 0 !important;
+        top: -36px !important;
+      }
+
+
+      /* final placement: top-right corner of the visible site when expanded */
+      .container > .sidebar-floating-toggle,
+      .sidebar-floating-toggle {
+        position: fixed !important;
+        top: 10px !important;
+        right: 18px !important;
+        z-index: 99999 !important;
+        width: 42px !important;
+        height: 42px !important;
+        padding: 0 !important;
+        border-radius: 999px !important;
+        background: #b98b47 !important;
+        border: 2px solid #9b6f35 !important;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: none !important;
+      }
+
+      .container > .sidebar-floating-toggle:hover,
+      .sidebar-floating-toggle:hover {
+        background: #9f7340 !important;
+        transform: none !important;
+      }
+
+      .container > .sidebar-floating-toggle .menu-lines,
+      .sidebar-floating-toggle .menu-lines {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .container > .sidebar-floating-toggle .menu-lines span,
+      .sidebar-floating-toggle .menu-lines span {
+        display: block !important;
+        width: 17px !important;
+        height: 3px !important;
+        background: #fffdf5 !important;
+        border-radius: 999px !important;
+      }
+
+      body.sidebar-collapsed .container > .sidebar-floating-toggle,
+      body.sidebar-collapsed .sidebar-floating-toggle {
+        position: fixed !important;
+        top: 10px !important;
+        right: 18px !important;
+      }
+
+      @media (max-width: 700px) {
+        .container > .sidebar-floating-toggle,
+        .sidebar-floating-toggle {
+          top: 10px !important;
+          right: 10px !important;
+          width: 36px !important;
+          height: 36px !important;
+        }
+      }
+
+
+      /* mobile sidebar drawer: keeps the button usable on phones */
+      @media (max-width: 700px) {
+        .sidebar-floating-toggle,
+        .container > .sidebar-floating-toggle {
+          position: fixed !important;
+          top: 12px !important;
+          right: 12px !important;
+          z-index: 10000 !important;
+          width: 38px !important;
+          height: 38px !important;
+        }
+
+        .sidebar {
+          position: fixed !important;
+          top: 62px !important;
+          right: 10px !important;
+          left: 10px !important;
+          width: auto !important;
+          max-height: calc(100vh - 80px) !important;
+          overflow-y: auto !important;
+          margin: 0 !important;
+          z-index: 9999 !important;
+          transform: translateX(0) !important;
+          opacity: 1 !important;
+          pointer-events: auto !important;
+        }
+
+        .sidebar.collapsed {
+          transform: translateX(calc(100% + 30px)) !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
+
+        body.sidebar-collapsed .container {
+          margin: 22px auto !important;
+        }
+
+        body.sidebar-collapsed::after,
+        body.sidebar-collapsed::before,
+        body::after,
+        body::before {
+          display: none !important;
+        }
+
+        .sidebar-header {
+          padding-right: 0 !important;
+        }
+
+        .sidebar h3 {
+          font-size: 1.05rem !important;
+        }
+      }
+
+
+      /* mobile: activity log sits above the site content instead of covering it */
+      @media (max-width: 700px) {
+        .sidebar {
+          position: static !important;
+          width: auto !important;
+          max-height: none !important;
+          overflow: visible !important;
+          margin: 60px 12px 12px 12px !important;
+          transform: none !important;
+          opacity: 1 !important;
+          pointer-events: auto !important;
+          z-index: 5 !important;
+        }
+
+        .sidebar.collapsed {
+          display: none !important;
+        }
+
+        .sidebar-floating-toggle,
+        .container > .sidebar-floating-toggle {
+          position: fixed !important;
+          top: 12px !important;
+          right: 12px !important;
+          z-index: 10000 !important;
+        }
+
+        body.sidebar-collapsed .container,
+        .container {
+          margin: 22px auto !important;
+        }
+
+        body::after,
+        body::before {
+          display: none !important;
+        }
+      }
+
+
+      /* mobile: reserve space under the floating button */
+      @media (max-width: 700px) {
+        .container {
+          margin-top: 72px !important;
+        }
+
+        .sidebar {
+          margin-top: 72px !important;
+        }
+
+        .sidebar-floating-toggle,
+        .container > .sidebar-floating-toggle {
+          top: 12px !important;
+          right: 12px !important;
+        }
+      }
+
+
+      /* stronger mobile spacing fix: pushes all page boxes below the floating button */
+      @media (max-width: 700px) {
+        body {
+          padding-top: 64px !important;
+        }
+
+        .container {
+          margin-top: 0 !important;
+        }
+
+        .sidebar {
+          margin-top: 0 !important;
+          margin-bottom: 14px !important;
+        }
+
+        .sidebar-floating-toggle,
+        .container > .sidebar-floating-toggle {
+          position: fixed !important;
+          top: 12px !important;
+          right: 12px !important;
+          z-index: 10000 !important;
+        }
+      }
 
 </style>
     <link
@@ -1217,14 +1889,6 @@
     <div class="sidebar" id="logSidebar">
       <div class="sidebar-header">
         <h3>activity log ⚡</h3>
-        <button
-          type="button"
-          class="log-toggle-btn"
-          id="logToggleBtn"
-          aria-expanded="true"
-        >
-          collapse
-        </button>
       </div>
       <div id="logBox">
         <div class="log-entry" style="opacity: 0.6">
@@ -1234,10 +1898,30 @@
     </div>
 
     <div class="container">
+      <button
+      type="button"
+      class="sidebar-floating-toggle"
+      id="sidebarFloatingToggle"
+      aria-expanded="true"
+      aria-label="collapse activity log"
+    >
+      <span class="menu-lines" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
       <!-- main app area: header, stats, add form, search/filter, and both lists -->
       <div class="header">
         <h1>⚡ raichu queue ⚡</h1>
       </div>
+
+      <div class="page-tabs" role="tablist" aria-label="raichu queue pages">
+        <button type="button" class="page-tab active" data-page="queuePage" role="tab" aria-selected="true">queue</button>
+        <button type="button" class="page-tab" data-page="plansPage" role="tab" aria-selected="false">plans</button>
+      </div>
+
+      <main class="app-page active" id="queuePage">
 
       <div class="stats-bar" id="statsBar">
         ⚡ loading stats and petting the raichu ...
@@ -1316,6 +2000,40 @@
           </div>
         </div>
       </div>
+      </main>
+
+      <main class="app-page" id="plansPage">
+        <div class="plans-page-box">
+          <p class="plans-intro">little ideas for things we want to do together ✨</p>
+
+          <div class="plans-add-box">
+            <input type="text" id="planInput" placeholder="add a plan" />
+            <select id="planCategoryInput">
+              <option value="things">things</option>
+              <option value="food">food</option>
+              <option value="places">places</option>
+            </select>
+            <button type="button" id="addPlanButton">add plan 💛</button>
+          </div>
+
+          <div class="plans-grid">
+            <section class="plan-category">
+              <h2>💕 things</h2>
+              <div class="plan-list" id="thingsPlanList"></div>
+            </section>
+
+            <section class="plan-category">
+              <h2>🍜 food</h2>
+              <div class="plan-list" id="foodPlanList"></div>
+            </section>
+
+            <section class="plan-category">
+              <h2>🎡 places</h2>
+              <div class="plan-list" id="placesPlanList"></div>
+            </section>
+          </div>
+        </div>
+      </main>
     </div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -1376,7 +2094,7 @@
         };
       }
 
-      // updates the summary bar at the top with current totals and finished counts
+      // upthings the summary bar at the top with current totals and finished counts
       function updateStats() {
         const totalMovies = movies.length;
         const totalGames = games.length;
@@ -1845,7 +2563,7 @@
         showRaichuMessage("good choice! ⚡");
       }
 
-      // updates an item status (want, in progress, finished) and re-renders the card state
+      // upthings an item status (want, in progress, finished) and re-renders the card state
       async function updateStatus(type, index, selectElement) {
         const status = selectElement.value;
         const item = type === "movie" ? movies[index] : games[index];
@@ -1926,7 +2644,7 @@
         }
       }
 
-      // saves a renamed title back to supabase and updates the activity log
+      // saves a renamed title back to supabase and upthings the activity log
       async function saveTitle(type, index) {
         const item = type === "movie" ? movies[index] : games[index];
         const input = document.getElementById(`${type}-title-input-${index}`);
@@ -2001,7 +2719,7 @@
         }, 2200);
       }
 
-      // updates the saved star rating for an item and refreshes the list
+      // upthings the saved star rating for an item and refreshes the list
       async function updateRating(type, index, value) {
         const item = type === "movie" ? movies[index] : games[index];
         const rating = Number(value);
@@ -2049,10 +2767,10 @@
         await loadItems();
       }
 
-      // listens for realtime supabase updates so the page stays in sync after changes
+      // listens for realtime supabase upthings so the page stays in sync after changes
       function subscribeToChanges() {
         supabaseClient
-          .channel("site-live-updates")
+          .channel("site-live-upthings")
           .on(
             "postgres_changes",
             { event: "*", schema: "public", table: "queue_items" },
@@ -2073,19 +2791,23 @@
       // collapses or expands the activity log and remembers the choice with localStorage
       function setActivityLogCollapsed(collapsed) {
         const sidebar = document.getElementById("logSidebar");
-        const toggleBtn = document.getElementById("logToggleBtn");
+        const toggleBtn = document.getElementById("sidebarFloatingToggle");
         if (!sidebar || !toggleBtn) return;
 
         sidebar.classList.toggle("collapsed", collapsed);
-        toggleBtn.textContent = collapsed ? "expand" : "collapse";
+        document.body.classList.toggle("sidebar-collapsed", collapsed);
         toggleBtn.setAttribute("aria-expanded", String(!collapsed));
+        toggleBtn.setAttribute(
+          "aria-label",
+          collapsed ? "show activity log" : "collapse activity log",
+        );
         localStorage.setItem(
           "activityLogCollapsed",
           collapsed ? "true" : "false",
         );
       }
 
-      const logToggleBtn = document.getElementById("logToggleBtn");
+      const logToggleBtn = document.getElementById("sidebarFloatingToggle");
       if (logToggleBtn) {
         const savedCollapsed =
           localStorage.getItem("activityLogCollapsed") === "true";
@@ -2096,7 +2818,139 @@
         });
       }
 
+
+
+      // ===== static page tabs + local plans page =====
+      const PLAN_STORAGE_KEY = "raichuPlans";
+      const ACTIVE_PAGE_STORAGE_KEY = "raichuActivePage";
+      const planCategories = ["things", "food", "places"];
+      let plans = [];
+
+      function setActivePage(pageId) {
+        document.querySelectorAll(".app-page").forEach((page) => {
+          page.classList.toggle("active", page.id === pageId);
+        });
+
+        document.querySelectorAll(".page-tab").forEach((tab) => {
+          const isActive = tab.dataset.page === pageId;
+          tab.classList.toggle("active", isActive);
+          tab.setAttribute("aria-selected", String(isActive));
+        });
+
+        localStorage.setItem(ACTIVE_PAGE_STORAGE_KEY, pageId);
+      }
+
+      function loadPlans() {
+        try {
+          const savedPlans = JSON.parse(localStorage.getItem(PLAN_STORAGE_KEY) || "[]");
+          plans = Array.isArray(savedPlans) ? savedPlans : [];
+        } catch (error) {
+          console.error("error loading plans:", error);
+          plans = [];
+        }
+        renderPlans();
+      }
+
+      function savePlans() {
+        localStorage.setItem(PLAN_STORAGE_KEY, JSON.stringify(plans));
+      }
+
+      function renderPlans() {
+        planCategories.forEach((category) => {
+          const list = document.getElementById(`${category}PlanList`);
+          if (!list) return;
+
+          const categoryPlans = plans.filter((plan) => plan.category === category);
+
+          if (categoryPlans.length === 0) {
+            list.innerHTML = `<div class="empty">nothing here yet ✨</div>`;
+            return;
+          }
+
+          list.innerHTML = categoryPlans
+            .map((plan) => {
+              const globalIndex = plans.findIndex((savedPlan) => savedPlan.id === plan.id);
+              return `
+                <div class="plan-item ${plan.done ? "done" : ""}">
+                  <input
+                    type="checkbox"
+                    class="plan-check"
+                    ${plan.done ? "checked" : ""}
+                    onchange="togglePlanDone(${globalIndex})"
+                    aria-label="mark ${escapeAttribute(plan.title)} as done"
+                  />
+                  <span class="plan-title">${escapeHtml(plan.title)}</span>
+                  <button type="button" class="plan-delete-btn" onclick="removePlan(${globalIndex})" aria-label="delete ${escapeAttribute(plan.title)}">✕</button>
+                </div>
+              `;
+            })
+            .join("");
+        });
+      }
+
+      function addPlan() {
+        const input = document.getElementById("planInput");
+        const categoryInput = document.getElementById("planCategoryInput");
+        if (!input || !categoryInput) return;
+
+        const title = toLowerSafe(input.value.trim());
+        const category = categoryInput.value;
+
+        if (!title) return;
+
+        plans.unshift({
+          id: Date.now(),
+          title,
+          category,
+          done: false,
+        });
+
+        input.value = "";
+        savePlans();
+        renderPlans();
+      }
+
+      function togglePlanDone(index) {
+        if (!plans[index]) return;
+        plans[index].done = !plans[index].done;
+        savePlans();
+        renderPlans();
+      }
+
+      function removePlan(index) {
+        if (!plans[index]) return;
+        const confirmed = window.confirm(`delete "${plans[index].title}" from plans?`);
+        if (!confirmed) return;
+        plans.splice(index, 1);
+        savePlans();
+        renderPlans();
+      }
+
       // ===== startup event listeners + initial page load =====
+      document.querySelectorAll(".page-tab").forEach((tab) => {
+        tab.addEventListener("click", () => setActivePage(tab.dataset.page));
+      });
+
+      const savedActivePage = localStorage.getItem(ACTIVE_PAGE_STORAGE_KEY);
+      setActivePage(savedActivePage === "plansPage" ? "plansPage" : "queuePage");
+
+      const addPlanButton = document.getElementById("addPlanButton");
+      if (addPlanButton) {
+        addPlanButton.addEventListener("click", addPlan);
+      }
+
+      const planInput = document.getElementById("planInput");
+      if (planInput) {
+        planInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            addPlan();
+          }
+        });
+      }
+
+      loadPlans();
+
       document.getElementById("addButton").addEventListener("click", addItem);
       loadActivityLog();
       document
@@ -2143,6 +2997,8 @@
       window.updateRating = updateRating;
       window.togglePriority = togglePriority;
       window.changePage = changePage;
+      window.togglePlanDone = togglePlanDone;
+      window.removePlan = removePlan;
 
       loadItems();
       loadActivityLog();
