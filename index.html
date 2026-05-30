@@ -2174,6 +2174,32 @@
         renderLog();
       }
 
+      
+      function addLocalActivityMessage(message) {
+        const entry = normalizeLogEntry({ message });
+        activityLog = [entry, ...activityLog].slice(0, 5);
+        renderLog();
+      }
+
+      async function logPlanAdded(title) {
+        const normalizedTitle = toLowerSafe(title.trim());
+        const dateOnly = new Date().toLocaleDateString();
+        const message = `added plan "${normalizedTitle}" • ${dateOnly}`;
+
+        addLocalActivityMessage(message);
+
+        try {
+          await saveActivityLog({
+            title: normalizedTitle,
+            itemType: "plan",
+            eventType: "added",
+          });
+          await loadActivityLog();
+        } catch (error) {
+          console.error("error logging plan:", error);
+        }
+      }
+
       // saves a human-readable activity message whenever users add, edit, rate, or remove items
       async function saveActivityLog({
         title,
@@ -2939,6 +2965,7 @@
         input.value = "";
         savePlans();
         renderPlans();
+        logPlanAdded(title);
         saveActivityLog({ title, itemType: "plan", eventType: "added" }).then(loadActivityLog);
       }
 
