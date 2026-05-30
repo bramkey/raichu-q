@@ -3210,6 +3210,53 @@
   font-size: 14px !important;
 }
 
+
+/* item tag + now adds a new tag instead of editing all current tags */
+.plan-tag-editor input {
+  max-width: 140px !important;
+}
+
+.plan-tag-editor button {
+  white-space: nowrap !important;
+}
+
+
+/* delete individual tags on hover */
+.plan-tag-removable {
+  position: relative !important;
+  padding-right: 8px !important;
+}
+
+.plan-tag-delete {
+  width: 14px !important;
+  height: 14px !important;
+  margin-left: 4px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.18) !important;
+  color: inherit !important;
+  padding: 0 !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.15s ease !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.plan-tag-removable:hover .plan-tag-delete {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.plan-tag-delete:hover {
+  background: rgba(255,255,255,0.3) !important;
+}
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -4373,7 +4420,15 @@
                         getPlanTags(plan.tags).length
                           ? `<div class="plan-tag-list">
                               ${getPlanTags(plan.tags)
-                                .map((tag) => `<span class="plan-tag">${escapeHtml(tag)}</span>`)
+                                .map((tag) => `<span class="plan-tag plan-tag-removable">
+          ${escapeHtml(tag)}
+          <button
+            type="button"
+            class="plan-tag-delete"
+            onclick="removePlanTag(${globalIndex}, '${tag.replace(/'/g, "\'")}')"
+            aria-label="remove ${escapeAttribute(tag)} tag"
+          >×</button>
+        </span>`)
                                 .join("")}
                              </div>
                              <button
@@ -4394,11 +4449,12 @@
                       <input
                         type="text"
                         id="plan-tag-input-${globalIndex}"
-                        value="${escapeAttribute(plan.tags || "")}"
-                        placeholder="add tags"
+                        value=""
+                        placeholder="add new tag"
+                        onkeydown="if(event.key === 'Enter'){ event.preventDefault(); savePlanTag(${globalIndex}); }"
                       />
-                      <button type="button" onclick="savePlanTag(${globalIndex})">save</button>
-                      <button type="button" class="secondary-btn" onclick="clearPlanTag(${globalIndex})">clear</button>
+                      <button type="button" onclick="savePlanTag(${globalIndex})">add</button>
+                      <button type="button" class="secondary-btn" onclick="clearPlanTag(${globalIndex})">clear all</button>
                     </div>
                   </div>
                   <button type="button" class="plan-delete-btn" onclick="removePlan(${globalIndex})" aria-label="delete ${escapeAttribute(plan.title)}">✕</button>
@@ -4547,8 +4603,8 @@
         editor.classList.toggle("show");
 
         if (editor.classList.contains("show") && input) {
+          input.value = "";
           input.focus();
-          input.select();
         }
       }
 
@@ -4559,11 +4615,46 @@
         if (!input) return;
 
         const plan = plans[index];
-        const newTags = String(input.value || "")
+
+        const existingTags = getPlanTags(plan.tags);
+        const addedTags = String(input.value || "")
           .split(",")
           .map((tag) => toLowerSafe(tag).trim())
-          .filter(Boolean)
-          .filter((tag, tagIndex, allTags) => allTags.indexOf(tag) === tagIndex)
+          .filter(Boolean);
+
+        const newTags = [...new Set([...existingTags, ...addedTags])].join(", ");
+
+        if (!addedTags.length) {
+          togglePlanTagEditor(index);
+          return;
+        }
+
+        plans[index].tags = newTags;
+        renderPlans();
+
+        const { error } = await supabaseClient
+          .from("plans")
+          .update({ tags: newTags })
+          .eq("id", plan.id);
+
+        if (error) {
+          console.error("error adding plan tag:", error);
+          await loadPlans();
+          alert("couldn't add that tag right now.");
+          return;
+        }
+
+        await loadPlans();
+      }
+
+
+      async function removePlanTag(index, tagToRemove) {
+        if (!plans[index]) return;
+
+        const plan = plans[index];
+
+        const newTags = getPlanTags(plan.tags)
+          .filter((tag) => tag !== tagToRemove)
           .join(", ");
 
         plans[index].tags = newTags;
@@ -4575,9 +4666,9 @@
           .eq("id", plan.id);
 
         if (error) {
-          console.error("error updating plan tags:", error);
+          console.error("error removing plan tag:", error);
           await loadPlans();
-          alert("couldn't save those tags right now.");
+          alert("couldn't remove that tag right now.");
           return;
         }
 
@@ -4744,6 +4835,7 @@
       window.savePlanTag = savePlanTag;
       window.clearPlanTag = clearPlanTag;
       window.removeDraftPlanTag = removeDraftPlanTag;
+      window.removePlanTag = removePlanTag;
       window.setupDraftPlanTagInput = setupDraftPlanTagInput;
 
 
