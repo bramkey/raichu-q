@@ -2142,7 +2142,7 @@
       function dedupeActivityEntries(entries) {
         const seen = new Set();
         return (entries || []).filter((entry) => {
-          const message = toLowerSafe(entry && entry.message ? entry.message : entry);
+          const message = toLowerSafe(entry && entry.message ? entry.message : entry).trim();
           if (!message || seen.has(message)) return false;
           seen.add(message);
           return true;
@@ -2176,18 +2176,29 @@
 
         activityLog = activityLog.filter((entry) => {
           const message = String(entry.message || entry || "").toLowerCase();
-          return !message.includes(`"${normalizedTitle}"`) && !message.includes(normalizedTitle);
+          return !message.includes(normalizedTitle);
         });
         renderLog();
 
         try {
-          const { error } = await supabaseClient
+          const escapedTitle = normalizedTitle.replaceAll('"', '\"');
+
+          const byTitle = await supabaseClient
             .from("activity_log")
             .delete()
             .eq("title", normalizedTitle);
 
-          if (error) {
-            console.error("error deleting activity log entries:", error);
+          if (byTitle.error) {
+            console.error("error deleting activity logs by title:", byTitle.error);
+          }
+
+          const byMessage = await supabaseClient
+            .from("activity_log")
+            .delete()
+            .ilike("message", `%${normalizedTitle}%`);
+
+          if (byMessage.error) {
+            console.error("error deleting activity logs by message:", byMessage.error);
           }
         } catch (error) {
           console.error("error deleting activity log entries:", error);
@@ -2198,9 +2209,9 @@
       async function loadActivityLog() {
         const { data, error } = await supabaseClient
           .from("activity_log")
-          .select("message, created_at")
+          .select("id, message, created_at")
           .order("created_at", { ascending: false })
-          .limit(5);
+          .limit(20);
 
         if (error) {
           console.error("Error loading activity log:", error);
@@ -2215,11 +2226,11 @@
       
       function addLocalActivityMessage(message) {
         const entry = normalizeLogEntry({ message });
-        const normalizedMessage = toLowerSafe(entry.message);
+        const normalizedMessage = toLowerSafe(entry.message).trim();
         activityLog = [
           entry,
           ...activityLog.filter((existing) => {
-            const existingMessage = toLowerSafe(existing && existing.message ? existing.message : existing);
+            const existingMessage = toLowerSafe(existing && existing.message ? existing.message : existing).trim();
             return existingMessage !== normalizedMessage;
           }),
         ].slice(0, 5);
@@ -2240,7 +2251,7 @@
         window.lastPlanLogMessage = message;
         setTimeout(() => {
           if (window.lastPlanLogMessage === message) window.lastPlanLogMessage = "";
-        }, 1500);
+        }, 2500);
 
         addLocalActivityMessage(message);
 
