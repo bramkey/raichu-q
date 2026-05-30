@@ -33,7 +33,7 @@
         width: 100%;
         box-sizing: border-box;
         position: relative;
-        }
+      }
 
       .header {
         text-align: center;
@@ -80,7 +80,7 @@
 
       @media (max-width: 700px) {
         /* ===== main two-column layout for watchlist + games ===== */
-      .lists {
+        .lists {
           flex-direction: column;
         }
         .search-box {
@@ -1575,142 +1575,6 @@
         opacity: 0;
         pointer-events: none;
       }
-
-      /* toggle now belongs to the main content box, not the viewport */
-      
-
-      
-
-      @media (max-width: 700px) {
-        
-      }
-
-
-      
-
-      
-
-      @media (max-width: 700px) {
-        
-
-        
-      }
-
-
-      /* visible sidebar toggle on main content card */
-      
-
-      .queue-browser-box 
-
-      .queue-browser-box 
-
-      .queue-browser-box 
-
-      @media (max-width: 700px) {
-        
-      }
-
-
-      /* sidebar toggle positioned in the open space beside the main content header */
-      .container > .sidebar-floating-toggle {
-        position: absolute !important;
-        top: -36px !important;
-        right: 0 !important;
-        z-index: 99999 !important;
-        width: 42px !important;
-        height: 42px !important;
-        padding: 0 !important;
-        border-radius: 999px !important;
-        background: #b98b47 !important;
-        border: 2px solid #a88658 !important;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-        transform: none !important;
-      }
-
-      .container > .sidebar-floating-toggle:hover {
-        background: #9f7340 !important;
-        transform: none !important;
-      }
-
-      .container > .sidebar-floating-toggle .menu-lines {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 4px !important;
-        align-items: center !important;
-        justify-content: center !important;
-      }
-
-      .container > .sidebar-floating-toggle .menu-lines span {
-        display: block !important;
-        width: 17px !important;
-        height: 3px !important;
-        background: #fffdf5 !important;
-        border-radius: 999px !important;
-      }
-
-      @media (max-width: 1380px) {
-        .container > .sidebar-floating-toggle {
-        position: absolute !important;
-        top: -36px !important;
-        right: 0 !important;
-        z-index: 99999 !important;
-        width: 42px !important;
-        height: 42px !important;
-        padding: 0 !important;
-        border-radius: 999px !important;
-        background: #b98b47 !important;
-        border: 2px solid #a88658 !important;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-        transform: none !important;
-      }
-      }
-
-      @media (max-width: 700px) {
-        .container > .sidebar-floating-toggle {
-        position: absolute !important;
-        top: -36px !important;
-        right: 0 !important;
-        z-index: 99999 !important;
-        width: 42px !important;
-        height: 42px !important;
-        padding: 0 !important;
-        border-radius: 999px !important;
-        background: #b98b47 !important;
-        border: 2px solid #a88658 !important;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-        transform: none !important;
-      }
-
-        .container > .sidebar-floating-toggle .menu-lines span {
-          width: 14px !important;
-          height: 3px !important;
-        }
-      }
-
-
-      body.sidebar-collapsed .container > .sidebar-floating-toggle {
-        right: 0 !important;
-        top: -36px !important;
-      }
-
 
       /* final placement: top-right corner of the visible site when expanded */
       .container > .sidebar-floating-toggle,
@@ -3492,6 +3356,21 @@
   }
 }
 
+/* final mobile header button size */
+@media (max-width: 700px) {
+  .sidebar-floating-toggle,
+  .container > .sidebar-floating-toggle {
+    width: 34px !important;
+    height: 34px !important;
+    top: 7px !important;
+    right: 12px !important;
+  }
+
+  .sidebar-floating-toggle .menu-lines span,
+  .container > .sidebar-floating-toggle .menu-lines span {
+    width: 14px !important;
+  }
+}
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -3499,7 +3378,7 @@
     />
   </head>
   <body>
-<!-- activity log sidebar: shows latest actions and can be collapsed -->
+    <!-- activity log sidebar: shows latest actions and can be collapsed -->
     <div class="sidebar" id="logSidebar">
       <div class="sidebar-header">
         <h3>activity log ⚡</h3>
@@ -3513,18 +3392,18 @@
 
     <div class="container">
       <button
-      type="button"
-      class="sidebar-floating-toggle"
-      id="sidebarFloatingToggle"
-      aria-expanded="true"
-      aria-label="collapse activity log"
-    >
-      <span class="menu-lines" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-    </button>
+        type="button"
+        class="sidebar-floating-toggle"
+        id="sidebarFloatingToggle"
+        aria-expanded="true"
+        aria-label="collapse activity log"
+      >
+        <span class="menu-lines" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
       <!-- sticky full-width header band -->
       <div class="header site-sticky-header">
         <h1>⚡ raichu queue ⚡</h1>
@@ -3532,7 +3411,7 @@
         <div class="page-tabs header-page-tabs" role="tablist" aria-label="raichu queue pages">
           <div class="header-pill-tabs">
             <button type="button" class="page-tab pill-tab active" data-page="queuePage" role="tab" aria-selected="true">queue</button>
-<button type="button" class="page-tab pill-tab" data-page="plansPage" role="tab" aria-selected="false">plans</button>
+            <button type="button" class="page-tab pill-tab" data-page="plansPage" role="tab" aria-selected="false">plans</button>
           </div>
         </div>
       </div>
@@ -3544,7 +3423,7 @@
       </div>
 
       <div class="toolbar">
-      <!-- add form: users create new movie/show or game entries here -->
+        <!-- add form: users create new movie/show or game entries here -->
         <div class="add-box">
           <div class="add-row">
             <input
@@ -4621,7 +4500,6 @@
       }
 
 
-
       // ===== static page tabs + shared Supabase plans page =====
       // required Supabase table:
       // public.plans
@@ -5162,7 +5040,6 @@
       setupDraftPlanTagInput();
 
       document.getElementById("addButton").addEventListener("click", addItem);
-      loadActivityLog();
       document
         .getElementById("searchInput")
         .addEventListener("input", (event) => {
@@ -5219,7 +5096,6 @@
       window.savePlanTitle = savePlanTitle;
       window.setupDraftPlanTagInput = setupDraftPlanTagInput;
 
-
       loadItems();
       loadActivityLog();
       subscribeToChanges();
@@ -5227,20 +5103,3 @@
     <footer class="footer">made with love for my gf 💛</footer>
   </body>
 </html>
-
-<style>
-@media (max-width:700px){
-  .sidebar-floating-toggle,
-  .container > .sidebar-floating-toggle{
-    width:34px !important;
-    height:34px !important;
-    top:7px !important;
-    right:12px !important;
-  }
-
-  .sidebar-floating-toggle .menu-lines span,
-  .container > .sidebar-floating-toggle .menu-lines span{
-    width:14px !important;
-  }
-}
-</style>
