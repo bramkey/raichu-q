@@ -2260,7 +2260,7 @@
           "things";
         const normalizedCategory = toLowerSafe(selectedCategory);
         const dateOnly = new Date().toLocaleDateString();
-        const message = `"${escapeHtml(normalizedTitle)}" added to ${normalizedCategory} • ${dateOnly}`;
+        const message = `added "${escapeHtml(normalizedTitle)}" to ${normalizedCategory} • ${dateOnly}`;
 
         if (window.lastPlanLogMessage === message) return;
         window.lastPlanLogMessage = message;
@@ -2301,7 +2301,7 @@
             category ||
             document.getElementById("planCategoryInput")?.value ||
             "things";
-          message = `"${escapeHtml(normalizedTitle)}" added to ${toLowerSafe(planCategory)} • ${dateOnly}`;
+          message = `added "${escapeHtml(normalizedTitle)}" to ${toLowerSafe(planCategory)} • ${dateOnly}`;
         } else if (eventType === "added") {
           message = `added "${escapeHtml(normalizedTitle)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
         } else if (eventType === "rated") {
