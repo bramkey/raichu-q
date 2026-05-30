@@ -2181,10 +2181,11 @@
         renderLog();
       }
 
-      async function logPlanAdded(title) {
+      async function logPlanAdded(title, category) {
         const normalizedTitle = toLowerSafe(title.trim());
+        const normalizedCategory = toLowerSafe(category || "plans");
         const dateOnly = new Date().toLocaleDateString();
-        const message = `added plan "${normalizedTitle}" • ${dateOnly}`;
+        const message = `"${escapeHtml(normalizedTitle)}" added to ${normalizedCategory} • ${dateOnly}`;
 
         addLocalActivityMessage(message);
 
@@ -2193,8 +2194,8 @@
             title: normalizedTitle,
             itemType: "plan",
             eventType: "added",
+            category: normalizedCategory,
           });
-          await loadActivityLog();
         } catch (error) {
           console.error("error logging plan:", error);
         }
@@ -2206,6 +2207,7 @@
         itemType,
         eventType,
         rating = null,
+        category = null,
       }) {
         if (!title) return false;
 
@@ -2214,7 +2216,8 @@
         let message = "";
 
         if (eventType === "added" && itemType === "plan") {
-          message = `added plan "${escapeHtml(normalizedTitle)}" • ${dateOnly}`;
+          const planCategory = category || "plans";
+          message = `"${escapeHtml(normalizedTitle)}" added to ${planCategory} • ${dateOnly}`;
         } else if (eventType === "added") {
           message = `added "${escapeHtml(normalizedTitle)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
         } else if (eventType === "rated") {
@@ -2965,8 +2968,8 @@
         input.value = "";
         savePlans();
         renderPlans();
-        logPlanAdded(title);
-        saveActivityLog({ title, itemType: "plan", eventType: "added" }).then(loadActivityLog);
+        logPlanAdded(title, category);
+saveActivityLog({ title, itemType: "plan", eventType: "added" }).then(loadActivityLog);
       }
 
       function togglePlanDone(index) {
