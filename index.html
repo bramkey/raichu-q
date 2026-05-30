@@ -1903,6 +1903,23 @@
   text-align:center !important;
   width:100%;
 }
+
+      #planSearchInput {
+        width: min(420px, 100%) !important;
+        border: 3px solid #b98b47 !important;
+        background: #fffdf5 !important;
+        font-weight: bold !important;
+        transition: all 0.25s ease !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+      }
+
+      #planSearchInput:focus {
+        transform: scale(1.015);
+        box-shadow: 0 0 6px rgba(185, 139, 71, 0.28) !important;
+        border-color: #9f7340 !important;
+        outline: none !important;
+      }
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -2100,6 +2117,7 @@
       let gamePage = 1;
       const ITEMS_PER_PAGE = 5;
       let activityLog = [];
+      let planSearchTerm = "";
 
       // keeps all stored/displayed text lowercase so the site stays visually consistent
       function toLowerSafe(value) {
@@ -2986,12 +3004,18 @@
         localStorage.setItem(PLAN_STORAGE_KEY, JSON.stringify(plans));
       }
 
-      function renderPlans() {
+            function renderPlans() {
         planCategories.forEach((category) => {
           const list = document.getElementById(`${category}PlanList`);
           if (!list) return;
 
-          const categoryPlans = plans.filter((plan) => plan.category === category);
+          const categoryPlans = plans.filter((plan) => {
+            const matchesCategory = plan.category === category;
+            const matchesSearch =
+              !planSearchTerm ||
+              String(plan.title || "").toLowerCase().includes(planSearchTerm);
+            return matchesCategory && matchesSearch;
+          });
 
           if (categoryPlans.length === 0) {
             list.innerHTML = `<div class="empty">nothing here yet ✨</div>`;
@@ -3073,6 +3097,14 @@ saveActivityLog({ title, itemType: "plan", eventType: "added" }).then(loadActivi
       const addPlanButton = document.getElementById("addPlanButton");
       if (addPlanButton) {
         addPlanButton.addEventListener("click", addPlan);
+      }
+
+      const planSearchInput = document.getElementById("planSearchInput");
+      if (planSearchInput) {
+        planSearchInput.addEventListener("input", (event) => {
+          planSearchTerm = event.target.value.trim().toLowerCase();
+          renderPlans();
+        });
       }
 
       const planInput = document.getElementById("planInput");
