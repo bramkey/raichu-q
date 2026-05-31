@@ -4979,7 +4979,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const themeIcon = isBulbasaur ? "\u{1F33F}" : "\u26A1";
         const heartIcon = isBulbasaur ? "\u{1F49A}" : "\u{1F49B}";
         const titleText = isBulbasaur
-          ? `${themeIcon} bulba-q ${themeIcon}`
+          ? `${themeIcon} bulba queue ${themeIcon}`
           : `${themeIcon} raichu queue ${themeIcon}`;
         const appTitle = document.getElementById("appTitle");
         const activityTitle = document.querySelector(".sidebar-header h3");
@@ -4994,7 +4994,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const themeHearts = document.querySelectorAll(".theme-heart");
 
         document.body.classList.toggle("bulbasaur-theme", isBulbasaur);
-        document.title = isBulbasaur ? `bulba-q ${themeIcon}` : `raichu queue ${themeIcon}`;
+        document.title = isBulbasaur ? `bulba queue ${themeIcon}` : `raichu queue ${themeIcon}`;
         localStorage.setItem(THEME_STORAGE_KEY, isBulbasaur ? "bulbasaur" : "raichu");
 
         if (appTitle) appTitle.textContent = titleText;
