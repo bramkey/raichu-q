@@ -1345,6 +1345,10 @@
         border: none !important;
         border-radius: 0 !important;
         padding: 0 !important;
+        width: min(1220px, calc(100vw - 32px)) !important;
+        max-width: none !important;
+        margin-left: 50% !important;
+        transform: translateX(-50%) !important;
         box-shadow: none !important;
       }
 
@@ -1383,7 +1387,7 @@
       .plans-browser-box {
         width: 100%;
         margin-top: 20px;
-        padding: 18px;
+        padding: 14px;
         background: #f4e3c2;
         border: 2px solid #c8ab72;
         border-radius: 24px;
@@ -1398,14 +1402,14 @@
       .plans-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 18px;
+        gap: 10px;
       }
 
       .plan-category {
         background: #f3ead7;
         border: 2px solid #c8ab72;
         border-radius: 22px;
-        padding: 16px;
+        padding: 14px;
         min-width: 0;
         max-width: 100%;
         box-sizing: border-box;
@@ -1488,6 +1492,13 @@
       }
 
       @media (max-width: 900px) {
+        .plans-page-box {
+          width: 100% !important;
+          max-width: 100% !important;
+          margin-left: 0 !important;
+          transform: none !important;
+        }
+
         .plans-grid {
           grid-template-columns: 1fr;
         }
@@ -2080,7 +2091,7 @@
 }
 
 .header-page-tabs {
-  margin: 0 58px 0 0 !important;
+  margin: 0 70px 0 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
@@ -2109,7 +2120,7 @@
   }
 
   .header-page-tabs {
-    margin: 0 2px 0 0 !important;
+    margin: 0 46px 0 0 !important;
     gap: 5px !important;
   }
 
@@ -2138,18 +2149,52 @@
   border-radius:999px !important;
   border:2px solid #c8ab72 !important;
   background:#eadcb9 !important;
+  background-clip:border-box !important;
   box-shadow:0 2px 6px rgba(0,0,0,0.08) !important;
   padding:0 !important;
+  isolation:isolate !important;
 }
 
 /* active color is drawn across the full pill so its slant averages to exactly 50% */
 .header-pill-tabs::before{
   content:"" !important;
   position:absolute !important;
-  inset:0 !important;
+  inset:-3px !important;
+  border-radius:inherit !important;
   background:#b98b47 !important;
   z-index:1 !important;
   pointer-events:none !important;
+  transition: clip-path 0.28s ease, background-color 0.28s ease !important;
+}
+
+.header-pill-tabs .page-tab.pill-tab:not(.active):hover {
+  color:#5e4730 !important;
+  background:transparent !important;
+}
+
+.header-pill-tabs::after {
+  content:"" !important;
+  position:absolute !important;
+  inset:-3px !important;
+  border-radius:inherit !important;
+  background:rgba(159,115,64,0.34) !important;
+  z-index:1 !important;
+  pointer-events:none !important;
+  opacity:0 !important;
+  transition:
+    opacity 0.34s ease,
+    clip-path 0.28s ease,
+    background-color 0.28s ease !important;
+}
+
+.header-pill-tabs:has(.page-tab:first-child.active):has(.page-tab:last-child:hover)::after {
+  clip-path:polygon(calc(50% - 7px) 0, 100% 0, 100% 100%, calc(50% + 7px) 100%) !important;
+  opacity:1 !important;
+}
+
+.header-pill-tabs:has(.page-tab:last-child.active):has(.page-tab:first-child:hover)::after {
+  clip-path:polygon(0 0, calc(50% - 7px) 0, calc(50% + 7px) 100%, 0 100%) !important;
+  opacity:1 !important;
 }
 
 /* queue active: top edge ends before center, bottom edge ends after center = visually equal half */
@@ -2179,20 +2224,28 @@
   z-index:2 !important;
   box-shadow:none !important;
   transform:none !important;
+  transition:
+    background-color 0.28s ease,
+    color 0.28s ease !important;
 }
 
 .header-pill-tabs .page-tab.pill-tab.active{
   color:#fffdf5 !important;
 }
 
+body:not(.bulbasaur-theme) .header-pill-tabs .page-tab.pill-tab:not(.active):hover {
+  color:#5e4730 !important;
+  background:transparent !important;
+}
+
 @media (max-width:700px){
   .header-pill-tabs{
-    width:116px !important;
+    width:104px !important;
   }
 
   .header-pill-tabs .page-tab.pill-tab{
     min-height:28px !important;
-    font-size:12px !important;
+    font-size:11px !important;
   }
 
   .header-pill-tabs:has(.page-tab:first-child.active)::before{
@@ -2201,6 +2254,14 @@
 
   .header-pill-tabs:has(.page-tab:last-child.active)::before{
     clip-path:polygon(calc(50% - 5px) 0, 100% 0, 100% 100%, calc(50% + 5px) 100%) !important;
+  }
+
+  .header-pill-tabs:has(.page-tab:first-child.active):has(.page-tab:last-child:hover)::after {
+    clip-path:polygon(calc(50% - 5px) 0, 100% 0, 100% 100%, calc(50% + 5px) 100%) !important;
+  }
+
+  .header-pill-tabs:has(.page-tab:last-child.active):has(.page-tab:first-child:hover)::after {
+    clip-path:polygon(0 0, calc(50% - 5px) 0, calc(50% + 5px) 100%, 0 100%) !important;
   }
 }
 
@@ -3676,6 +3737,11 @@ body.bulbasaur-theme .header-pill-tabs::before {
   background: #4f8f46 !important;
 }
 
+body.bulbasaur-theme .header-pill-tabs .page-tab.pill-tab:not(.active):hover {
+  color: #2f5034 !important;
+  background: transparent !important;
+}
+
 body.bulbasaur-theme .header-pill-tabs .page-tab.pill-tab,
 body.bulbasaur-theme .header-pill-tabs .page-tab.pill-tab.active {
   background: transparent !important;
@@ -3689,6 +3755,16 @@ body.bulbasaur-theme .header-pill-tabs .page-tab.pill-tab {
 
 body.bulbasaur-theme .header-pill-tabs .page-tab.pill-tab.active {
   color: #fbfff5 !important;
+}
+
+body.bulbasaur-theme .header-pill-tabs .page-tab.pill-tab:not(.active):hover {
+  color: #2f5034 !important;
+  background: transparent !important;
+}
+
+body.bulbasaur-theme .header-pill-tabs:has(.page-tab:first-child.active):has(.page-tab:last-child:hover)::after,
+body.bulbasaur-theme .header-pill-tabs:has(.page-tab:last-child.active):has(.page-tab:first-child:hover)::after {
+  background: rgba(95, 147, 77, 0.34) !important;
 }
 
 /* soft earth accents for Bulbasaur theme */
@@ -3814,6 +3890,28 @@ body.bulbasaur-theme .plans-grid {
   box-sizing: border-box !important;
 }
 
+/* Desktop Plans layout: give the three categories noticeably more room */
+@media (min-width: 901px) {
+  .plans-page-box,
+  body.bulbasaur-theme .plans-page-box {
+    width: min(1160px, calc(100vw - 48px)) !important;
+    max-width: none !important;
+    margin-left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .plans-grid,
+  body.bulbasaur-theme .plans-grid {
+    gap: 8px !important;
+  }
+
+  .plans-browser-box,
+  body.bulbasaur-theme .plans-browser-box {
+    padding: 14px !important;
+    overflow: hidden !important;
+  }
+}
+
 /* Bulbasaur plans tag controls: unified earth colors + smoother hovers */
 body.bulbasaur-theme #plansPage .plan-tag-add,
 body.bulbasaur-theme #plansPage .plan-tag-empty {
@@ -3866,6 +3964,45 @@ body.bulbasaur-theme #plansPage .draft-tag-remove:hover {
   background-color: #5f664f !important;
   border-color: #7f826d !important;
   color: #fbfff5 !important;
+}
+
+body.bulbasaur-theme #plansPage .plan-tag-editor button:not(.secondary-btn) {
+  background: #4f8f46 !important;
+  background-color: #4f8f46 !important;
+  color: #fbfff5 !important;
+  border-color: #33693b !important;
+  box-shadow: none !important;
+  transition:
+    background-color 0.38s ease,
+    border-color 0.38s ease,
+    color 0.38s ease,
+    opacity 0.34s ease,
+    transform 0.34s ease !important;
+}
+
+body.bulbasaur-theme #plansPage .plan-tag-editor button:not(.secondary-btn):hover {
+  background: #3f7d45 !important;
+  background-color: #3f7d45 !important;
+  border-color: #2f6036 !important;
+  color: #fbfff5 !important;
+  transform: none !important;
+}
+
+body.bulbasaur-theme #plansPage .plan-tag-editor input {
+  background: #fbfff5 !important;
+  background-color: #fbfff5 !important;
+  color: #2f5034 !important;
+  border-color: #8f9279 !important;
+  box-shadow: inset 0 1px 3px rgba(61, 70, 55, 0.06) !important;
+}
+
+body.bulbasaur-theme #plansPage .plan-tag-editor input:focus {
+  background: #fbfff5 !important;
+  background-color: #fbfff5 !important;
+  color: #2f5034 !important;
+  border-color: #707762 !important;
+  box-shadow: 0 0 6px rgba(112, 119, 98, 0.22) !important;
+  outline: none !important;
 }
 
 /* Bulbasaur + tag buttons: keep the hide/show animation smooth too */
@@ -4072,6 +4209,77 @@ body:not(.bulbasaur-theme) #plansPage .plan-tag-editor button:hover {
     transform: scale(1) !important;
   }
 }
+
+/* Bulbasaur focus states: keep keyboard/click focus out of Raichu orange */
+body.bulbasaur-theme input:focus,
+body.bulbasaur-theme select:focus,
+body.bulbasaur-theme textarea:focus,
+body.bulbasaur-theme button:focus,
+body.bulbasaur-theme .secondary-btn:focus,
+body.bulbasaur-theme .page-tab:focus,
+body.bulbasaur-theme .title-button:focus,
+body.bulbasaur-theme .summary-link:focus,
+body.bulbasaur-theme .priority-toggle:focus,
+body.bulbasaur-theme .plan-tag-add:focus,
+body.bulbasaur-theme .plan-tag-empty:focus,
+body.bulbasaur-theme .plan-tag-delete:focus,
+body.bulbasaur-theme .draft-tag-remove:focus,
+body.bulbasaur-theme .plan-title-save-btn:focus,
+body.bulbasaur-theme .plan-delete-btn:focus,
+body.bulbasaur-theme .save-title-btn:focus,
+body.bulbasaur-theme .save-summary-btn:focus,
+body.bulbasaur-theme #searchInput:focus,
+body.bulbasaur-theme #planSearchInput:focus,
+body.bulbasaur-theme #planTagDraftInput:focus,
+body.bulbasaur-theme #plansPage .plan-tag-editor input:focus,
+body.bulbasaur-theme #plansPage .plan-tag-editor button:focus {
+  border-color: #707762 !important;
+  box-shadow: 0 0 6px rgba(112, 119, 98, 0.22) !important;
+  outline: none !important;
+}
+
+body.bulbasaur-theme button:focus-visible,
+body.bulbasaur-theme input:focus-visible,
+body.bulbasaur-theme select:focus-visible,
+body.bulbasaur-theme textarea:focus-visible,
+body.bulbasaur-theme .page-tab:focus-visible,
+body.bulbasaur-theme .secondary-btn:focus-visible,
+body.bulbasaur-theme .summary-link:focus-visible,
+body.bulbasaur-theme .priority-toggle:focus-visible,
+body.bulbasaur-theme .plan-tag-add:focus-visible,
+body.bulbasaur-theme .plan-tag-empty:focus-visible,
+body.bulbasaur-theme .plan-tag-delete:focus-visible,
+body.bulbasaur-theme .draft-tag-remove:focus-visible {
+  outline: 2px solid #707762 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(112, 119, 98, 0.18) !important;
+}
+
+body.bulbasaur-theme .plan-check {
+  accent-color: #5f934d !important;
+}
+
+body.bulbasaur-theme .plan-title:focus,
+body.bulbasaur-theme .title-text:focus {
+  color: #2f5034 !important;
+  outline: 2px solid #aeb19a !important;
+  outline-offset: 2px !important;
+}
+
+body.bulbasaur-theme .sidebar-floating-toggle,
+body.bulbasaur-theme .sidebar-floating-toggle:focus,
+body.bulbasaur-theme .sidebar-floating-toggle:focus-visible {
+  border-color: #33693b !important;
+}
+
+body.bulbasaur-theme .sidebar-floating-toggle:focus-visible {
+  outline: 2px solid #5f934d !important;
+  outline-offset: 2px !important;
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.22),
+    0 0 0 4px rgba(95, 147, 77, 0.18) !important;
+}
+
 /* Bulbasaur mascot keeps Raichu behavior, only larger art */
 body.bulbasaur-theme .queue-browser-box .raichu-container {
   top: -80px !important;
@@ -5968,5 +6176,3 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
   </body>
 </html>
-
-
