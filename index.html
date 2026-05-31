@@ -3977,6 +3977,101 @@ body.bulbasaur-theme #plansPage .plan-item:hover .plan-tag-empty {
     transform: scale(1) !important;
   }
 }
+
+/* Raichu Plans buttons: smoother hover in and out */
+body:not(.bulbasaur-theme) #plansPage button,
+body:not(.bulbasaur-theme) #plansPage .page-tab,
+body:not(.bulbasaur-theme) #plansPage .plan-tag,
+body:not(.bulbasaur-theme) #plansPage .plan-tag-add,
+body:not(.bulbasaur-theme) #plansPage .plan-tag-empty,
+body:not(.bulbasaur-theme) #plansPage .plan-tag-delete,
+body:not(.bulbasaur-theme) #plansPage .draft-tag-remove,
+body:not(.bulbasaur-theme) #plansPage .plan-delete-btn,
+body:not(.bulbasaur-theme) #plansPage .plan-title-save-btn,
+body:not(.bulbasaur-theme) #plansPage .plan-tag-editor button {
+  transition:
+    width 0.38s ease,
+    background-color 0.38s ease,
+    border-color 0.38s ease,
+    color 0.38s ease,
+    box-shadow 0.38s ease,
+    opacity 0.34s ease,
+    transform 0.34s ease,
+    visibility 0s linear 0.34s !important;
+}
+
+body:not(.bulbasaur-theme) #plansPage .plan-item:hover .plan-tag-add,
+body:not(.bulbasaur-theme) #plansPage .plan-item:hover .plan-tag-empty,
+body:not(.bulbasaur-theme) #plansPage .plan-item:hover .plan-delete-btn,
+body:not(.bulbasaur-theme) #plansPage .plan-tag-removable:hover .plan-tag-delete,
+body:not(.bulbasaur-theme) #plansPage .draft-plan-tag:hover .draft-tag-remove {
+  transition-delay: 0s !important;
+}
+
+body:not(.bulbasaur-theme) #plansPage .plan-tag-row {
+  transition:
+    max-height 0.38s ease,
+    margin-top 0.38s ease,
+    opacity 0.34s ease !important;
+}
+
+body:not(.bulbasaur-theme) #plansPage button:hover,
+body:not(.bulbasaur-theme) #plansPage .plan-tag-add:hover,
+body:not(.bulbasaur-theme) #plansPage .plan-tag-empty:hover,
+body:not(.bulbasaur-theme) #plansPage .plan-tag-delete:hover,
+body:not(.bulbasaur-theme) #plansPage .draft-tag-remove:hover,
+body:not(.bulbasaur-theme) #plansPage .plan-delete-btn:hover,
+body:not(.bulbasaur-theme) #plansPage .plan-title-save-btn:hover,
+body:not(.bulbasaur-theme) #plansPage .plan-tag-editor button:hover {
+  transition:
+    width 0.38s ease,
+    background-color 0.38s ease,
+    border-color 0.38s ease,
+    color 0.38s ease,
+    box-shadow 0.38s ease,
+    opacity 0.34s ease,
+    transform 0.34s ease,
+    visibility 0s !important;
+}
+
+/* Raichu mobile/narrow screens: show Plans tag controls without hover */
+@media (hover: none), (pointer: coarse), (max-width: 700px) {
+  body:not(.bulbasaur-theme) #plansPage .plan-tag-row,
+  body:not(.bulbasaur-theme) #plansPage .plan-tag-list {
+    overflow: visible !important;
+  }
+
+  body:not(.bulbasaur-theme) #plansPage .plan-tag-row:has(.plan-tag-empty) {
+    max-height: 28px !important;
+    margin-top: 4px !important;
+    opacity: 1 !important;
+  }
+
+  body:not(.bulbasaur-theme) #plansPage .plan-tag-add,
+  body:not(.bulbasaur-theme) #plansPage .plan-tag-empty {
+    position: static !important;
+    width: 20px !important;
+    min-width: 20px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
+    transform: scale(1) !important;
+  }
+
+  body:not(.bulbasaur-theme) #plansPage .plan-tag-empty {
+    width: 22px !important;
+    min-width: 22px !important;
+  }
+
+  body:not(.bulbasaur-theme) #plansPage .plan-tag-delete,
+  body:not(.bulbasaur-theme) #plansPage .draft-tag-remove {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: scale(1) !important;
+  }
+}
 /* Bulbasaur mascot keeps Raichu behavior, only larger art */
 body.bulbasaur-theme .queue-browser-box .raichu-container {
   top: -80px !important;
