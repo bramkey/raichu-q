@@ -4262,16 +4262,19 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
               <section class="plan-category">
                 <h2>things</h2>
                 <div class="plan-list" id="thingsPlanList"></div>
+                <div class="pagination plan-pagination" id="thingsPlanPagination"></div>
               </section>
 
               <section class="plan-category">
                 <h2>food</h2>
                 <div class="plan-list" id="foodPlanList"></div>
+                <div class="pagination plan-pagination" id="foodPlanPagination"></div>
               </section>
 
               <section class="plan-category">
                 <h2>places</h2>
                 <div class="plan-list" id="placesPlanList"></div>
+                <div class="pagination plan-pagination" id="placesPlanPagination"></div>
               </section>
             </div>
           </div>
@@ -5310,6 +5313,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       const ACTIVE_PAGE_STORAGE_KEY = "raichuActivePage";
       const planCategories = ["things", "food", "places"];
       let plans = [];
+      let planPages = { things: 1, food: 1, places: 1 };
 
       function normalizePlan(plan) {
         if (!plan) return plan;
@@ -5353,6 +5357,26 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         renderPlans();
       }
 
+      function resetPlanPages() {
+        planPages = { things: 1, food: 1, places: 1 };
+      }
+
+      function renderPlanPagination(category, currentPage, totalPages) {
+        const paginationEl = document.getElementById(`${category}PlanPagination`);
+        if (!paginationEl) return;
+
+        if (totalPages <= 1) {
+          paginationEl.innerHTML = "";
+          return;
+        }
+
+        paginationEl.innerHTML = `
+          <button class="page-btn secondary-btn" ${currentPage === 1 ? "disabled" : ""} onclick="changePlanPage('${category}', -1)">prev</button>
+          <span class="page-info">page ${currentPage} of ${totalPages}</span>
+          <button class="page-btn secondary-btn" ${currentPage === totalPages ? "disabled" : ""} onclick="changePlanPage('${category}', 1)">next</button>
+        `;
+      }
+
       function renderPlans() {
         planCategories.forEach((category) => {
           const list = document.getElementById(`${category}PlanList`);
@@ -5369,10 +5393,17 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
           if (categoryPlans.length === 0) {
             list.innerHTML = `<div class="empty">nothing here yet ✨</div>`;
+            renderPlanPagination(category, 1, 1);
             return;
           }
 
-          list.innerHTML = categoryPlans
+          const totalPages = Math.max(1, Math.ceil(categoryPlans.length / ITEMS_PER_PAGE));
+          const currentPage = Math.min(Math.max(1, planPages[category] || 1), totalPages);
+          const start = (currentPage - 1) * ITEMS_PER_PAGE;
+          const pagePlans = categoryPlans.slice(start, start + ITEMS_PER_PAGE);
+          planPages[category] = currentPage;
+
+          list.innerHTML = pagePlans
             .map((plan) => {
               const globalIndex = plans.findIndex((savedPlan) => savedPlan.id === plan.id);
               return `
@@ -5454,17 +5485,43 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
               `;
             })
             .join("");
+          renderPlanPagination(category, currentPage, totalPages);
         });
       }
 
+      function changePlanPage(category, direction) {
+        if (!planCategories.includes(category)) return;
+        planPages[category] = (planPages[category] || 1) + direction;
+        renderPlans();
+      }
 
       let draftPlanTags = [];
 
       function getPlanTags(tags) {
-        return String(tags || "")
+        const rawTags = String(tags || "").trim();
+        if (!rawTags) return [];
+
+        if (rawTags.startsWith("[")) {
+          try {
+            const parsedTags = JSON.parse(rawTags);
+            if (Array.isArray(parsedTags)) {
+              return parsedTags
+                .map((tag) => toLowerSafe(tag).trim())
+                .filter(Boolean);
+            }
+          } catch (error) {
+            console.warn("could not parse saved plan tags:", error);
+          }
+        }
+
+        return rawTags
           .split(",")
           .map((tag) => toLowerSafe(tag).trim())
           .filter(Boolean);
+      }
+
+      function serializePlanTags(tags) {
+        return JSON.stringify([...new Set(tags.map((tag) => toLowerSafe(tag).trim()).filter(Boolean))]);
       }
 
       function renderDraftPlanTags() {
@@ -5517,7 +5574,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
       function collectPlanTagsForSave() {
         addDraftPlanTagFromInput();
-        return draftPlanTags.join(", ");
+        return serializePlanTags(draftPlanTags);
       }
 
       function resetDraftPlanTags() {
@@ -5583,6 +5640,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
         input.value = "";
         resetDraftPlanTags();
+        planPages[category] = 1;
         await loadPlans();
         await logPlanAdded(title, category);
       }
@@ -5609,12 +5667,10 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const plan = plans[index];
 
         const existingTags = getPlanTags(plan.tags);
-        const addedTags = String(input.value || "")
-          .split(",")
-          .map((tag) => toLowerSafe(tag).trim())
-          .filter(Boolean);
+        const tagToAdd = toLowerSafe(input.value.trim());
+        const addedTags = tagToAdd ? [tagToAdd] : [];
 
-        const newTags = [...new Set([...existingTags, ...addedTags])].join(", ");
+        const newTags = serializePlanTags([...existingTags, ...addedTags]);
 
         if (!addedTags.length) {
           togglePlanTagEditor(index);
@@ -5645,9 +5701,9 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
         const plan = plans[index];
 
-        const newTags = getPlanTags(plan.tags)
-          .filter((tag) => tag !== tagToRemove)
-          .join(", ");
+        const newTags = serializePlanTags(
+          getPlanTags(plan.tags).filter((tag) => tag !== tagToRemove),
+        );
 
         plans[index].tags = newTags;
         renderPlans();
@@ -5829,6 +5885,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       if (planSearchInput) {
         planSearchInput.addEventListener("input", (event) => {
           planSearchTerm = event.target.value.trim().toLowerCase();
+          resetPlanPages();
           renderPlans();
         });
       }
@@ -5891,6 +5948,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       window.updateRating = updateRating;
       window.togglePriority = togglePriority;
       window.changePage = changePage;
+      window.changePlanPage = changePlanPage;
       window.togglePlanDone = togglePlanDone;
       window.removePlan = removePlan;
 
@@ -5910,3 +5968,5 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
   </body>
 </html>
+
+
