@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -1407,6 +1407,9 @@
         border-radius: 22px;
         padding: 16px;
         min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
       }
 
@@ -3794,6 +3797,22 @@ body.bulbasaur-theme .plan-item:hover {
   box-shadow: 0 6px 16px rgba(61, 70, 55, 0.16) !important;
 }
 
+
+/* keep the Plans wrapper transparent so colored boxes do not spill past their containers */
+body.bulbasaur-theme .plans-page-box {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+body.bulbasaur-theme .plans-browser-box,
+body.bulbasaur-theme .plans-grid {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
 /* Bulbasaur mascot keeps Raichu behavior, only larger art */
 body.bulbasaur-theme .queue-browser-box .raichu-container {
   top: -80px !important;
@@ -5632,6 +5651,8 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
   </body>
 </html>
+
+
 
 
 
