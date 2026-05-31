@@ -3813,6 +3813,170 @@ body.bulbasaur-theme .plans-grid {
   max-width: 100% !important;
   box-sizing: border-box !important;
 }
+
+/* Bulbasaur plans tag controls: unified earth colors + smoother hovers */
+body.bulbasaur-theme #plansPage .plan-tag-add,
+body.bulbasaur-theme #plansPage .plan-tag-empty {
+  background: #ddd9c4 !important;
+  background-color: #ddd9c4 !important;
+  color: #3f5949 !important;
+  border-color: #96977e !important;
+  box-shadow: none !important;
+  transition:
+    background-color 0.38s ease,
+    border-color 0.38s ease,
+    color 0.38s ease,
+    opacity 0.34s ease,
+    transform 0.34s ease !important;
+}
+
+body.bulbasaur-theme #plansPage .plan-tag-add:hover,
+body.bulbasaur-theme #plansPage .plan-tag-empty:hover {
+  background: #cbc6aa !important;
+  background-color: #cbc6aa !important;
+  color: #334d40 !important;
+  border-color: #7f826d !important;
+  transform: none !important;
+}
+
+body.bulbasaur-theme #plansPage .plan-tag-delete,
+body.bulbasaur-theme #plansPage .draft-tag-remove {
+  background: #707762 !important;
+  background-color: #707762 !important;
+  color: #fbfff5 !important;
+  border: 1px solid #96977e !important;
+  box-shadow: none !important;
+  transition:
+    background-color 0.38s ease,
+    border-color 0.38s ease,
+    color 0.38s ease,
+    opacity 0.34s ease,
+    transform 0.34s ease,
+    visibility 0s linear 0.34s !important;
+}
+
+body.bulbasaur-theme #plansPage .plan-tag-removable:hover .plan-tag-delete,
+body.bulbasaur-theme #plansPage .draft-plan-tag:hover .draft-tag-remove {
+  transition-delay: 0s !important;
+}
+
+body.bulbasaur-theme #plansPage .plan-tag-delete:hover,
+body.bulbasaur-theme #plansPage .draft-tag-remove:hover {
+  background: #5f664f !important;
+  background-color: #5f664f !important;
+  border-color: #7f826d !important;
+  color: #fbfff5 !important;
+}
+
+/* Bulbasaur + tag buttons: keep the hide/show animation smooth too */
+body.bulbasaur-theme #plansPage .plan-tag-row {
+  transition:
+    max-height 0.38s ease,
+    margin-top 0.38s ease,
+    opacity 0.34s ease !important;
+}
+
+body.bulbasaur-theme #plansPage .plan-tag-add,
+body.bulbasaur-theme #plansPage .plan-tag-empty {
+  transition:
+    width 0.38s ease,
+    background-color 0.38s ease,
+    border-color 0.38s ease,
+    color 0.38s ease,
+    opacity 0.34s ease,
+    transform 0.34s ease,
+    visibility 0s linear 0.34s !important;
+}
+
+body.bulbasaur-theme #plansPage .plan-item:hover .plan-tag-add,
+body.bulbasaur-theme #plansPage .plan-item:hover .plan-tag-empty {
+  transition:
+    width 0.38s ease,
+    background-color 0.38s ease,
+    border-color 0.38s ease,
+    color 0.38s ease,
+    opacity 0.34s ease,
+    transform 0.34s ease,
+    visibility 0s !important;
+}
+
+/* Mobile/touch: tag delete and add buttons are visible without hover */
+@media (hover: none), (pointer: coarse) {
+  body.bulbasaur-theme #plansPage .plan-tag-row:has(.plan-tag-empty) {
+    max-height: 28px !important;
+    margin-top: 4px !important;
+    opacity: 1 !important;
+  }
+
+  body.bulbasaur-theme #plansPage .plan-tag-add,
+  body.bulbasaur-theme #plansPage .plan-tag-empty {
+    position: static !important;
+    width: 20px !important;
+    min-width: 20px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: scale(1) !important;
+    transition:
+      background-color 0.38s ease,
+      border-color 0.38s ease,
+      color 0.38s ease,
+      opacity 0.34s ease,
+      transform 0.34s ease !important;
+  }
+
+  body.bulbasaur-theme #plansPage .plan-tag-empty {
+    width: 22px !important;
+    min-width: 22px !important;
+  }
+
+  body.bulbasaur-theme #plansPage .plan-tag-delete,
+  body.bulbasaur-theme #plansPage .draft-tag-remove {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: scale(1) !important;
+  }
+}
+
+/* Narrow screens: show Plans tag controls even when the browser still reports hover */
+@media (max-width: 700px) {
+  body.bulbasaur-theme #plansPage .plan-tag-row,
+  body.bulbasaur-theme #plansPage .plan-tag-list {
+    overflow: visible !important;
+  }
+
+  body.bulbasaur-theme #plansPage .plan-tag-row:has(.plan-tag-empty) {
+    max-height: 28px !important;
+    margin-top: 4px !important;
+    opacity: 1 !important;
+  }
+
+  body.bulbasaur-theme #plansPage .plan-tag-add,
+  body.bulbasaur-theme #plansPage .plan-tag-empty {
+    position: static !important;
+    width: 20px !important;
+    min-width: 20px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
+    transform: scale(1) !important;
+  }
+
+  body.bulbasaur-theme #plansPage .plan-tag-empty {
+    width: 22px !important;
+    min-width: 22px !important;
+  }
+
+  body.bulbasaur-theme #plansPage .plan-tag-delete,
+  body.bulbasaur-theme #plansPage .draft-tag-remove {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: scale(1) !important;
+  }
+}
 /* Bulbasaur mascot keeps Raichu behavior, only larger art */
 body.bulbasaur-theme .queue-browser-box .raichu-container {
   top: -80px !important;
@@ -5651,18 +5815,3 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
