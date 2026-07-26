@@ -22,11 +22,15 @@
         text-transform: lowercase;
       }
 
+      body.add-modal-open {
+        overflow: hidden;
+      }
+
       .container {
-        max-width: 1100px;
+        max-width: 1180px;
         margin: 40px auto;
         margin-right: calc(
-          50% - 550px + 210px
+          50% - 590px + 210px
         ); /* shift left slightly for strip */
         padding: 25px;
         flex: 1 0 auto;
@@ -103,6 +107,113 @@
         gap: 10px;
         justify-content: center;
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      .add-overlay,
+      .edit-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 20000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 22px;
+        background: rgba(94, 71, 48, 0.22);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+      }
+
+      .add-overlay.hidden,
+      .edit-overlay.hidden {
+        display: none;
+      }
+
+      .add-modal,
+      .edit-modal {
+        width: min(720px, 100%);
+        background: #f4e3c2;
+        border: 2px solid #c8ab72;
+        border-radius: 18px;
+        padding: 16px;
+        box-shadow: 0 18px 46px rgba(0, 0, 0, 0.22);
+      }
+
+      .add-modal-header,
+      .edit-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .add-modal-title,
+      .edit-modal-title {
+        font-family: "Fredoka", cursive;
+        font-size: 1.25rem;
+        font-weight: 700;
+      }
+
+      .add-modal-close,
+      .edit-modal-close {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .add-modal .add-box {
+        max-width: none;
+        margin: 0;
+      }
+
+      .add-modal .toolbar {
+        margin-bottom: 0;
+      }
+
+      .edit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .edit-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .edit-field label {
+        font-size: 12px;
+        font-weight: 800;
+        opacity: 0.75;
+      }
+
+      .edit-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .edit-row .edit-field {
+        flex: 1 1 180px;
+      }
+
+      .edit-modal textarea {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .edit-modal-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 4px;
       }
 
       .description-box {
@@ -442,6 +553,34 @@
         white-space: nowrap;
       }
 
+      .type-badge {
+        background: #fff8dc;
+        border: 1px solid rgba(168, 134, 88, 0.45);
+        color: #7a5a34;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 3px 7px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+
+      .type-badge.type-show {
+        background: #e8f4ff;
+        color: #005b96;
+      }
+
+      .type-badge.type-game {
+        background: #fff1ee;
+        color: #9b3f2f;
+      }
+
+      .type-select {
+        background: #fff8dc;
+        color: #7a5a34;
+        border-color: rgba(168, 134, 88, 0.7);
+        font-weight: 700;
+      }
+
       .status-want-border {
         border-left: 8px solid #c6a05b !important;
       }
@@ -632,23 +771,49 @@
       }
 
       .stats-bar {
-        white-space: pre;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        align-items: center;
+        gap: 0;
         margin: 12px 0 18px 0;
         margin-top: 12px;
         text-align: center;
         background: #eee0bd;
         border: 2px solid #c8ab72;
         border-radius: 12px;
-        padding: 8px 12px;
+        padding: 10px 12px;
         font-size: 13px;
         font-weight: 500;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
       }
 
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 0 10px;
+      }
+
+      .stat-item + .stat-item {
+        border-left: 1px solid rgba(168, 134, 88, 0.35);
+      }
+
+      .stat-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0;
+        opacity: 0.75;
+      }
+
+      .stat-value {
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
       @media (max-width: 700px) {
         .stats-bar {
-          white-space: pre-line;
-          line-height: 1.6;
+          line-height: 1.3;
         }
       }
 
@@ -835,6 +1000,30 @@
         margin-bottom: 18px;
       }
 
+      .queue-browser-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+
+      .queue-browser-top .queue-filter-box {
+        margin-bottom: 0;
+      }
+
+      .open-add-modal-btn {
+        flex: 0 0 auto;
+      }
+
+      .queue-action-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: auto;
+      }
+
       @media (max-width: 700px) {
         .queue-browser-box {
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -845,6 +1034,19 @@
 
         .queue-browser-box .search-box {
           margin-bottom: 14px;
+        }
+
+        .queue-browser-top {
+          align-items: stretch;
+        }
+
+        .queue-action-group {
+          width: 100%;
+          justify-content: flex-end;
+        }
+
+        .queue-action-group .open-add-modal-btn {
+          width: auto;
         }
       }
 
@@ -863,6 +1065,67 @@
       }
       .priority-toggle.active {
         background: #d7b46a;
+      }
+
+      .finished-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      .finished-toggle input {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        min-width: 18px;
+        flex: 0 0 18px;
+        margin: 0;
+        border: 2px solid #a88658;
+        border-radius: 4px;
+        background: #fffdf5;
+        position: relative;
+        cursor: pointer;
+        box-sizing: border-box;
+      }
+
+      .finished-toggle input::after {
+        content: "✓";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -54%);
+        color: rgba(94, 71, 48, 0.35);
+        opacity: 0;
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 1;
+        pointer-events: none;
+        transition: opacity 0.28s ease;
+      }
+
+      .finished-toggle:hover input:not(:checked)::after {
+        opacity: 1;
+      }
+
+      .finished-toggle input:checked {
+        background: #e8f8e8;
+        border-color: #4caf50;
+      }
+
+      .finished-toggle input:checked::after {
+        color: #1e6b1e;
+        opacity: 1;
+      }
+
+      .item-edit-btn {
+        font-size: 12px;
+        padding: 5px 8px;
+        border-radius: 8px;
       }
 
       .stats-bar,
@@ -1098,13 +1361,16 @@
         width: 380px;
         max-height: calc(100vh - 40px);
         overflow-y: auto;
-        background: #f3ead7;
-        border: 2px solid #c8ab72;
-        border-radius: 20px;
-        padding: 16px;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
         z-index: 1000;
         box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
       }
 
       .sidebar {
@@ -1131,7 +1397,8 @@
       }
 
       .sidebar.collapsed .sidebar-header h3,
-      .sidebar.collapsed #logBox {
+      .sidebar.collapsed #logBox,
+      .sidebar.collapsed .sidebar-card {
         display: none;
       }
 
@@ -1197,6 +1464,15 @@
         padding-right: 42px;
       }
 
+      .sidebar-card {
+        background: #f3ead7;
+        border: 2px solid #c8ab72;
+        border-radius: 20px;
+        padding: 16px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+        box-sizing: border-box;
+      }
+
       .sidebar h3 {
         margin: 0;
         font-family: "Fredoka", cursive;
@@ -1235,6 +1511,67 @@
         padding: 8px 10px;
         line-height: 1.35;
         word-break: break-word;
+      }
+
+      .ongoing-box {
+        margin-top: 0;
+      }
+
+      .ongoing-box .sidebar-header {
+        padding-right: 0;
+      }
+
+      .ongoing-box h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        text-align: center;
+      }
+
+      #ongoingBox {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: min(260px, 36vh);
+        overflow-y: auto;
+        padding-right: 4px;
+        scrollbar-color: #c8ab72 #f3ead7;
+        scrollbar-width: thin;
+      }
+
+      #ongoingBox::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      #ongoingBox::-webkit-scrollbar-track {
+        background: #f3ead7;
+        border-radius: 999px;
+      }
+
+      #ongoingBox::-webkit-scrollbar-thumb {
+        background: #c8ab72;
+        border-radius: 999px;
+        border: 2px solid #f3ead7;
+      }
+
+      #ongoingBox::-webkit-scrollbar-thumb:hover {
+        background: #a88658;
+      }
+
+      .ongoing-entry {
+        background: #fffdf5;
+        border: 2px solid #cfb27a;
+        border-radius: 12px;
+        padding: 8px 10px;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .ongoing-entry-type {
+        display: inline-block;
+        margin-left: 6px;
+        opacity: 0.65;
+        font-size: 11px;
+        font-weight: 800;
       }
 
       @media (max-width: 1500px) {
@@ -1849,7 +2186,7 @@
         border-radius: 0 !important;
         margin: 0 !important;
         /* aligns the title with the shifted-left main content area */
-        padding: 18px 76px 18px max(16px, calc((100vw - 1100px) / 2 - 185px)) !important;
+        padding: 18px 76px 18px max(16px, calc((100vw - 1180px) / 2 - 185px)) !important;
         box-sizing: border-box !important;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important;
       }
@@ -1891,11 +2228,11 @@
       @media (max-width: 1380px) {
         .container > .site-sticky-header {
           /* once the activity log stacks, line the title back up with centered content */
-          padding-left: max(16px, calc((100vw - 1100px) / 2 + 25px)) !important;
+          padding-left: max(16px, calc((100vw - 1180px) / 2 + 25px)) !important;
         }
       }
 
-      @media (max-width: 1100px) {
+      @media (max-width: 1180px) {
         .container > .site-sticky-header {
           padding-left: 16px !important;
         }
@@ -2090,6 +2427,80 @@
   flex: 1 1 auto !important;
 }
 
+.container > .site-sticky-header .stats-bar {
+  flex: 0 1 300px !important;
+  max-width: 320px !important;
+  min-width: 250px !important;
+  margin: 0 0 0 auto !important;
+  padding: 7px 10px !important;
+  border-width: 2px !important;
+  border-radius: 10px !important;
+  background: rgba(238, 224, 189, 0.92) !important;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.08) !important;
+}
+
+.container > .site-sticky-header .stat-item {
+  gap: 3px !important;
+  padding: 0 8px !important;
+}
+
+.container > .site-sticky-header .stat-label {
+  font-size: 10px !important;
+}
+
+.container > .site-sticky-header .stat-value {
+  font-size: 15px !important;
+}
+
+.header-search-box {
+  display: flex !important;
+  align-items: center !important;
+  flex: 0 1 240px !important;
+  min-width: 170px !important;
+}
+
+.container > .site-sticky-header #searchInput {
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 8px 10px !important;
+  border-width: 2px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+}
+
+.queue-filter-box {
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+
+.filter-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(238, 224, 189, 0.72);
+  border: 1px solid rgba(168, 134, 88, 0.38);
+  border-radius: 999px;
+  padding: 6px 8px 6px 12px;
+}
+
+.filter-label {
+  font-size: 11px;
+  font-weight: 800;
+  opacity: 0.7;
+}
+
+.filter-control select {
+  min-width: 160px;
+  padding: 7px 10px;
+  border-width: 1px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.filter-control #genreFilter {
+  min-width: 130px;
+}
+
 .header-page-tabs {
   margin: 0 70px 0 0 !important;
   display: flex !important;
@@ -2107,6 +2518,12 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.10) !important;
 }
 
+@media (max-width: 980px) {
+  .container > .site-sticky-header .stats-bar {
+    display: none !important;
+  }
+}
+
 @media (max-width: 700px) {
   .container > .site-sticky-header {
     gap: 8px !important;
@@ -2117,6 +2534,20 @@
     font-size: 1.25rem !important;
     flex: 1 1 auto !important;
     min-width: 0 !important;
+  }
+
+  .container > .site-sticky-header .stats-bar {
+    display: none !important;
+  }
+
+  .header-search-box {
+    flex: 0 1 126px !important;
+    min-width: 96px !important;
+  }
+
+  .container > .site-sticky-header #searchInput {
+    padding: 6px 8px !important;
+    font-size: 11px !important;
   }
 
   .header-page-tabs {
@@ -3512,14 +3943,35 @@ body:not(.bulbasaur-theme) .header-pill-tabs .page-tab.pill-tab:not(.active):hov
       }
 
       body.bulbasaur-theme .sidebar {
-        background: #e8e3cf !important;
-        border-color: #9f9a82 !important;
         color: #2f5034 !important;
       }
 
+      body.bulbasaur-theme .sidebar-card {
+        background: #e8e3cf !important;
+        border-color: #9f9a82 !important;
+      }
 
+      body.bulbasaur-theme #ongoingBox {
+        scrollbar-color: #77a95d #e8e3cf;
+      }
+
+      body.bulbasaur-theme #ongoingBox::-webkit-scrollbar-track {
+        background: #e8e3cf !important;
+      }
+
+      body.bulbasaur-theme #ongoingBox::-webkit-scrollbar-thumb {
+        background: #77a95d !important;
+        border-color: #e8e3cf !important;
+      }
+
+      body.bulbasaur-theme #ongoingBox::-webkit-scrollbar-thumb:hover {
+        background: #5f934d !important;
+      }
+
+      
       body.bulbasaur-theme .raichu-bubble,
-      body.bulbasaur-theme .log-entry {
+      body.bulbasaur-theme .log-entry,
+      body.bulbasaur-theme .ongoing-entry {
         background: #fbfff5 !important;
         border-color: #77a95d !important;
         color: #2f5034 !important;
@@ -4280,6 +4732,72 @@ body.bulbasaur-theme .sidebar-floating-toggle:focus-visible {
     0 0 0 4px rgba(95, 147, 77, 0.18) !important;
 }
 
+/* Final mascot placement: anchor Raichu/Bulbasaur in the footer. */
+.footer {
+  position: relative !important;
+}
+
+.footer-mascot {
+  position: absolute !important;
+  left: 18px !important;
+  top: -58px !important;
+  width: 72px !important;
+  height: 72px !important;
+  pointer-events: auto !important;
+}
+
+.footer .raichu-container,
+body.bulbasaur-theme .footer .raichu-container {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  width: 72px !important;
+  flex: none !important;
+  z-index: 2 !important;
+}
+
+.footer .raichu-img,
+body.bulbasaur-theme .footer .raichu-img {
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: contain !important;
+}
+
+.footer .raichu-bubble,
+body.bulbasaur-theme .footer .raichu-bubble {
+  bottom: 76px !important;
+  left: 8px !important;
+  right: auto !important;
+}
+
+@media (max-width: 700px) {
+  .footer-mascot {
+    left: 12px !important;
+    top: -48px !important;
+    width: 58px !important;
+    height: 58px !important;
+  }
+
+  .footer .raichu-container,
+  body.bulbasaur-theme .footer .raichu-container {
+    width: 58px !important;
+  }
+
+  .footer .raichu-img,
+  body.bulbasaur-theme .footer .raichu-img {
+    width: 58px !important;
+    height: 58px !important;
+  }
+
+  .footer .raichu-bubble,
+  body.bulbasaur-theme .footer .raichu-bubble {
+    bottom: 62px !important;
+    left: 6px !important;
+  }
+}
+
 /* Bulbasaur mascot keeps Raichu behavior, only larger art */
 body.bulbasaur-theme .queue-browser-box .raichu-container {
   top: -80px !important;
@@ -4322,12 +4840,24 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
   <body>
     <!-- activity log sidebar: shows latest actions and can be collapsed -->
     <div class="sidebar" id="logSidebar">
-      <div class="sidebar-header">
-        <h3>activity log ⚡</h3>
+      <div class="sidebar-card activity-card">
+        <div class="sidebar-header">
+          <h3>activity log ⚡</h3>
+        </div>
+        <div id="logBox">
+          <div class="log-entry" style="opacity: 0.6">
+            nothing new added yet :(
+          </div>
+        </div>
       </div>
-      <div id="logBox">
-        <div class="log-entry" style="opacity: 0.6">
-          nothing new added yet :(
+      <div class="sidebar-card ongoing-box">
+        <div class="sidebar-header">
+          <h3>ongoing</h3>
+        </div>
+        <div id="ongoingBox">
+          <div class="ongoing-entry" style="opacity: 0.6">
+            nothing ongoing right now
+          </div>
         </div>
       </div>
     </div>
@@ -4350,6 +4880,18 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       <div class="header site-sticky-header">
         <h1 id="appTitle">⚡ raichu queue ⚡</h1>
 
+        <div class="stats-bar" id="statsBar">
+          ⚡ loading stats and petting the raichu ...
+        </div>
+
+        <div class="header-search-box">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="⚡ search the queue"
+          />
+        </div>
+
         <div class="page-tabs header-page-tabs" role="tablist" aria-label="raichu queue pages">
           <div class="header-pill-tabs">
             <button type="button" class="page-tab pill-tab active" data-page="queuePage" role="tab" aria-selected="true">queue</button>
@@ -4360,65 +4902,123 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
       <main class="app-page active" id="queuePage">
 
-      <div class="stats-bar" id="statsBar">
-        ⚡ loading stats and petting the raichu ...
+      <div class="add-overlay hidden" id="addOverlay" aria-hidden="true">
+        <div class="add-modal" role="dialog" aria-modal="true" aria-labelledby="addModalTitle">
+          <div class="add-modal-header">
+            <div class="add-modal-title" id="addModalTitle">add new</div>
+            <button type="button" class="secondary-btn add-modal-close" id="closeAddModal" aria-label="close add new">✕</button>
+          </div>
+          <div class="toolbar">
+            <!-- add form: users create new movie/show or game entries here -->
+            <div class="add-box">
+              <div class="add-row">
+                <input
+                  type="text"
+                  id="titleInput"
+                  placeholder="add a movie, show, or game"
+                />
+              </div>
+
+              <div class="add-row controls-row">
+                <select id="typeInput">
+                  <option value="movie">movie</option>
+                  <option value="show">show</option>
+                  <option value="game">game</option>
+                </select>
+                <button
+                  type="button"
+                  class="secondary-btn"
+                  id="toggleDescriptionBtn"
+                >
+                  add summary
+                </button>
+                <button id="addButton">add to queue ⚡</button>
+              </div>
+
+              <div class="description-box" id="descriptionBox">
+                <textarea
+                  id="descriptionInput"
+                  placeholder="write a short summary or notes here."
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="toolbar">
-        <!-- add form: users create new movie/show or game entries here -->
-        <div class="add-box">
-          <div class="add-row">
-            <input
-              type="text"
-              id="titleInput"
-              placeholder="add a movie/show or game"
-            />
+      <div class="edit-overlay hidden" id="editOverlay" aria-hidden="true">
+        <div class="edit-modal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+          <div class="edit-modal-header">
+            <div class="edit-modal-title" id="editModalTitle">edit item</div>
+            <button type="button" class="secondary-btn edit-modal-close" id="closeEditModal" aria-label="close edit item">✕</button>
           </div>
-
-          <div class="add-row controls-row">
-            <select id="typeInput">
-              <option value="movie">movie/show</option>
-              <option value="game">game</option>
-            </select>
-            <button
-              type="button"
-              class="secondary-btn"
-              id="toggleDescriptionBtn"
-            >
-              add summary
-            </button>
-            <button id="addButton">add to queue ⚡</button>
-          </div>
-
-          <div class="description-box" id="descriptionBox">
-            <textarea
-              id="descriptionInput"
-              placeholder="write a short summary or notes here."
-            ></textarea>
+          <div class="edit-form">
+            <div class="edit-field">
+              <label for="editTitleInput">title</label>
+              <input type="text" id="editTitleInput" placeholder="title" />
+            </div>
+            <div class="edit-row">
+              <div class="edit-field" id="editTypeField">
+                <label for="editTypeInput">type</label>
+                <select id="editTypeInput">
+                  <option value="movie">movie</option>
+                  <option value="show">show</option>
+                </select>
+              </div>
+              <div class="edit-field">
+                <label for="editStatusInput">status</label>
+                <select id="editStatusInput"></select>
+              </div>
+              <div class="edit-field">
+                <label for="editRatingInput">rating</label>
+                <select id="editRatingInput">
+                  <option value="">no rating</option>
+                  <option value="1">1 star</option>
+                  <option value="2">2 stars</option>
+                  <option value="3">3 stars</option>
+                  <option value="4">4 stars</option>
+                  <option value="5">5 stars</option>
+                </select>
+              </div>
+            </div>
+            <div class="edit-field">
+              <label for="editDescriptionInput">summary</label>
+              <textarea id="editDescriptionInput" placeholder="write a short summary or notes here."></textarea>
+            </div>
+            <div class="edit-modal-actions">
+              <button type="button" class="delete-btn-inline secondary-btn" id="editDeleteButton">delete</button>
+              <div class="item-actions">
+                <button type="button" class="secondary-btn" id="cancelEditButton">cancel</button>
+                <button type="button" id="saveEditButton">save changes</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="queue-browser-box">
       <!-- browsing area: raichu message, search/filter controls, and both paginated lists -->
-        <div class="raichu-container" id="raichu">
-          <img src="raichu.ico" class="raichu-img" id="themeMascot" />
-          <div class="raichu-bubble" id="raichuBubble" data-default="hi gf">
-            hi gf
+        <div class="queue-browser-top">
+          <div class="search-box queue-filter-box">
+            <label class="filter-control" for="statusFilter">
+              <span class="filter-label">filter</span>
+              <select id="statusFilter">
+                <option value="all">all statuses</option>
+                <option value="finished">finished</option>
+                <option value="in progress">in progress / currently playing</option>
+                <option value="want">want to watch / play</option>
+              </select>
+              <select id="genreFilter" aria-label="filter by genre">
+                <option value="all">all genres</option>
+                <option value="horror">horror</option>
+                <option value="comedy">comedy</option>
+                <option value="romance">romance</option>
+              </select>
+            </label>
           </div>
-        </div>
-        <div class="search-box">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="⚡ search the queue"
-          />
-          <select id="statusFilter">
-            <option value="all">all statuses</option>
-            <option value="finished">finished</option>
-            <option value="in progress">in progress / currently playing</option>
-            <option value="want">want to watch / play</option>
-          </select>
+          <div class="queue-action-group">
+            <button type="button" class="open-add-modal-btn" id="openAddModal">add new</button>
+          </div>
         </div>
 
         <div class="lists">
@@ -4491,6 +5091,14 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
     </div>
 
     <footer class="footer">
+      <div class="footer-mascot">
+        <div class="raichu-container" id="raichu">
+          <img src="raichu.ico" class="raichu-img" id="themeMascot" />
+          <div class="raichu-bubble" id="raichuBubble" data-default="hi gf">
+            hi gf
+          </div>
+        </div>
+      </div>
       <span>made with love for my gf <span class="theme-heart" id="footerHeart">💛</span></span>
       <button type="button" class="secondary-btn theme-toggle" id="themeToggle" aria-pressed="false">bulba mode</button>
     </footer>
@@ -4525,11 +5133,13 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       let games = [];
       let searchTerm = "";
       let statusFilter = "all";
+      let genreFilter = "all";
       let moviePage = 1;
       let gamePage = 1;
       const ITEMS_PER_PAGE = 5;
       let activityLog = [];
       let planSearchTerm = "";
+      let editItemContext = null;
 
       // keeps all stored/displayed text lowercase so the site stays visually consistent
       function toLowerSafe(value) {
@@ -4538,10 +5148,15 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
       function normalizeQueueItem(item) {
         if (!item) return item;
+        const storedType = toLowerSafe(item.type);
         return {
           ...item,
           title: toLowerSafe(item.title),
           description: toLowerSafe(item.description),
+          tags: toLowerSafe(item.tags),
+          type: ["movie", "show", "game"].includes(storedType)
+            ? storedType
+            : "movie",
         };
       }
 
@@ -4554,21 +5169,37 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         };
       }
 
-      // upthings the summary bar at the top with current totals and finished counts
       function updateStats() {
-        const totalMovies = movies.length;
+        const movieItems = movies.filter((item) => item.type === "movie");
+        const showItems = movies.filter((item) => item.type === "show");
+        const totalMovies = movieItems.length;
+        const totalShows = showItems.length;
         const totalGames = games.length;
-        const finishedMovies = movies.filter(
+        const finishedMovies = movieItems.filter(
+          (item) => item.status === "finished",
+        ).length;
+        const finishedShows = showItems.filter(
           (item) => item.status === "finished",
         ).length;
         const finishedGames = games.filter(
           (item) => item.status === "finished",
         ).length;
-        document.getElementById("statsBar").innerText =
-          `🎬 ${totalMovies} on our watchlist (${finishedMovies} finished)
-🎮 ${totalGames} games to play (${finishedGames} finished)`;
-      }
 
+        document.getElementById("statsBar").innerHTML = `
+          <div class="stat-item">
+            <span class="stat-label">movies</span>
+            <span class="stat-value">${finishedMovies} / ${totalMovies}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">shows</span>
+            <span class="stat-value">${finishedShows} / ${totalShows}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">games</span>
+            <span class="stat-value">${finishedGames} / ${totalGames}</span>
+          </div>
+        `;
+      }
 
       function dedupeActivityEntries(entries) {
         const seen = new Set();
@@ -4596,6 +5227,41 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         logBox.innerHTML = activityLog
           .map(
             (entry) => `<div class="log-entry">${entry.message || entry}</div>`,
+          )
+          .join("");
+      }
+
+      function getQueueItemTypeLabel(item) {
+        if (item.type === "game") return "game";
+        if (item.type === "show") return "show";
+        return "movie";
+      }
+
+      function renderOngoing() {
+        const ongoingBox = document.getElementById("ongoingBox");
+        if (!ongoingBox) return;
+
+        const ongoingItems = [...movies, ...games]
+          .filter((item) => {
+            const status = String(item.status || "").toLowerCase();
+            return status === "in progress" || status === "currently playing";
+          })
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+        if (ongoingItems.length === 0) {
+          ongoingBox.innerHTML =
+            '<div class="ongoing-entry" style="opacity:0.6;">nothing ongoing right now</div>';
+          return;
+        }
+
+        ongoingBox.innerHTML = ongoingItems
+          .map(
+            (item) => `
+              <div class="ongoing-entry">
+                ${escapeHtml(item.title)}
+                <span class="ongoing-entry-type">${getQueueItemTypeLabel(item)}</span>
+              </div>
+            `,
           )
           .join("");
       }
@@ -4781,9 +5447,9 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
             "things";
           message = `added "${escapeHtml(normalizedTitle)}" to ${toLowerSafe(planCategory)} • ${dateOnly}`;
         } else if (eventType === "added") {
-          message = `added "${escapeHtml(normalizedTitle)}" in ${itemType === "game" ? "games" : "watchlist"} • ${dateOnly}`;
+          message = `added "${escapeHtml(normalizedTitle)}" to ${getQueueTypeLabel(itemType)} • ${dateOnly}`;
         } else if (eventType === "rated") {
-          message = `"${escapeHtml(normalizedTitle)}" on ${itemType === "game" ? "games" : "watchlist"} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
+          message = `"${escapeHtml(normalizedTitle)}" in ${getQueueTypeLabel(itemType)} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
         }
 
         message = toLowerSafe(message);
@@ -4804,6 +5470,12 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         }
 
         return true;
+      }
+
+      function getQueueTypeLabel(type) {
+        if (type === "game") return "games";
+        if (type === "show") return "shows";
+        return "movies";
       }
 
       function getStatusClass(status) {
@@ -4843,80 +5515,32 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
       // builds the html for one queue card, including status, rating, priority, and edit controls
       function createItemHTML(item, index, type) {
-        const options =
-          type === "game"
-            ? `
-          <option value="want to play" ${item.status === "want to play" ? "selected" : ""}>want to play</option>
-          <option value="currently playing" ${item.status === "currently playing" ? "selected" : ""}>currently playing</option>
-          <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
-        `
-            : `
-          <option value="want to watch" ${item.status === "want to watch" ? "selected" : ""}>want to watch</option>
-          <option value="in progress" ${item.status === "in progress" ? "selected" : ""}>in progress</option>
-          <option value="finished" ${item.status === "finished" ? "selected" : ""}>finished</option>
-        `;
-
+        const itemType = ["movie", "show", "game"].includes(item.type)
+          ? item.type
+          : type;
         const finishedClass = item.status === "finished" ? "finished-item" : "";
-        const finishedBadge =
-          item.status === "finished"
-            ? '<span class="finished-badge">Finished ✓</span>'
-            : "";
+        const typeBadge =
+          itemType === "game"
+            ? ""
+            : `<span class="type-badge type-${itemType}">${itemType}</span>`;
         const hasSummary = item.description && item.description.trim();
-        const editorValue = item.description
-          ? escapeAttribute(item.description)
-          : "";
-        const ratingHTML =
-          item.status === "finished"
-            ? `
-          <div class="rating-row">
-            <div class="star-rating" aria-label="rating">
-              ${[1, 2, 3, 4, 5]
-                .map(
-                  (star) => `
-                <button
-                  type="button"
-                  class="star-btn ${item.rating >= star ? "active" : ""}"
-                  onclick="updateRating('${type}', ${index}, ${star})"
-                  aria-label="rate ${star} stars"
-                >★</button>
-              `,
-                )
-                .join("")}
-            </div>
-          </div>
-        `
-            : "";
+        const finishedChecked = item.status === "finished" ? "checked" : "";
 
         return `
         <div class="item ${finishedClass} ${getBorderClass(item.status)}">
           <div class="item-top">
             <div class="title">
-              <button type="button" class="title-button" onclick="toggleTitleEditor('${type}', ${index})" aria-label="edit title for ${escapeHtml(item.title)}">
+              <button type="button" class="title-button" onclick="openEditModal('${type}', ${index})" aria-label="edit ${escapeHtml(item.title)}">
                 <span class="title-text">${escapeHtml(item.title)}</span>
               </button>
-              ${finishedBadge}
+              ${typeBadge}
             </div>
             <div class="controls">
               <button class="priority-toggle ${item.priority ? "active" : ""}" onclick="togglePriority(\'${type}\', ${index}, ${item.priority ? "false" : "true"})">${item.priority ? "★" : "☆"}</button>
-              <select class="${getStatusClass(item.status)}" onchange="updateStatus('${type}', ${index}, this)">
-                ${options}
-              </select>
-              <button class="delete-btn" onclick="removeItem('${type}', ${index})">✕</button>
-            </div>
-          </div>
-
-
-          <div class="title-editor" id="${type}-title-editor-${index}">
-            <input
-              type="text"
-              id="${type}-title-input-${index}"
-              value="${escapeAttribute(item.title)}"
-              placeholder="edit title"
-              onkeydown="handleTitleEditKey(event, '${type}', ${index})"
-            />
-            <div class="item-actions">
-              <button onclick="saveTitle('${type}', ${index})">save title</button>
-              <button class="secondary-btn" onclick="toggleTitleEditor('${type}', ${index})">cancel</button>
+              <label class="finished-toggle" aria-label="mark ${escapeAttribute(item.title)} as finished">
+                <input type="checkbox" ${finishedChecked} onchange="toggleFinished('${type}', ${index}, this)" />
+              </label>
+              <button type="button" class="secondary-btn item-edit-btn" onclick="openEditModal('${type}', ${index})">edit</button>
             </div>
           </div>
 
@@ -4925,70 +5549,11 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
               hasSummary
                 ? `
               <div class="summary-text" id="${type}-summary-${index}">${escapeHtml(item.description)}</div>
-              <div class="summary-bottom">
-                <button class="summary-link" onclick="toggleSummaryEditor('${type}', ${index})">edit summary</button>
-
-                ${
-                  item.status === "finished"
-                    ? `
-                  <div class="rating-row">
-                    <div class="star-rating" aria-label="rating">
-                      ${[1, 2, 3, 4, 5]
-                        .map(
-                          (star) => `
-                        <button
-                          type="button"
-                          class="star-btn ${item.rating >= star ? "active" : ""}"
-                          onclick="updateRating('${type}', ${index}, ${star})"
-                          aria-label="rate ${star} stars"
-                        >★</button>
-                      `,
-                        )
-                        .join("")}
-                    </div>
-                  </div>
-                `
-                    : ""
-                }
-              </div>
             `
                 : `
-              <div class="summary-bottom">
-                <button class="summary-link" onclick="toggleSummaryEditor('${type}', ${index})">add summary</button>
-
-                ${
-                  item.status === "finished"
-                    ? `
-                  <div class="rating-row">
-                    <div class="star-rating" aria-label="rating">
-                      ${[1, 2, 3, 4, 5]
-                        .map(
-                          (star) => `
-                        <button
-                          type="button"
-                          class="star-btn ${item.rating >= star ? "active" : ""}"
-                          onclick="updateRating('${type}', ${index}, ${star})"
-                          aria-label="rate ${star} stars"
-                        >★</button>
-                      `,
-                        )
-                        .join("")}
-                    </div>
-                  </div>
-                `
-                    : ""
-                }
-              </div>
+              <div class="summary-bottom"></div>
             `
             }
-          </div>
-
-          <div class="summary-editor" id="${type}-editor-${index}">
-            <textarea id="${type}-editor-input-${index}" placeholder="write a short summary or notes here.">${editorValue}</textarea>
-            <div class="item-actions">
-              <button class="save-summary-btn" onclick="saveSummary('${type}', ${index})">save summary</button>
-              <button class="secondary-btn" onclick="toggleSummaryEditor('${type}', ${index})">cancel</button>
-            </div>
           </div>
         </div>
       `;
@@ -5014,6 +5579,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           const title = String(item.title || "").toLowerCase();
           const description = String(item.description || "").toLowerCase();
           const status = String(item.status || "").toLowerCase();
+          const tags = String(item.tags || "").toLowerCase();
 
           const matchesSearch =
             !searchTerm ||
@@ -5031,7 +5597,12 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
               status === "want to watch" || status === "want to play";
           }
 
-          return matchesSearch && matchesStatus;
+          const matchesGenre =
+            genreFilter === "all" ||
+            tags.includes(genreFilter) ||
+            description.includes(genreFilter);
+
+          return matchesSearch && matchesStatus && matchesGenre;
         });
       }
 
@@ -5110,6 +5681,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         renderPagination("movie", movieData.currentPage, movieData.totalPages);
         renderPagination("game", gameData.currentPage, gameData.totalPages);
         updateStats();
+        renderOngoing();
       }
 
       function changePage(type, direction) {
@@ -5134,7 +5706,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         }
 
         const normalizedData = (data || []).map(normalizeQueueItem);
-        movies = normalizedData.filter((item) => item.type === "movie");
+        movies = normalizedData.filter((item) => item.type === "movie" || item.type === "show");
         games = normalizedData.filter((item) => item.type === "game");
         render();
         updateStats();
@@ -5179,6 +5751,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         document.getElementById("descriptionBox").classList.remove("show");
         document.getElementById("toggleDescriptionBtn").textContent =
           "add summary";
+        closeAddModal();
         await loadItems();
         await saveActivityLog({ title, itemType: type, eventType: "added" });
         await loadActivityLog();
@@ -5206,6 +5779,117 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         if (status === "finished") {
           showRaichuMessage("was it any good?");
         }
+      }
+
+      async function updateItemType(index, selectElement) {
+        const newType = selectElement.value;
+        const item = movies[index];
+
+        if (!item || !["movie", "show"].includes(newType)) return;
+
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .update({ type: newType })
+          .eq("id", item.id);
+
+        if (error) {
+          console.error("Type update error:", error);
+          selectElement.value = item.type || "movie";
+          return;
+        }
+
+        await loadItems();
+        showRaichuMessage(`marked as ${newType}`);
+      }
+
+      async function toggleFinished(type, index, checkbox) {
+        const item = type === "game" ? games[index] : movies[index];
+        if (!item) return;
+
+        const fallbackType = item.type || type;
+        const status = checkbox.checked
+          ? "finished"
+          : fallbackType === "game"
+            ? "want to play"
+            : "want to watch";
+
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .update({ status })
+          .eq("id", item.id);
+
+        if (error) {
+          console.error("Finished update error:", error);
+          checkbox.checked = item.status === "finished";
+          return;
+        }
+
+        await loadItems();
+        if (status === "finished") showRaichuMessage("was it any good?");
+      }
+
+      async function saveEditItem() {
+        const item = getItemByContext(editItemContext);
+        const itemId = editItemContext && editItemContext.id;
+        if (!item || !itemId) {
+          alert("couldn't find that item to save.");
+          return;
+        }
+
+        const title = toLowerSafe(document.getElementById("editTitleInput").value.trim());
+        if (!title) {
+          alert("please enter a title.");
+          return;
+        }
+
+        const duplicateExists = [...movies, ...games].some(
+          (queueItem) =>
+            queueItem.id !== item.id &&
+            String(queueItem.title || "").toLowerCase() === title,
+        );
+
+        if (duplicateExists) {
+          alert("⚠️ that's already in your queue!");
+          return;
+        }
+
+        const type =
+          editItemContext.listType === "game"
+            ? "game"
+            : document.getElementById("editTypeInput").value;
+        if (!["movie", "show", "game"].includes(type)) {
+          alert("please choose a valid type.");
+          return;
+        }
+        const status = document.getElementById("editStatusInput").value;
+        const description = toLowerSafe(
+          document.getElementById("editDescriptionInput").value.trim(),
+        );
+        const rawRating = document.getElementById("editRatingInput").value;
+        const rating = rawRating ? Number(rawRating) : null;
+
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .update({ title, type, status, description, rating })
+          .eq("id", itemId);
+
+        if (error) {
+          console.error("Edit update error:", error);
+          alert("couldn't save those changes right now.");
+          return;
+        }
+
+        closeEditModal();
+        await loadItems();
+        showRaichuMessage("saved");
+      }
+
+      async function deleteEditItem() {
+        const item = getItemByContext(editItemContext);
+        if (!item) return;
+
+        await removeItem(editItemContext.listType, editItemContext.index);
+        closeEditModal();
       }
 
       // deletes an item from the queue and records that action in the activity log
@@ -5342,6 +6026,96 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         }, 2200);
       }
 
+      function openAddModal() {
+        const overlay = document.getElementById("addOverlay");
+        const titleInput = document.getElementById("titleInput");
+        if (!overlay) return;
+
+        overlay.classList.remove("hidden");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("add-modal-open");
+
+        requestAnimationFrame(() => {
+          if (titleInput) titleInput.focus();
+        });
+      }
+
+      function closeAddModal() {
+        const overlay = document.getElementById("addOverlay");
+        if (!overlay) return;
+
+        overlay.classList.add("hidden");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("add-modal-open");
+      }
+
+      function getItemByContext(context) {
+        if (!context) return null;
+        const allItems = [...movies, ...games];
+        return (
+          allItems.find((item) => item.id === context.id) ||
+          (context.listType === "game"
+            ? games[context.index]
+            : movies[context.index])
+        );
+      }
+
+      function getStatusOptionsForType(type, selectedStatus) {
+        const options =
+          type === "game"
+            ? ["want to play", "currently playing", "finished"]
+            : ["want to watch", "in progress", "finished"];
+
+        return options
+          .map(
+            (status) =>
+              `<option value="${status}" ${selectedStatus === status ? "selected" : ""}>${status}</option>`,
+          )
+          .join("");
+      }
+
+      function openEditModal(listType, index) {
+        const item = listType === "game" ? games[index] : movies[index];
+        const overlay = document.getElementById("editOverlay");
+        if (!item || !overlay) return;
+
+        editItemContext = { listType, index, id: item.id };
+
+        const itemType = item.type || listType;
+        document.getElementById("editModalTitle").textContent = `edit ${item.title}`;
+        document.getElementById("editTitleInput").value = item.title || "";
+        document.getElementById("editDescriptionInput").value = item.description || "";
+        document.getElementById("editRatingInput").value = item.rating || "";
+
+        const typeField = document.getElementById("editTypeField");
+        const typeInput = document.getElementById("editTypeInput");
+        if (listType === "game") {
+          typeField.style.display = "none";
+          typeInput.value = "movie";
+        } else {
+          typeField.style.display = "";
+          typeInput.value = itemType === "show" ? "show" : "movie";
+        }
+
+        const statusInput = document.getElementById("editStatusInput");
+        statusInput.innerHTML = getStatusOptionsForType(itemType, item.status);
+
+        overlay.classList.remove("hidden");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("add-modal-open");
+        requestAnimationFrame(() => document.getElementById("editTitleInput").focus());
+      }
+
+      function closeEditModal() {
+        const overlay = document.getElementById("editOverlay");
+        if (!overlay) return;
+
+        overlay.classList.add("hidden");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("add-modal-open");
+        editItemContext = null;
+      }
+
       // upthings the saved star rating for an item and refreshes the list
       async function updateRating(type, index, value) {
         const item = type === "movie" ? movies[index] : games[index];
@@ -5364,7 +6138,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         if (item.status === "finished") {
           await saveActivityLog({
             title: item.title,
-            itemType: type,
+            itemType: item.type || type,
             eventType: "rated",
             rating,
           });
@@ -6113,6 +6887,49 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
       document.getElementById("addButton").addEventListener("click", addItem);
       document
+        .getElementById("openAddModal")
+        .addEventListener("click", openAddModal);
+      document
+        .getElementById("closeAddModal")
+        .addEventListener("click", closeAddModal);
+      document
+        .getElementById("addOverlay")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "addOverlay") closeAddModal();
+        });
+      document
+        .getElementById("closeEditModal")
+        .addEventListener("click", closeEditModal);
+      document
+        .getElementById("cancelEditButton")
+        .addEventListener("click", closeEditModal);
+      document
+        .getElementById("saveEditButton")
+        .addEventListener("click", saveEditItem);
+      document
+        .getElementById("editDeleteButton")
+        .addEventListener("click", deleteEditItem);
+      document
+        .getElementById("editOverlay")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "editOverlay") closeEditModal();
+        });
+      document
+        .getElementById("editTypeInput")
+        .addEventListener("change", (event) => {
+          const statusInput = document.getElementById("editStatusInput");
+          statusInput.innerHTML = getStatusOptionsForType(
+            event.target.value,
+            statusInput.value,
+          );
+        });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeAddModal();
+          closeEditModal();
+        }
+      });
+      document
         .getElementById("searchInput")
         .addEventListener("input", (event) => {
           searchTerm = event.target.value.trim().toLowerCase();
@@ -6125,6 +6942,15 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         .getElementById("statusFilter")
         .addEventListener("change", (event) => {
           statusFilter = event.target.value;
+          moviePage = 1;
+          gamePage = 1;
+          render();
+        });
+
+      document
+        .getElementById("genreFilter")
+        .addEventListener("change", (event) => {
+          genreFilter = event.target.value;
           moviePage = 1;
           gamePage = 1;
           render();
@@ -6148,6 +6974,9 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
       window.updateStatus = updateStatus;
       window.removeItem = removeItem;
+      window.updateItemType = updateItemType;
+      window.toggleFinished = toggleFinished;
+      window.openEditModal = openEditModal;
       window.toggleSummaryEditor = toggleSummaryEditor;
       window.toggleTitleEditor = toggleTitleEditor;
       window.handleTitleEditKey = handleTitleEditKey;
