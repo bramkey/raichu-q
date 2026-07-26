@@ -192,6 +192,86 @@
         opacity: 0.75;
       }
 
+      .tag-chip-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        max-height: 126px;
+        overflow-y: auto;
+        padding: 3px 2px 5px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(168, 134, 88, 0.58) rgba(244, 227, 194, 0.46);
+      }
+
+      .tag-chip-grid::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .tag-chip-grid::-webkit-scrollbar-track {
+        background: rgba(244, 227, 194, 0.46);
+        border-radius: 999px;
+      }
+
+      .tag-chip-grid::-webkit-scrollbar-thumb {
+        background: rgba(168, 134, 88, 0.58);
+        border-radius: 999px;
+      }
+
+      .tag-chip {
+        min-height: 0 !important;
+        padding: 5px 9px !important;
+        border: 1px solid rgba(139, 111, 68, 0.28) !important;
+        border-radius: 999px !important;
+        background: rgba(255, 253, 245, 0.62) !important;
+        color: #6f604b !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        box-shadow: none !important;
+        transform: none !important;
+      }
+
+      .tag-chip:hover {
+        background: rgba(220, 195, 141, 0.52) !important;
+        color: #5e4730 !important;
+        transform: none !important;
+      }
+
+      .tag-chip.active {
+        background: #d7b46a !important;
+        border-color: rgba(151, 106, 48, 0.42) !important;
+        color: #fffdf5 !important;
+      }
+
+      body.bulbasaur-theme .tag-chip-grid {
+        scrollbar-color: rgba(92, 132, 86, 0.64) rgba(232, 241, 224, 0.62);
+      }
+
+      body.bulbasaur-theme .tag-chip-grid::-webkit-scrollbar-track {
+        background: rgba(232, 241, 224, 0.62);
+      }
+
+      body.bulbasaur-theme .tag-chip-grid::-webkit-scrollbar-thumb {
+        background: rgba(92, 132, 86, 0.64);
+      }
+
+      body.bulbasaur-theme .tag-chip {
+        border-color: rgba(96, 132, 83, 0.28) !important;
+        background: rgba(250, 255, 246, 0.72) !important;
+        color: #536b49 !important;
+      }
+
+      body.bulbasaur-theme .tag-chip:hover {
+        background: rgba(194, 219, 168, 0.58) !important;
+        color: #3f5d38 !important;
+      }
+
+      body.bulbasaur-theme .tag-chip.active {
+        background: #7da45f !important;
+        border-color: rgba(73, 112, 61, 0.42) !important;
+        color: #fffdf5 !important;
+      }
+
       .edit-row {
         display: flex;
         gap: 10px;
@@ -437,8 +517,9 @@
 
       .summary-text {
         padding: 10px 12px;
-        background: #f3ecdf;
-        border: 2px solid #cfb27a;
+        background: #fafafa;
+        border: 1px solid #d7d7d7;
+        color: #4f4f4f;
         border-radius: 12px;
         line-height: 1.4;
         white-space: pre-wrap;
@@ -582,6 +663,24 @@
         background: #fff8dc;
         color: #7a5a34;
         border-color: rgba(168, 134, 88, 0.7);
+        font-weight: 700;
+      }
+
+      .queue-tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 6px;
+      }
+
+      .queue-tag {
+        background: transparent;
+        border: 0;
+        color: #777;
+        opacity: 0.72;
+        border-radius: 0;
+        padding: 0;
+        font-size: 11px;
         font-weight: 700;
       }
 
@@ -1074,65 +1173,16 @@
         background: #d7b46a;
       }
 
-      .finished-toggle {
+      .item-edit-btn {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border-radius: 8px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        cursor: pointer;
-      }
-
-      .finished-toggle input {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 18px;
-        height: 18px;
-        min-width: 18px;
-        flex: 0 0 18px;
-        margin: 0;
-        border: 2px solid #a88658;
-        border-radius: 4px;
-        background: #fffdf5;
-        position: relative;
-        cursor: pointer;
-        box-sizing: border-box;
-      }
-
-      .finished-toggle input::after {
-        content: "✓";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -54%);
-        color: rgba(94, 71, 48, 0.35);
-        opacity: 0;
         font-size: 13px;
-        font-weight: 900;
         line-height: 1;
-        pointer-events: none;
-        transition: opacity 0.28s ease;
-      }
-
-      .finished-toggle:hover input:not(:checked)::after {
-        opacity: 1;
-      }
-
-      .finished-toggle input:checked {
-        background: #e8f8e8;
-        border-color: #4caf50;
-      }
-
-      .finished-toggle input:checked::after {
-        color: #1e6b1e;
-        opacity: 1;
-      }
-
-      .item-edit-btn {
-        font-size: 12px;
-        padding: 5px 8px;
-        border-radius: 8px;
       }
 
       .stats-bar,
@@ -2533,7 +2583,9 @@
   font-size: 12px;
 }
 
-.filter-control #genreFilter {
+.filter-control #genreFilter,
+.filter-control #platformFilter,
+.filter-control #tagFilter {
   min-width: 130px;
 }
 
@@ -4324,7 +4376,13 @@ body.bulbasaur-theme .draft-tag-remove:hover {
 }
 
 /* Bulbasaur summary boxes + smoother motion */
-body.bulbasaur-theme .summary-text,
+body.bulbasaur-theme .summary-text {
+  background: #fafafa !important;
+  border-color: #d7d7d7 !important;
+  color: #4f4f4f !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
 body.bulbasaur-theme .summary-editor textarea {
   background: #f4f7eb !important;
   border-color: #aeb19a !important;
@@ -4892,11 +4950,11 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       </div>
       <div class="sidebar-card ongoing-box">
         <div class="sidebar-header">
-          <h3>ongoing</h3>
+          <h3>currently in rotation</h3>
         </div>
         <div id="ongoingBox">
           <div class="ongoing-entry" style="opacity: 0.6">
-            nothing ongoing right now
+            nothing in rotation right now
           </div>
         </div>
       </div>
@@ -4981,6 +5039,12 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
                   placeholder="write a short summary or notes here."
                 ></textarea>
               </div>
+              <div class="add-row">
+                <div class="edit-field">
+                  <label>tags</label>
+                  <div class="tag-chip-grid" id="addTagChips" aria-label="choose tags"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -5025,16 +5089,45 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
               <label for="editDescriptionInput">summary</label>
               <textarea id="editDescriptionInput" placeholder="write a short summary or notes here."></textarea>
             </div>
+            <div class="edit-field">
+              <label>tags</label>
+              <div class="tag-chip-grid" id="editTagChips" aria-label="choose tags"></div>
+            </div>
             <div class="edit-modal-actions">
               <button type="button" class="delete-btn-inline secondary-btn" id="editDeleteButton">delete</button>
               <div class="item-actions">
-                <button type="button" class="secondary-btn" id="cancelEditButton">cancel</button>
                 <button type="button" id="saveEditButton">save changes</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <datalist id="tagSuggestions">
+        <option value="horror"></option>
+        <option value="comedy"></option>
+        <option value="romance"></option>
+        <option value="drama"></option>
+        <option value="action"></option>
+        <option value="sci-fi"></option>
+        <option value="fantasy"></option>
+        <option value="thriller"></option>
+        <option value="cozy"></option>
+        <option value="co-op"></option>
+        <option value="multiplayer"></option>
+        <option value="rpg"></option>
+        <option value="puzzle"></option>
+        <option value="strategy"></option>
+        <option value="platformer"></option>
+        <option value="open world"></option>
+        <option value="story"></option>
+        <option value="steam/pc"></option>
+        <option value="switch"></option>
+        <option value="xbox"></option>
+        <option value="playstation"></option>
+        <option value="mobile"></option>
+        <option value="website"></option>
+      </datalist>
 
       <div class="queue-browser-box">
       <!-- browsing area: raichu message, search/filter controls, and both paginated lists -->
@@ -5046,7 +5139,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
                 <option value="all">all statuses</option>
                 <option value="finished">finished</option>
                 <option value="in progress">in progress / currently playing</option>
-                <option value="hiatus">hiatus</option>
+                <option value="hiatus">out of rotation</option>
                 <option value="want">want to watch / play</option>
               </select>
               <select id="genreFilter" aria-label="filter by genre">
@@ -5054,6 +5147,32 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
                 <option value="horror">horror</option>
                 <option value="comedy">comedy</option>
                 <option value="romance">romance</option>
+                <option value="drama">drama</option>
+                <option value="action">action</option>
+                <option value="sci-fi">sci-fi</option>
+                <option value="fantasy">fantasy</option>
+                <option value="thriller">thriller</option>
+              </select>
+              <select id="platformFilter" aria-label="filter by platform">
+                <option value="all">all platforms</option>
+                <option value="steam/pc">steam/pc</option>
+                <option value="xbox">xbox</option>
+                <option value="playstation">playstation</option>
+                <option value="mobile">mobile</option>
+                <option value="website">website</option>
+                <option value="switch">switch</option>
+              </select>
+              <select id="tagFilter" aria-label="filter by tag">
+                <option value="all">all tags</option>
+                <option value="cozy">cozy</option>
+                <option value="co-op">co-op</option>
+                <option value="multiplayer">multiplayer</option>
+                <option value="rpg">rpg</option>
+                <option value="puzzle">puzzle</option>
+                <option value="strategy">strategy</option>
+                <option value="platformer">platformer</option>
+                <option value="open world">open world</option>
+                <option value="story">story</option>
               </select>
             </label>
           </div>
@@ -5169,12 +5288,19 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       // rating integer null
       // message text not null
       // created_at timestamptz not null default now()
+      //
+      // queue_items also uses:
+      // tags text null
 
       let movies = [];
       let games = [];
       let searchTerm = "";
       let statusFilter = "all";
       let genreFilter = "all";
+      let platformFilter = "all";
+      let tagFilter = "all";
+      let draftQueueTags = [];
+      let editQueueTags = [];
       let moviePage = 1;
       let gamePage = 1;
       const ITEMS_PER_PAGE = 5;
@@ -5288,7 +5414,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
         if (ongoingItems.length === 0) {
           ongoingBox.innerHTML =
-            '<div class="ongoing-entry" style="opacity:0.6;">nothing ongoing right now</div>';
+            '<div class="ongoing-entry" style="opacity:0.6;">nothing in rotation right now</div>';
           return;
         }
 
@@ -5301,9 +5427,6 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
                   <span class="ongoing-entry-type">${getQueueItemTypeLabel(item)}</span>
                 </div>
                 <div class="ongoing-actions">
-                  <label class="finished-toggle" aria-label="mark ${escapeAttribute(item.title)} as finished">
-                    <input type="checkbox" onchange="finishOngoingItem(${item.id}, this)" />
-                  </label>
                   <button type="button" class="secondary-btn ongoing-edit-btn" onclick="openEditModalById(${item.id})" aria-label="edit ${escapeAttribute(item.title)}">✎</button>
                 </div>
               </div>
@@ -5529,6 +5652,127 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         return "movies";
       }
 
+      function getStatusLabel(status) {
+        return status === "hiatus" ? "out of rotation" : status;
+      }
+
+      function getQueueTags(tags) {
+        return getPlanTags(tags);
+      }
+
+      function serializeQueueTags(tags) {
+        return serializePlanTags(tags);
+      }
+
+      const QUEUE_TAG_OPTIONS = [
+        "horror",
+        "comedy",
+        "romance",
+        "drama",
+        "action",
+        "sci-fi",
+        "fantasy",
+        "thriller",
+        "steam/pc",
+        "xbox",
+        "playstation",
+        "mobile",
+        "website",
+        "switch",
+        "cozy",
+        "co-op",
+        "multiplayer",
+        "rpg",
+        "puzzle",
+        "strategy",
+        "platformer",
+        "open world",
+        "story",
+      ];
+
+      function renderQueueTagChips(containerId, selectedTags) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const normalizedSelected = getQueueTags(serializeQueueTags(selectedTags));
+        const allTags = [
+          ...QUEUE_TAG_OPTIONS,
+          ...normalizedSelected.filter((tag) => !QUEUE_TAG_OPTIONS.includes(tag)),
+        ];
+
+        container.innerHTML = allTags
+          .map((tag) => {
+            const isActive = normalizedSelected.includes(tag);
+            return `
+              <button
+                type="button"
+                class="tag-chip ${isActive ? "active" : ""}"
+                data-tag="${escapeAttribute(tag)}"
+                aria-pressed="${isActive}"
+              >#${escapeHtml(tag.replace(/\s+/g, "-"))}</button>
+            `;
+          })
+          .join("");
+      }
+
+      function toggleQueueTag(mode, tag) {
+        const tagList = mode === "edit" ? editQueueTags : draftQueueTags;
+        const normalizedTag = toLowerSafe(tag).trim();
+        if (!normalizedTag) return;
+
+        const existingIndex = tagList.indexOf(normalizedTag);
+        if (existingIndex >= 0) {
+          tagList.splice(existingIndex, 1);
+        } else {
+          tagList.push(normalizedTag);
+        }
+
+        if (mode === "edit") {
+          renderQueueTagChips("editTagChips", editQueueTags);
+        } else {
+          renderQueueTagChips("addTagChips", draftQueueTags);
+        }
+      }
+
+      function setupQueueTagChipControls() {
+        [
+          { id: "addTagChips", mode: "add" },
+          { id: "editTagChips", mode: "edit" },
+        ].forEach(({ id, mode }) => {
+          const container = document.getElementById(id);
+          if (!container || container.dataset.ready === "true") return;
+
+          container.dataset.ready = "true";
+          container.addEventListener("click", (event) => {
+            const chip =
+              event.target instanceof Element
+                ? event.target.closest(".tag-chip")
+                : null;
+            if (!chip) return;
+            toggleQueueTag(mode, chip.dataset.tag || "");
+          });
+        });
+
+        renderQueueTagChips("addTagChips", draftQueueTags);
+        renderQueueTagChips("editTagChips", editQueueTags);
+      }
+
+      function renderQueueTags(tags) {
+        const queueTags = getQueueTags(tags);
+        if (!queueTags.length) return "";
+
+        return `
+          <div class="queue-tag-list">
+            ${queueTags
+              .map(
+                (tag) =>
+                  `<span class="queue-tag">#${escapeHtml(tag.replace(/\s+/g, "-"))}</span>`,
+              )
+              .join("")}
+          </div>
+        `;
+      }
+
       function getStatusClass(status) {
         if (status === "want to watch" || status === "want to play")
           return "status-want";
@@ -5577,7 +5821,6 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
             ? ""
             : `<span class="type-badge type-${itemType}">${itemType}</span>`;
         const hasSummary = item.description && item.description.trim();
-        const finishedChecked = item.status === "finished" ? "checked" : "";
 
         return `
         <div class="item ${finishedClass} ${getBorderClass(item.status)}">
@@ -5590,10 +5833,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
             </div>
             <div class="controls">
               <button class="priority-toggle ${item.priority ? "active" : ""}" onclick="togglePriority(\'${type}\', ${index}, ${item.priority ? "false" : "true"})">${item.priority ? "★" : "☆"}</button>
-              <label class="finished-toggle" aria-label="mark ${escapeAttribute(item.title)} as finished">
-                <input type="checkbox" ${finishedChecked} onchange="toggleFinished('${type}', ${index}, this)" />
-              </label>
-              <button type="button" class="secondary-btn item-edit-btn" onclick="openEditModal('${type}', ${index})">edit</button>
+              <button type="button" class="secondary-btn item-edit-btn" onclick="openEditModal('${type}', ${index})" aria-label="edit ${escapeAttribute(item.title)}">✎</button>
             </div>
           </div>
 
@@ -5608,6 +5848,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
             `
             }
           </div>
+          ${renderQueueTags(item.tags)}
         </div>
       `;
       }
@@ -5632,7 +5873,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           const title = String(item.title || "").toLowerCase();
           const description = String(item.description || "").toLowerCase();
           const status = String(item.status || "").toLowerCase();
-          const tags = String(item.tags || "").toLowerCase();
+          const tags = getQueueTags(item.tags);
 
           const matchesSearch =
             !searchTerm ||
@@ -5657,7 +5898,23 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
             tags.includes(genreFilter) ||
             description.includes(genreFilter);
 
-          return matchesSearch && matchesStatus && matchesGenre;
+          const matchesPlatform =
+            platformFilter === "all" ||
+            tags.includes(platformFilter) ||
+            description.includes(platformFilter);
+
+          const matchesTag =
+            tagFilter === "all" ||
+            tags.includes(tagFilter) ||
+            description.includes(tagFilter);
+
+          return (
+            matchesSearch &&
+            matchesStatus &&
+            matchesGenre &&
+            matchesPlatform &&
+            matchesTag
+          );
         });
       }
 
@@ -5699,12 +5956,18 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       function render() {
         const movieList = document.getElementById("movieList");
         const gameList = document.getElementById("gameList");
+        const shouldShowFinished =
+          Boolean(searchTerm) || statusFilter === "finished";
 
         const filteredMovies = filterItems(sortQueue(movies)).filter(
-          (item) => !isOngoingItem(item),
+          (item) =>
+            !isOngoingItem(item) &&
+            (shouldShowFinished || item.status !== "finished"),
         );
         const filteredGames = filterItems(sortQueue(games)).filter(
-          (item) => !isOngoingItem(item),
+          (item) =>
+            !isOngoingItem(item) &&
+            (shouldShowFinished || item.status !== "finished"),
         );
 
         const movieData = paginateItems(filteredMovies, moviePage);
@@ -5779,6 +6042,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const title = toLowerSafe(titleInput.value.trim());
         const type = typeInput.value;
         const description = toLowerSafe(descriptionInput.value.trim());
+        const tags = serializeQueueTags(draftQueueTags);
 
         if (!title) return;
 
@@ -5798,7 +6062,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
         const { error } = await supabaseClient
           .from("queue_items")
-          .insert([{ title, type, status: defaultStatus, description }]);
+          .insert([{ title, type, status: defaultStatus, description, tags }]);
 
         if (error) {
           console.error("Insert error:", error);
@@ -5807,6 +6071,8 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
         titleInput.value = "";
         descriptionInput.value = "";
+        draftQueueTags = [];
+        renderQueueTagChips("addTagChips", draftQueueTags);
         document.getElementById("descriptionBox").classList.remove("show");
         document.getElementById("toggleDescriptionBtn").textContent =
           "add summary";
@@ -5861,32 +6127,6 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         showRaichuMessage(`marked as ${newType}`);
       }
 
-      async function toggleFinished(type, index, checkbox) {
-        const item = type === "game" ? games[index] : movies[index];
-        if (!item) return;
-
-        const fallbackType = item.type || type;
-        const status = checkbox.checked
-          ? "finished"
-          : fallbackType === "game"
-            ? "want to play"
-            : "want to watch";
-
-        const { error } = await supabaseClient
-          .from("queue_items")
-          .update({ status })
-          .eq("id", item.id);
-
-        if (error) {
-          console.error("Finished update error:", error);
-          checkbox.checked = item.status === "finished";
-          return;
-        }
-
-        await loadItems();
-        if (status === "finished") showRaichuMessage("was it any good?");
-      }
-
       async function saveEditItem() {
         const item = getItemByContext(editItemContext);
         const itemId = editItemContext && editItemContext.id;
@@ -5924,9 +6164,10 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const description = toLowerSafe(
           document.getElementById("editDescriptionInput").value.trim(),
         );
+        const tags = serializeQueueTags(editQueueTags);
         const rawRating = document.getElementById("editRatingInput").value;
         const rating = rawRating ? Number(rawRating) : null;
-        const updatePayload = { title, type, status, description };
+        const updatePayload = { title, type, status, description, tags };
 
         if (rawRating || item.rating !== null) {
           updatePayload.rating = rating;
@@ -6095,6 +6336,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const titleInput = document.getElementById("titleInput");
         if (!overlay) return;
 
+        renderQueueTagChips("addTagChips", draftQueueTags);
         overlay.classList.remove("hidden");
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("add-modal-open");
@@ -6133,7 +6375,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         return options
           .map(
             (status) =>
-              `<option value="${status}" ${selectedStatus === status ? "selected" : ""}>${status}</option>`,
+              `<option value="${status}" ${selectedStatus === status ? "selected" : ""}>${getStatusLabel(status)}</option>`,
           )
           .join("");
       }
@@ -6149,6 +6391,8 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         document.getElementById("editModalTitle").textContent = `edit ${item.title}`;
         document.getElementById("editTitleInput").value = item.title || "";
         document.getElementById("editDescriptionInput").value = item.description || "";
+        editQueueTags = getQueueTags(item.tags);
+        renderQueueTagChips("editTagChips", editQueueTags);
         document.getElementById("editRatingInput").value = item.rating || "";
 
         const typeField = document.getElementById("editTypeField");
@@ -6181,26 +6425,6 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         if (gameIndex >= 0) openEditModal("game", gameIndex);
       }
 
-      async function finishOngoingItem(itemId, checkbox) {
-        const item = [...movies, ...games].find((queueItem) => queueItem.id === itemId);
-        if (!item) return;
-
-        const { error } = await supabaseClient
-          .from("queue_items")
-          .update({ status: "finished" })
-          .eq("id", itemId);
-
-        if (error) {
-          console.error("Ongoing finish error:", error);
-          checkbox.checked = false;
-          alert("couldn't mark that as finished right now.");
-          return;
-        }
-
-        await loadItems();
-        showRaichuMessage("was it any good?");
-      }
-
       function closeEditModal() {
         const overlay = document.getElementById("editOverlay");
         if (!overlay) return;
@@ -6209,6 +6433,8 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         overlay.setAttribute("aria-hidden", "true");
         document.body.classList.remove("add-modal-open");
         editItemContext = null;
+        editQueueTags = [];
+        renderQueueTagChips("editTagChips", editQueueTags);
       }
 
       // upthings the saved star rating for an item and refreshes the list
@@ -6979,6 +7205,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
       loadPlans();
       setupDraftPlanTagInput();
+      setupQueueTagChipControls();
 
       document.getElementById("addButton").addEventListener("click", addItem);
       document
@@ -6994,9 +7221,6 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         });
       document
         .getElementById("closeEditModal")
-        .addEventListener("click", closeEditModal);
-      document
-        .getElementById("cancelEditButton")
         .addEventListener("click", closeEditModal);
       document
         .getElementById("saveEditButton")
@@ -7051,6 +7275,24 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           render();
         });
 
+      document
+        .getElementById("platformFilter")
+        .addEventListener("change", (event) => {
+          platformFilter = event.target.value;
+          moviePage = 1;
+          gamePage = 1;
+          render();
+        });
+
+      document
+        .getElementById("tagFilter")
+        .addEventListener("change", (event) => {
+          tagFilter = event.target.value;
+          moviePage = 1;
+          gamePage = 1;
+          render();
+        });
+
       const toggleDescriptionBtn = document.getElementById(
         "toggleDescriptionBtn",
       );
@@ -7070,10 +7312,8 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       window.updateStatus = updateStatus;
       window.removeItem = removeItem;
       window.updateItemType = updateItemType;
-      window.toggleFinished = toggleFinished;
       window.openEditModal = openEditModal;
       window.openEditModalById = openEditModalById;
-      window.finishOngoingItem = finishOngoingItem;
       window.toggleSummaryEditor = toggleSummaryEditor;
       window.toggleTitleEditor = toggleTitleEditor;
       window.handleTitleEditKey = handleTitleEditKey;
