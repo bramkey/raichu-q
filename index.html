@@ -1268,22 +1268,22 @@
 
       .raichu-container {
         position: absolute;
-        top: -58px;
+        top: -54px;
         right: 14px;
-        width: 82px;
+        width: 96px;
         pointer-events: auto;
         z-index: 10;
       }
 
       .raichu-img {
-        width: 82px;
-        height: 82px;
+        width: 96px;
+        height: 96px;
         display: block;
       }
 
       .raichu-bubble {
         position: absolute;
-        bottom: 90px;
+        bottom: 104px;
         right: 0;
         background: #ffffff;
         color: #5e4730;
@@ -4419,6 +4419,31 @@ body.bulbasaur-theme #planSearchInput:focus {
   box-shadow: 0 0 6px rgba(112, 119, 98, 0.22) !important;
 }
 
+@media (min-width: 701px) {
+  body.bulbasaur-theme .queue-filter-box {
+    background: rgba(232, 227, 207, 0.28) !important;
+    border-color: rgba(143, 146, 121, 0.18) !important;
+    box-shadow: inset 0 1px 0 rgba(250, 255, 246, 0.28) !important;
+  }
+
+  body.bulbasaur-theme .filter-control {
+    background: rgba(221, 217, 196, 0.44) !important;
+    border-color: rgba(143, 146, 121, 0.22) !important;
+    box-shadow: none !important;
+  }
+
+  body.bulbasaur-theme .filter-label {
+    color: #4d6044 !important;
+    opacity: 0.66 !important;
+  }
+
+  body.bulbasaur-theme .filter-control select,
+  body.bulbasaur-theme .queue-filter-box #searchInput {
+    background: rgba(251, 255, 245, 0.7) !important;
+    border-color: rgba(143, 146, 121, 0.42) !important;
+  }
+}
+
 body.bulbasaur-theme .summary-link,
 body.bulbasaur-theme .theme-toggle,
 body.bulbasaur-theme .priority-toggle,
@@ -5015,8 +5040,8 @@ body.bulbasaur-theme .sidebar-floating-toggle:focus-visible {
   position: absolute !important;
   left: 18px !important;
   top: -58px !important;
-  width: 72px !important;
-  height: 72px !important;
+  width: 86px !important;
+  height: 86px !important;
   pointer-events: auto !important;
 }
 
@@ -5027,21 +5052,21 @@ body.bulbasaur-theme .footer .raichu-container {
   right: auto !important;
   bottom: auto !important;
   left: auto !important;
-  width: 72px !important;
+  width: 86px !important;
   flex: none !important;
   z-index: 2 !important;
 }
 
 .footer .raichu-img,
 body.bulbasaur-theme .footer .raichu-img {
-  width: 72px !important;
-  height: 72px !important;
+  width: 86px !important;
+  height: 86px !important;
   object-fit: contain !important;
 }
 
 .footer .raichu-bubble,
 body.bulbasaur-theme .footer .raichu-bubble {
-  bottom: 76px !important;
+  bottom: 90px !important;
   left: 8px !important;
   right: auto !important;
 }
@@ -5074,42 +5099,42 @@ body.bulbasaur-theme .footer .raichu-bubble {
 
 /* Bulbasaur mascot keeps Raichu behavior, only larger art */
 body.bulbasaur-theme .footer-mascot {
-  top: -58px !important;
-  width: 82px !important;
-  height: 82px !important;
+  top: -74px !important;
+  width: 112px !important;
+  height: 112px !important;
 }
 
 body.bulbasaur-theme .footer .raichu-container {
-  width: 82px !important;
+  width: 112px !important;
 }
 
 body.bulbasaur-theme .footer .raichu-img {
-  width: 82px !important;
-  height: 82px !important;
+  width: 112px !important;
+  height: 112px !important;
   image-rendering: auto !important;
   transform: translateZ(0);
 }
 
 body.bulbasaur-theme .footer .raichu-bubble {
-  bottom: 86px !important;
+  bottom: 116px !important;
 }
 
 body.bulbasaur-theme .queue-browser-box .raichu-container {
-  top: -78px !important;
+  top: -92px !important;
   right: 8px !important;
-  width: 164px !important;
+  width: 216px !important;
 }
 
 body.bulbasaur-theme .queue-browser-box .raichu-img {
-  width: 164px !important;
-  height: 164px !important;
+  width: 216px !important;
+  height: 216px !important;
   object-fit: contain !important;
   image-rendering: auto !important;
   transform: translateZ(0);
 }
 
 body.bulbasaur-theme .queue-browser-box .raichu-bubble {
-  bottom: 148px !important;
+  bottom: 194px !important;
 }
 
 @media (max-width: 700px) {
@@ -5395,6 +5420,27 @@ body.sidebar-collapsed .sidebar-bg-toggle {
   .filter-control #platformFilter,
   .filter-control #tagFilter {
     min-width: 86px !important;
+  }
+}
+
+@media (min-width: 701px) {
+  body.bulbasaur-theme .queue-browser-top .queue-filter-box {
+    padding: 8px 10px !important;
+    background: rgba(211, 225, 190, 0.68) !important;
+    border: 1px solid rgba(116, 137, 93, 0.24) !important;
+    border-radius: 14px !important;
+    box-shadow: inset 0 1px 0 rgba(250, 255, 246, 0.34) !important;
+  }
+
+  body.bulbasaur-theme .queue-browser-top .filter-control {
+    background: rgba(232, 237, 213, 0.58) !important;
+    border-color: rgba(116, 137, 93, 0.2) !important;
+  }
+
+  body.bulbasaur-theme .queue-browser-top .filter-control select,
+  body.bulbasaur-theme .queue-browser-top .queue-filter-box #searchInput {
+    background: rgba(246, 252, 236, 0.82) !important;
+    border-color: rgba(116, 137, 93, 0.34) !important;
   }
 }
 
