@@ -7820,7 +7820,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         await updateActivityLogsForTitle(oldTitle, title, item.type || type);
         closeEditModal();
         await loadItems();
-        showRaichuMessage("saved");
+        showMascotActionMessage("save");
       }
 
       async function deleteEditItem() {
@@ -7852,6 +7852,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
         await loadItems();
         await deleteActivityLogsForTitle(item.title);
+        showMascotActionMessage("delete");
 }
 
       // shows or hides the inline summary editor for a single card
@@ -7926,6 +7927,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
         await updateActivityLogsForTitle(oldTitle, title, item.type || type);
         await loadItems();
+        showMascotActionMessage("save");
       }
 
       // saves the edited summary/notes text for a queue item
@@ -7945,6 +7947,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         }
 
         await loadItems();
+        showMascotActionMessage("save");
       }
       const MASCOT_HOVER_MESSAGES = [
         "hi gf",
@@ -7989,6 +7992,15 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             bubble.textContent = defaultText;
           }, 350);
         }, 2200);
+      }
+
+      function showMascotActionMessage(action) {
+        const isBulbasaur = document.body.classList.contains("bulbasaur-theme");
+        if (action === "save") {
+          showRaichuMessage("saved!");
+        } else if (action === "delete") {
+          showRaichuMessage("bye bye!");
+        }
       }
 
       function openAddModal() {
@@ -8304,7 +8316,8 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           ? `${themeIcon} bulba queue ${themeIcon}`
           : `${themeIcon} raichu queue ${themeIcon}`;
         const appTitle = document.getElementById("appTitle");
-        const activityTitle = document.querySelector(".sidebar-header h3");
+        const activityTitle = document.querySelector(".activity-card .sidebar-header h3");
+        const ongoingTitle = document.querySelector(".ongoing-box .sidebar-header h3");
         const statsBar = document.getElementById("statsBar");
         const sidebarStatsBar = document.getElementById("sidebarStatsBar");
         const addButton = document.getElementById("addButton");
@@ -8322,6 +8335,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
         if (appTitle) appTitle.textContent = titleText;
         if (activityTitle) activityTitle.textContent = `activity log ${themeIcon}`;
+        if (ongoingTitle) ongoingTitle.textContent = `currently in rotation ${themeIcon}`;
         if (statsBar && statsBar.textContent.includes("loading stats")) {
           statsBar.innerHTML = `<span class="stats-loading">${themeIcon} loading stats and petting the raichu ...</span>`;
         }
@@ -8741,6 +8755,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         }
 
         await loadPlans();
+        showMascotActionMessage("save");
       }
 
 
@@ -8853,6 +8868,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
         await updateActivityLogsForTitle(currentPlan.title, newTitle);
         await loadPlans();
+        showMascotActionMessage("save");
       }
 
       async function togglePlanDone(index) {
@@ -8903,6 +8919,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
         await deleteActivityLogsForTitle(planTitle);
         await loadPlans();
+        showMascotActionMessage("delete");
       }
 
       // ===== startup event listeners + initial page load =====
