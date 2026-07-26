@@ -1689,24 +1689,32 @@
         word-break: break-word;
       }
 
-      .ongoing-actions {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-left: auto;
-        flex: 0 0 auto;
+      .ongoing-title-button {
+        background: none !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        color: inherit !important;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 700;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+        opacity: 0.86;
+        transform: none !important;
+        transition:
+          color 0.22s ease,
+          opacity 0.22s ease;
       }
 
-      .ongoing-edit-btn {
-        width: 24px;
-        height: 24px;
-        padding: 0;
-        border-radius: 8px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        line-height: 1;
+      .ongoing-title-button:hover,
+      .ongoing-title-button:focus-visible {
+        background: none !important;
+        box-shadow: none !important;
+        color: #7a5a34 !important;
+        opacity: 1;
+        text-decoration: none;
+        transform: none !important;
       }
 
       @media (max-width: 1500px) {
@@ -2603,9 +2611,9 @@
 }
 
 .queue-filter-box #searchInput {
-  flex: 0 0 280px;
-  width: 280px;
-  min-width: 220px;
+  flex: 0 0 220px;
+  width: 220px;
+  min-width: 170px;
 }
 
 .filter-control {
@@ -4504,6 +4512,11 @@ body.bulbasaur-theme .edit-modal {
   color: #2f5034 !important;
 }
 
+body.bulbasaur-theme .ongoing-title-button:hover,
+body.bulbasaur-theme .ongoing-title-button:focus-visible {
+  color: #3f6847 !important;
+}
+
 body.bulbasaur-theme .add-modal .add-box {
   background: transparent !important;
   border: 0 !important;
@@ -5260,6 +5273,181 @@ body.sidebar-collapsed .sidebar-bg-toggle {
 }
 
 /* Final header alignment: keep controls grouped on the right. */
+@media (min-width: 1381px) {
+  .container,
+  body.sidebar-collapsed .container {
+    max-width: 1200px !important;
+    width: min(calc(100vw - 32px), 1200px) !important;
+  }
+
+  body:not(.sidebar-collapsed) .container {
+    max-width: 1200px !important;
+    width: min(1200px, calc(100vw - 460px)) !important;
+    margin: 0 420px 40px max(20px, calc((100vw - 460px - min(1200px, calc(100vw - 460px))) / 2)) !important;
+  }
+
+  .queue-browser-box {
+    box-sizing: border-box !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 4px !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 1380px) {
+  .container,
+  body.sidebar-collapsed .container,
+  body:not(.sidebar-collapsed) .container {
+    max-width: 1200px !important;
+    width: min(calc(100vw - 32px), 1200px) !important;
+  }
+
+  .queue-browser-box {
+    margin-top: 4px !important;
+  }
+}
+
+@media (min-width: 701px) {
+  .queue-browser-top {
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+  }
+
+  .queue-filter-box {
+    flex: 1 1 auto !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+  }
+
+  .queue-filter-box #searchInput {
+    flex: 0 1 190px !important;
+    min-width: 150px !important;
+    width: auto !important;
+  }
+
+  .filter-control {
+    flex: 0 1 auto !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    padding: 6px 7px 6px 10px !important;
+    min-width: 0 !important;
+  }
+
+  .filter-control select {
+    min-width: 108px !important;
+    width: auto !important;
+  }
+
+  .filter-control #statusFilter {
+    min-width: 124px !important;
+  }
+
+  .filter-control #genreFilter,
+  .filter-control #platformFilter,
+  .filter-control #tagFilter {
+    min-width: 104px !important;
+  }
+
+  .queue-action-group {
+    flex: 0 0 auto !important;
+    margin-left: 0 !important;
+  }
+
+  .queue-action-group .open-add-modal-btn {
+    width: auto !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 1080px) {
+  .queue-browser-top {
+    gap: 8px !important;
+  }
+
+  .queue-filter-box {
+    gap: 6px !important;
+  }
+
+  .queue-filter-box #searchInput {
+    flex-basis: 145px !important;
+    min-width: 120px !important;
+  }
+
+  .filter-label {
+    display: none !important;
+  }
+
+  .filter-control {
+    padding: 5px 6px !important;
+  }
+
+  .filter-control select,
+  .filter-control #statusFilter,
+  .filter-control #genreFilter,
+  .filter-control #platformFilter,
+  .filter-control #tagFilter {
+    min-width: 86px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .queue-browser-box {
+    margin-top: 8px !important;
+  }
+}
+
+.title-button,
+.plan-title,
+.ongoing-title-button {
+  color: #5f3f22 !important;
+  opacity: 0.9 !important;
+  transition:
+    color 0.28s ease,
+    opacity 0.28s ease !important;
+}
+
+.title-button:hover,
+.title-button:focus-visible,
+.plan-title:hover,
+.plan-title:focus-visible,
+.ongoing-title-button:hover,
+.ongoing-title-button:focus-visible {
+  color: #3f2714 !important;
+  opacity: 1 !important;
+  text-decoration: none !important;
+}
+
+body.bulbasaur-theme .title-button,
+body.bulbasaur-theme .plan-title,
+body.bulbasaur-theme .ongoing-title-button {
+  color: #24482c !important;
+}
+
+.ongoing-entry-type {
+  color: #8a6a3f !important;
+  opacity: 0.52 !important;
+}
+
+body.bulbasaur-theme .ongoing-entry-type {
+  color: #5d7653 !important;
+  opacity: 0.58 !important;
+}
+
+body.bulbasaur-theme .title-button:hover,
+body.bulbasaur-theme .title-button:focus-visible,
+body.bulbasaur-theme .plan-title:hover,
+body.bulbasaur-theme .plan-title:focus-visible,
+body.bulbasaur-theme .ongoing-title-button:hover,
+body.bulbasaur-theme .ongoing-title-button:focus-visible {
+  color: #18351f !important;
+  opacity: 1 !important;
+  text-decoration: none !important;
+}
+
 .container > .site-sticky-header {
   justify-content: flex-start !important;
 }
@@ -5967,11 +6155,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             (item) => `
               <div class="ongoing-entry">
                 <div class="ongoing-entry-title">
-                  ${escapeHtml(item.title)}
+                  <button type="button" class="ongoing-title-button" onclick="openEditModalById(${item.id})" aria-label="edit ${escapeAttribute(item.title)}">
+                    ${escapeHtml(item.title)}
+                  </button>
                   <span class="ongoing-entry-type">${getQueueItemTypeLabel(item)}</span>
-                </div>
-                <div class="ongoing-actions">
-                  <button type="button" class="secondary-btn ongoing-edit-btn" onclick="openEditModalById(${item.id})" aria-label="edit ${escapeAttribute(item.title)}">✎</button>
                 </div>
               </div>
             `,
