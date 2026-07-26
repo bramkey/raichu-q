@@ -650,8 +650,9 @@
       }
 
       .type-badge.type-show {
-        background: #e8f4ff;
-        color: #005b96;
+        background: #ffe8bf;
+        color: #8a5636;
+        border-color: rgba(168, 103, 61, 0.45);
       }
 
       .type-badge.type-game {
@@ -866,8 +867,14 @@
       }
 
       .page-btn {
-        padding: 6px 10px;
-        font-size: 12px;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        line-height: 1;
         border-radius: 8px;
       }
 
@@ -1510,12 +1517,13 @@
       }
 
       .sidebar-header {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
         margin-bottom: 10px;
-        padding-right: 42px;
+        padding: 0 42px;
       }
 
       .sidebar-card {
@@ -1548,6 +1556,34 @@
 
       .log-toggle-btn:hover {
         background: #dcc38d;
+      }
+
+      .activity-card.is-log-collapsed .sidebar-header {
+        margin-bottom: 0;
+      }
+
+      .activity-card.is-log-collapsed #logBox {
+        display: none;
+      }
+
+      .activity-log-toggle {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        line-height: 1;
+      }
+
+      .activity-log-toggle:hover {
+        transform: translateY(-50%);
       }
 
 
@@ -2124,8 +2160,12 @@
           display: none !important;
         }
 
-        .sidebar-header {
-          padding-right: 0 !important;
+        .activity-card .sidebar-header {
+          padding: 0 38px !important;
+        }
+
+        .ongoing-box .sidebar-header {
+          padding: 0 !important;
         }
 
         .sidebar h3 {
@@ -2227,9 +2267,9 @@
   font-weight:bold;
 }
 
-.sidebar-header{
+.ongoing-box .sidebar-header{
   justify-content:center !important;
-  padding-right:0 !important;
+  padding:0 !important;
 }
 .sidebar h3{
   text-align:center !important;
@@ -2535,31 +2575,30 @@
   font-size: 15px !important;
 }
 
-.header-search-box {
-  display: flex !important;
-  align-items: center !important;
-  flex: 0 1 240px !important;
-  min-width: 170px !important;
-}
-
-.container > .site-sticky-header #searchInput {
-  width: 100% !important;
-  min-width: 0 !important;
-  padding: 8px 10px !important;
-  border-width: 2px !important;
-  border-radius: 10px !important;
-  font-size: 12px !important;
-}
-
 .queue-filter-box {
+  display: flex;
+  align-items: center;
   justify-content: flex-start;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
   margin-bottom: 16px;
+}
+
+.queue-filter-box #searchInput {
+  flex: 0 0 280px;
+  width: 280px;
+  min-width: 220px;
 }
 
 .filter-control {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  min-width: 0;
   background: rgba(238, 224, 189, 0.72);
   border: 1px solid rgba(168, 134, 88, 0.38);
   border-radius: 999px;
@@ -2584,6 +2623,20 @@
 .filter-control #platformFilter,
 .filter-control #tagFilter {
   min-width: 130px;
+}
+
+@media (max-width: 700px) {
+  .queue-filter-box {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+  }
+
+  .queue-filter-box #searchInput {
+    flex-basis: auto;
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 .header-page-tabs {
@@ -2623,16 +2676,6 @@
 
   .container > .site-sticky-header .stats-bar {
     display: none !important;
-  }
-
-  .header-search-box {
-    flex: 0 1 126px !important;
-    min-width: 96px !important;
-  }
-
-  .container > .site-sticky-header #searchInput {
-    padding: 6px 8px !important;
-    font-size: 11px !important;
   }
 
   .header-page-tabs {
@@ -4938,6 +4981,16 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       <div class="sidebar-card activity-card">
         <div class="sidebar-header">
           <h3>activity log ⚡</h3>
+          <button
+            type="button"
+            class="secondary-btn activity-log-toggle"
+            id="activityLogToggle"
+            aria-controls="logBox"
+            aria-expanded="false"
+            aria-label="expand activity log"
+          >
+            +
+          </button>
         </div>
         <div id="logBox">
           <div class="log-entry" style="opacity: 0.6">
@@ -4977,14 +5030,6 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
         <div class="stats-bar" id="statsBar">
           <span class="stats-loading">⚡ loading stats and petting the raichu ...</span>
-        </div>
-
-        <div class="header-search-box">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="⚡ search the queue"
-          />
         </div>
 
         <div class="page-tabs header-page-tabs" role="tablist" aria-label="raichu queue pages">
@@ -5130,6 +5175,11 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       <!-- browsing area: raichu message, search/filter controls, and both paginated lists -->
         <div class="queue-browser-top">
           <div class="search-box queue-filter-box">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="⚡ search the queue"
+            />
             <label class="filter-control" for="statusFilter">
               <span class="filter-label">filter</span>
               <select id="statusFilter">
@@ -5300,7 +5350,8 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       let editQueueTags = [];
       let moviePage = 1;
       let gamePage = 1;
-      const ITEMS_PER_PAGE = 5;
+      const QUEUE_ITEMS_PER_PAGE = 6;
+      const PLAN_ITEMS_PER_PAGE = 5;
       let activityLog = [];
       let planSearchTerm = "";
       let editItemContext = null;
@@ -5968,12 +6019,12 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       function paginateItems(items, page) {
         const totalPages = Math.max(
           1,
-          Math.ceil(items.length / ITEMS_PER_PAGE),
+          Math.ceil(items.length / QUEUE_ITEMS_PER_PAGE),
         );
         const safePage = Math.min(page, totalPages);
-        const start = (safePage - 1) * ITEMS_PER_PAGE;
+        const start = (safePage - 1) * QUEUE_ITEMS_PER_PAGE;
         return {
-          pageItems: items.slice(start, start + ITEMS_PER_PAGE),
+          pageItems: items.slice(start, start + QUEUE_ITEMS_PER_PAGE),
           totalPages,
           currentPage: safePage,
         };
@@ -5991,10 +6042,15 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           return;
         }
 
+        const prevButton =
+          currentPage > 1
+            ? `<button class="page-btn secondary-btn" aria-label="previous page" onclick="changePage('${type}', -1)">‹</button>`
+            : "";
+
         paginationEl.innerHTML = `
-        <button class="page-btn secondary-btn" ${currentPage === 1 ? "disabled" : ""} onclick="changePage('${type}', -1)">prev</button>
+        ${prevButton}
         <span class="page-info">page ${currentPage} of ${totalPages}</span>
-        <button class="page-btn secondary-btn" ${currentPage === totalPages ? "disabled" : ""} onclick="changePage('${type}', 1)">next</button>
+        <button class="page-btn secondary-btn" aria-label="next page" ${currentPage === totalPages ? "disabled" : ""} onclick="changePage('${type}', 1)">›</button>
       `;
       }
 
@@ -6580,6 +6636,38 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         );
       }
 
+      function setActivityEntriesCollapsed(collapsed) {
+        const activityCard = document.querySelector(".activity-card");
+        const toggleBtn = document.getElementById("activityLogToggle");
+        if (!activityCard || !toggleBtn) return;
+
+        activityCard.classList.toggle("is-log-collapsed", collapsed);
+        toggleBtn.textContent = collapsed ? "+" : "−";
+        toggleBtn.setAttribute("aria-expanded", String(!collapsed));
+        toggleBtn.setAttribute(
+          "aria-label",
+          collapsed ? "expand activity log" : "collapse activity log",
+        );
+        localStorage.setItem(
+          "activityEntriesCollapsed",
+          collapsed ? "true" : "false",
+        );
+      }
+
+      const activityLogToggle = document.getElementById("activityLogToggle");
+      if (activityLogToggle) {
+        const savedEntriesCollapsed = localStorage.getItem(
+          "activityEntriesCollapsed",
+        );
+        setActivityEntriesCollapsed(savedEntriesCollapsed !== "false");
+        activityLogToggle.addEventListener("click", () => {
+          const activityCard = document.querySelector(".activity-card");
+          setActivityEntriesCollapsed(
+            !activityCard.classList.contains("is-log-collapsed"),
+          );
+        });
+      }
+
       const logToggleBtn = document.getElementById("sidebarFloatingToggle");
       if (logToggleBtn) {
         const savedCollapsed =
@@ -6722,9 +6810,9 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         }
 
         paginationEl.innerHTML = `
-          <button class="page-btn secondary-btn" ${currentPage === 1 ? "disabled" : ""} onclick="changePlanPage('${category}', -1)">prev</button>
+          <button class="page-btn secondary-btn" aria-label="previous page" ${currentPage === 1 ? "disabled" : ""} onclick="changePlanPage('${category}', -1)">‹</button>
           <span class="page-info">page ${currentPage} of ${totalPages}</span>
-          <button class="page-btn secondary-btn" ${currentPage === totalPages ? "disabled" : ""} onclick="changePlanPage('${category}', 1)">next</button>
+          <button class="page-btn secondary-btn" aria-label="next page" ${currentPage === totalPages ? "disabled" : ""} onclick="changePlanPage('${category}', 1)">›</button>
         `;
       }
 
@@ -6748,10 +6836,10 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
             return;
           }
 
-          const totalPages = Math.max(1, Math.ceil(categoryPlans.length / ITEMS_PER_PAGE));
+          const totalPages = Math.max(1, Math.ceil(categoryPlans.length / PLAN_ITEMS_PER_PAGE));
           const currentPage = Math.min(Math.max(1, planPages[category] || 1), totalPages);
-          const start = (currentPage - 1) * ITEMS_PER_PAGE;
-          const pagePlans = categoryPlans.slice(start, start + ITEMS_PER_PAGE);
+          const start = (currentPage - 1) * PLAN_ITEMS_PER_PAGE;
+          const pagePlans = categoryPlans.slice(start, start + PLAN_ITEMS_PER_PAGE);
           planPages[category] = currentPage;
 
           list.innerHTML = pagePlans
