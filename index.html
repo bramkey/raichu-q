@@ -5137,6 +5137,186 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
   bottom: 194px !important;
 }
 
+#addTagChips,
+#editTagChips {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+.filter-control {
+  position: relative;
+}
+
+.filter-native-hidden {
+  display: none !important;
+}
+
+.filter-custom {
+  position: relative;
+  display: inline-flex;
+  min-width: 104px;
+}
+
+.filter-custom[data-filter-id="statusFilter"] {
+  min-width: 124px;
+}
+
+.filter-custom[data-filter-id="genreFilter"],
+.filter-custom[data-filter-id="platformFilter"],
+.filter-custom[data-filter-id="tagFilter"] {
+  min-width: 104px;
+}
+
+.filter-button {
+  width: 100%;
+  min-width: 104px;
+  padding: 7px 28px 7px 10px;
+  border: 1px solid #c8ab72;
+  border-radius: 999px;
+  background: #fffdf5;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  text-transform: lowercase;
+  cursor: pointer;
+  position: relative;
+}
+
+.filter-button::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-72%) rotate(45deg);
+  opacity: 0.7;
+}
+
+.filter-menu {
+  display: none;
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  right: 0 !important;
+  width: max-content;
+  min-width: 150px;
+  z-index: 20050 !important;
+  padding: 6px;
+  background: #fffdf5;
+  border: 1px solid rgba(168, 134, 88, 0.4);
+  border-radius: 12px !important;
+  box-shadow: 0 10px 24px rgba(94, 71, 48, 0.18) !important;
+}
+
+.filter-custom.open .filter-menu {
+  display: grid;
+  gap: 2px;
+}
+
+.filter-option {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  text-transform: lowercase;
+  cursor: pointer;
+}
+
+.filter-option:hover,
+.filter-option.active {
+  background: rgba(216, 180, 106, 0.28);
+}
+
+body.bulbasaur-theme .filter-button,
+body.bulbasaur-theme .filter-menu {
+  background: rgba(246, 252, 236, 0.92) !important;
+  border-color: rgba(116, 137, 93, 0.34) !important;
+}
+
+body.bulbasaur-theme .filter-option:hover,
+body.bulbasaur-theme .filter-option.active {
+  background: rgba(184, 220, 164, 0.42);
+}
+
+@media (min-width: 701px) {
+  .queue-browser-box {
+    overflow: visible !important;
+  }
+
+  .add-modal,
+  .edit-modal {
+    position: relative !important;
+  }
+
+  .add-modal > .footer-mascot,
+  .edit-modal > .footer-mascot {
+    position: absolute !important;
+    top: -42px !important;
+    right: 86px !important;
+    left: auto !important;
+    width: 78px !important;
+    height: 78px !important;
+    z-index: 20002 !important;
+    pointer-events: auto !important;
+  }
+
+  .add-modal > .footer-mascot .raichu-container,
+  .edit-modal > .footer-mascot .raichu-container {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 78px !important;
+  }
+
+  .add-modal > .footer-mascot .raichu-img,
+  .edit-modal > .footer-mascot .raichu-img {
+    width: 78px !important;
+    height: 78px !important;
+    object-fit: contain !important;
+  }
+
+  .add-modal > .footer-mascot .raichu-bubble,
+  .edit-modal > .footer-mascot .raichu-bubble {
+    bottom: 76px !important;
+    left: auto !important;
+    right: 0 !important;
+    z-index: 20003 !important;
+  }
+
+  body.bulbasaur-theme .add-modal > .footer-mascot,
+  body.bulbasaur-theme .edit-modal > .footer-mascot {
+    top: -100px !important;
+    right: 72px !important;
+    width: 156px !important;
+    height: 156px !important;
+  }
+
+  body.bulbasaur-theme .add-modal > .footer-mascot .raichu-container,
+  body.bulbasaur-theme .edit-modal > .footer-mascot .raichu-container {
+    width: 156px !important;
+  }
+
+  body.bulbasaur-theme .add-modal > .footer-mascot .raichu-img,
+  body.bulbasaur-theme .edit-modal > .footer-mascot .raichu-img {
+    width: 156px !important;
+    height: 156px !important;
+  }
+
+  body.bulbasaur-theme .add-modal > .footer-mascot .raichu-bubble,
+  body.bulbasaur-theme .edit-modal > .footer-mascot .raichu-bubble {
+    bottom: 140px !important;
+  }
+}
+
 @media (max-width: 700px) {
   body.bulbasaur-theme .footer-mascot {
     top: -48px !important;
@@ -6031,6 +6211,24 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
     font-size: 11px !important;
   }
 
+  .filter-custom,
+  .filter-button {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .filter-button {
+    min-height: 36px !important;
+    padding: 7px 24px 7px 8px !important;
+    border-radius: 12px !important;
+    font-size: 11px !important;
+  }
+
+  .filter-menu {
+    left: 0 !important;
+    right: auto !important;
+  }
+
   .queue-action-group {
     width: 100% !important;
     display: flex !important;
@@ -6177,6 +6375,12 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
     width: 100% !important;
     min-width: 0 !important;
     white-space: nowrap !important;
+  }
+
+  #addTagChips,
+  #editTagChips {
+    max-height: none !important;
+    overflow-y: visible !important;
   }
 
   .add-modal input:focus,
@@ -6504,6 +6708,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         <option value="farming sim"></option>
         <option value="life sim"></option>
         <option value="visual novel"></option>
+        <option value="gay"></option>
         <option value="steam/pc"></option>
         <option value="switch"></option>
         <option value="xbox"></option>
@@ -6583,6 +6788,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
                 <option value="farming sim">farming sim</option>
                 <option value="life sim">life sim</option>
                 <option value="visual novel">visual novel</option>
+                <option value="gay">gay</option>
               </select>
             </label>
           </div>
@@ -7257,6 +7463,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         "farming sim",
         "life sim",
         "visual novel",
+        "gay",
       ];
 
       const QUEUE_TAG_OPTIONS = [
@@ -7959,37 +8166,42 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       ];
 
       function getRandomMascotMessage() {
-        const currentText = document.getElementById("raichuBubble")?.textContent?.trim();
+        const currentText = document.querySelector(".raichu-bubble")?.textContent?.trim();
         const availableMessages = MASCOT_HOVER_MESSAGES.filter((message) => message !== currentText);
         const messages = availableMessages.length ? availableMessages : MASCOT_HOVER_MESSAGES;
         return messages[Math.floor(Math.random() * messages.length)];
       }
 
       function showRandomMascotHoverMessage() {
-        const bubble = document.getElementById("raichuBubble");
-        if (!bubble) return;
-
         const message = getRandomMascotMessage();
-        bubble.dataset.default = message;
-        bubble.textContent = message;
+        document.querySelectorAll(".raichu-bubble").forEach((bubble) => {
+          bubble.dataset.default = message;
+          bubble.textContent = message;
+        });
       }
 
       // handles raichu speech bubble popups for friendly feedback after user actions
       function showRaichuMessage(text) {
-        const bubble = document.getElementById("raichuBubble");
-        if (!bubble) return;
-
-        const defaultText = bubble.dataset.default || "hi gf";
-        bubble.textContent = text;
-        bubble.style.opacity = "1";
-        bubble.style.transform = "translateY(0)";
+        const bubbles = document.querySelectorAll(".raichu-bubble");
+        if (!bubbles.length) return;
 
         clearTimeout(window.raichuTimeout);
+        bubbles.forEach((bubble) => {
+          bubble.dataset.restoreText = bubble.dataset.default || "hi gf";
+          bubble.textContent = text;
+          bubble.style.opacity = "1";
+          bubble.style.transform = "translateY(0)";
+        });
         window.raichuTimeout = setTimeout(() => {
-          bubble.style.opacity = "";
-          bubble.style.transform = "";
+          bubbles.forEach((bubble) => {
+            bubble.style.opacity = "";
+            bubble.style.transform = "";
+          });
           setTimeout(() => {
-            bubble.textContent = defaultText;
+            bubbles.forEach((bubble) => {
+              bubble.textContent = bubble.dataset.restoreText || bubble.dataset.default || "hi gf";
+              delete bubble.dataset.restoreText;
+            });
           }, 350);
         }, 2200);
       }
@@ -8003,12 +8215,31 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         }
       }
 
+      function getMascotShell() {
+        return document.querySelector(".footer-mascot");
+      }
+
+      function moveMascotToModal(modal) {
+        const mascot = getMascotShell();
+        if (!mascot || !modal || mascot.parentElement === modal) return;
+        modal.insertBefore(mascot, modal.firstElementChild);
+      }
+
+      function restoreMascotToFooter() {
+        const mascot = getMascotShell();
+        const footer = document.querySelector(".footer");
+        if (!mascot || !footer || mascot.parentElement === footer) return;
+        footer.insertBefore(mascot, footer.firstElementChild);
+      }
+
       function openAddModal() {
         const overlay = document.getElementById("addOverlay");
+        const modal = overlay?.querySelector(".add-modal");
         const titleInput = document.getElementById("titleInput");
         if (!overlay) return;
 
         refreshQueueTagChipsForMode("add");
+        moveMascotToModal(modal);
         overlay.classList.remove("hidden");
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("add-modal-open");
@@ -8025,6 +8256,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         overlay.classList.add("hidden");
         overlay.setAttribute("aria-hidden", "true");
         document.body.classList.remove("add-modal-open");
+        restoreMascotToFooter();
       }
 
       function getItemByContext(context) {
@@ -8055,6 +8287,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       function openEditModal(listType, index) {
         const item = listType === "game" ? games[index] : movies[index];
         const overlay = document.getElementById("editOverlay");
+        const modal = overlay?.querySelector(".edit-modal");
         if (!item || !overlay) return;
 
         editItemContext = { listType, index, id: item.id };
@@ -8080,6 +8313,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         statusInput.innerHTML = getStatusOptionsForType(itemType, item.status);
         refreshQueueTagChipsForMode("edit");
 
+        moveMascotToModal(modal);
         overlay.classList.remove("hidden");
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("add-modal-open");
@@ -8107,6 +8341,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         editItemContext = null;
         editQueueTags = [];
         refreshQueueTagChipsForMode("edit");
+        restoreMascotToFooter();
       }
 
       // upthings the saved star rating for an item and refreshes the list
@@ -8324,8 +8559,8 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         const searchInput = document.getElementById("searchInput");
         const planSearchInput = document.getElementById("planSearchInput");
         const themeToggle = document.getElementById("themeToggle");
-        const raichuBubble = document.getElementById("raichuBubble");
-        const themeMascot = document.getElementById("themeMascot");
+        const raichuBubbles = document.querySelectorAll(".raichu-bubble");
+        const themeMascots = document.querySelectorAll(".raichu-img");
         const siteFavicon = document.getElementById("siteFavicon");
         const themeHearts = document.querySelectorAll(".theme-heart");
 
@@ -8356,20 +8591,20 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         themeHearts.forEach((heart) => {
           heart.textContent = heartIcon;
         });
-        if (themeMascot) {
+        themeMascots.forEach((themeMascot) => {
           themeMascot.src = isBulbasaur ? "bulba.gif" : "raichu.ico";
           themeMascot.alt = isBulbasaur ? "bulbasaur" : "raichu";
-        }
+        });
         if (siteFavicon) {
           siteFavicon.href = isBulbasaur ? "bulba.gif" : "raichu.ico";
           siteFavicon.type = isBulbasaur ? "image/gif" : "image/x-icon";
         }
-        if (raichuBubble) {
+        raichuBubbles.forEach((raichuBubble) => {
           raichuBubble.dataset.default = "hi gf";
           if (!raichuBubble.classList.contains("show")) {
             raichuBubble.textContent = raichuBubble.dataset.default;
           }
-        }
+        });
       }
 
       const ACTIVE_PAGE_STORAGE_KEY = "raichuActivePage";
@@ -8938,11 +9173,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           setTheme(nextTheme);
         });
       }
-      const mascot = document.getElementById("raichu");
-      if (mascot) {
+      document.querySelectorAll(".raichu-container").forEach((mascot) => {
         mascot.addEventListener("mouseenter", showRandomMascotHoverMessage);
         mascot.addEventListener("focus", showRandomMascotHoverMessage);
-      }
+      });
       const savedActivePage = localStorage.getItem(ACTIVE_PAGE_STORAGE_KEY);
       setActivePage(savedActivePage === "plansPage" ? "plansPage" : "queuePage");
 
@@ -9066,6 +9300,87 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           gamePage = 1;
           render();
         });
+
+      const customFilterMenus = [];
+      function setupCustomFilter(selectId) {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+
+        const customFilter = document.createElement("div");
+        const customButton = document.createElement("button");
+        const customMenu = document.createElement("div");
+
+        customFilter.className = "filter-custom";
+        customFilter.dataset.filterId = selectId;
+        customButton.type = "button";
+        customButton.className = "filter-button";
+        customButton.setAttribute("aria-haspopup", "listbox");
+        customButton.setAttribute("aria-expanded", "false");
+        customMenu.className = "filter-menu";
+        customMenu.setAttribute("role", "listbox");
+
+        const setFilterLabel = () => {
+          customButton.textContent =
+            select.selectedOptions[0]?.textContent || select.options[0]?.textContent || "";
+        };
+
+        const syncActiveOption = () => {
+          customMenu
+            .querySelectorAll(".filter-option")
+            .forEach((button) =>
+              button.classList.toggle("active", button.dataset.value === select.value),
+            );
+        };
+
+        Array.from(select.options).forEach((option) => {
+          const optionButton = document.createElement("button");
+          optionButton.type = "button";
+          optionButton.className = "filter-option";
+          optionButton.textContent = option.textContent;
+          optionButton.dataset.value = option.value;
+          optionButton.setAttribute("role", "option");
+          optionButton.addEventListener("click", () => {
+            select.value = option.value;
+            select.dispatchEvent(new Event("change"));
+            setFilterLabel();
+            syncActiveOption();
+            customFilter.classList.remove("open");
+            customButton.setAttribute("aria-expanded", "false");
+          });
+          customMenu.appendChild(optionButton);
+        });
+
+        setFilterLabel();
+        syncActiveOption();
+        customFilter.append(customButton, customMenu);
+        select.classList.add("filter-native-hidden");
+        select.insertAdjacentElement("afterend", customFilter);
+        customFilterMenus.push({ customFilter, customButton });
+
+        customButton.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const willOpen = !customFilter.classList.contains("open");
+          customFilterMenus.forEach(({ customFilter: menu, customButton: button }) => {
+            menu.classList.remove("open");
+            button.setAttribute("aria-expanded", "false");
+          });
+          customFilter.classList.toggle("open", willOpen);
+          customButton.setAttribute("aria-expanded", String(willOpen));
+        });
+      }
+
+      ["statusFilter", "genreFilter", "platformFilter", "tagFilter"].forEach(
+        setupCustomFilter,
+      );
+
+      document.addEventListener("click", (event) => {
+        customFilterMenus.forEach(({ customFilter, customButton }) => {
+          if (!customFilter.contains(event.target)) {
+            customFilter.classList.remove("open");
+            customButton.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
 
       const toggleDescriptionBtn = document.getElementById(
         "toggleDescriptionBtn",
