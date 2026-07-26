@@ -531,6 +531,10 @@
         color: #1e6b1e;
       }
 
+      .status-hiatus {
+        color: #6f6277;
+      }
+
       .finished-item {
         opacity: 0.72;
         filter: grayscale(0.18);
@@ -586,6 +590,9 @@
       }
       .status-progress-border {
         border-left: 8px solid #3498db !important;
+      }
+      .status-hiatus-border {
+        border-left: 8px solid #9a8ca5 !important;
       }
       .status-finished-border {
         border-left: 8px solid #4caf50 !important;
@@ -1564,6 +1571,9 @@
         padding: 8px 10px;
         font-size: 12px;
         line-height: 1.35;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
 
       .ongoing-entry-type {
@@ -1572,6 +1582,32 @@
         opacity: 0.65;
         font-size: 11px;
         font-weight: 800;
+      }
+
+      .ongoing-entry-title {
+        flex: 1 1 auto;
+        min-width: 0;
+        word-break: break-word;
+      }
+
+      .ongoing-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        flex: 0 0 auto;
+      }
+
+      .ongoing-edit-btn {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        line-height: 1;
       }
 
       @media (max-width: 1500px) {
@@ -4159,6 +4195,10 @@ body.bulbasaur-theme .item.status-progress-border {
   border-left: 8px solid #6aa7a0 !important;
 }
 
+body.bulbasaur-theme .item.status-hiatus-border {
+  border-left: 8px solid #9f9a82 !important;
+}
+
 body.bulbasaur-theme .item.status-finished-border,
 body.bulbasaur-theme .finished-item {
   border-left: 8px solid #5f934d !important;
@@ -5006,6 +5046,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
                 <option value="all">all statuses</option>
                 <option value="finished">finished</option>
                 <option value="in progress">in progress / currently playing</option>
+                <option value="hiatus">hiatus</option>
                 <option value="want">want to watch / play</option>
               </select>
               <select id="genreFilter" aria-label="filter by genre">
@@ -5242,10 +5283,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         if (!ongoingBox) return;
 
         const ongoingItems = [...movies, ...games]
-          .filter((item) => {
-            const status = String(item.status || "").toLowerCase();
-            return status === "in progress" || status === "currently playing";
-          })
+          .filter(isOngoingItem)
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
         if (ongoingItems.length === 0) {
@@ -5258,12 +5296,25 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           .map(
             (item) => `
               <div class="ongoing-entry">
-                ${escapeHtml(item.title)}
-                <span class="ongoing-entry-type">${getQueueItemTypeLabel(item)}</span>
+                <div class="ongoing-entry-title">
+                  ${escapeHtml(item.title)}
+                  <span class="ongoing-entry-type">${getQueueItemTypeLabel(item)}</span>
+                </div>
+                <div class="ongoing-actions">
+                  <label class="finished-toggle" aria-label="mark ${escapeAttribute(item.title)} as finished">
+                    <input type="checkbox" onchange="finishOngoingItem(${item.id}, this)" />
+                  </label>
+                  <button type="button" class="secondary-btn ongoing-edit-btn" onclick="openEditModalById(${item.id})" aria-label="edit ${escapeAttribute(item.title)}">✎</button>
+                </div>
               </div>
             `,
           )
           .join("");
+      }
+
+      function isOngoingItem(item) {
+        const status = String(item && item.status ? item.status : "").toLowerCase();
+        return status === "in progress" || status === "currently playing";
       }
 
 
@@ -5483,6 +5534,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           return "status-want";
         if (status === "in progress" || status === "currently playing")
           return "status-progress";
+        if (status === "hiatus") return "status-hiatus";
         return "status-finished";
       }
 
@@ -5510,6 +5562,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         if (status === "finished") return "status-finished-border";
         if (status === "in progress" || status === "currently playing")
           return "status-progress-border";
+        if (status === "hiatus") return "status-hiatus-border";
         return "status-want-border";
       }
 
@@ -5592,6 +5645,8 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           } else if (statusFilter === "in progress") {
             matchesStatus =
               status === "in progress" || status === "currently playing";
+          } else if (statusFilter === "hiatus") {
+            matchesStatus = status === "hiatus";
           } else if (statusFilter === "want") {
             matchesStatus =
               status === "want to watch" || status === "want to play";
@@ -5645,8 +5700,12 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const movieList = document.getElementById("movieList");
         const gameList = document.getElementById("gameList");
 
-        const filteredMovies = filterItems(sortQueue(movies));
-        const filteredGames = filterItems(sortQueue(games));
+        const filteredMovies = filterItems(sortQueue(movies)).filter(
+          (item) => !isOngoingItem(item),
+        );
+        const filteredGames = filterItems(sortQueue(games)).filter(
+          (item) => !isOngoingItem(item),
+        );
 
         const movieData = paginateItems(filteredMovies, moviePage);
         const gameData = paginateItems(filteredGames, gamePage);
@@ -5867,15 +5926,20 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         );
         const rawRating = document.getElementById("editRatingInput").value;
         const rating = rawRating ? Number(rawRating) : null;
+        const updatePayload = { title, type, status, description };
+
+        if (rawRating || item.rating !== null) {
+          updatePayload.rating = rating;
+        }
 
         const { error } = await supabaseClient
           .from("queue_items")
-          .update({ title, type, status, description, rating })
+          .update(updatePayload)
           .eq("id", itemId);
 
         if (error) {
           console.error("Edit update error:", error);
-          alert("couldn't save those changes right now.");
+          alert(`couldn't save those changes right now. supabase says: ${error.message || "unknown error"}`);
           return;
         }
 
@@ -6063,8 +6127,8 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       function getStatusOptionsForType(type, selectedStatus) {
         const options =
           type === "game"
-            ? ["want to play", "currently playing", "finished"]
-            : ["want to watch", "in progress", "finished"];
+            ? ["want to play", "currently playing", "hiatus", "finished"]
+            : ["want to watch", "in progress", "hiatus", "finished"];
 
         return options
           .map(
@@ -6104,6 +6168,37 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("add-modal-open");
         requestAnimationFrame(() => document.getElementById("editTitleInput").focus());
+      }
+
+      function openEditModalById(itemId) {
+        const movieIndex = movies.findIndex((item) => item.id === itemId);
+        if (movieIndex >= 0) {
+          openEditModal("movie", movieIndex);
+          return;
+        }
+
+        const gameIndex = games.findIndex((item) => item.id === itemId);
+        if (gameIndex >= 0) openEditModal("game", gameIndex);
+      }
+
+      async function finishOngoingItem(itemId, checkbox) {
+        const item = [...movies, ...games].find((queueItem) => queueItem.id === itemId);
+        if (!item) return;
+
+        const { error } = await supabaseClient
+          .from("queue_items")
+          .update({ status: "finished" })
+          .eq("id", itemId);
+
+        if (error) {
+          console.error("Ongoing finish error:", error);
+          checkbox.checked = false;
+          alert("couldn't mark that as finished right now.");
+          return;
+        }
+
+        await loadItems();
+        showRaichuMessage("was it any good?");
       }
 
       function closeEditModal() {
@@ -6977,6 +7072,8 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       window.updateItemType = updateItemType;
       window.toggleFinished = toggleFinished;
       window.openEditModal = openEditModal;
+      window.openEditModalById = openEditModalById;
+      window.finishOngoingItem = finishOngoingItem;
       window.toggleSummaryEditor = toggleSummaryEditor;
       window.toggleTitleEditor = toggleTitleEditor;
       window.handleTitleEditKey = handleTitleEditKey;
