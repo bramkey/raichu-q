@@ -613,7 +613,7 @@
       }
 
       .status-hiatus {
-        color: #6f6277;
+        color: #8f4f3f;
       }
 
       .finished-item {
@@ -691,7 +691,7 @@
         border-left: 8px solid #3498db !important;
       }
       .status-hiatus-border {
-        border-left: 8px solid #9a8ca5 !important;
+        border-left: 8px solid #c46f55 !important;
       }
       .status-finished-border {
         border-left: 8px solid #4caf50 !important;
@@ -1171,18 +1171,6 @@
       }
       .priority-toggle.active {
         background: #d7b46a;
-      }
-
-      .item-edit-btn {
-        width: 24px;
-        height: 24px;
-        padding: 0;
-        border-radius: 8px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        line-height: 1;
       }
 
       .stats-bar,
@@ -4950,7 +4938,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       </div>
       <div class="sidebar-card ongoing-box">
         <div class="sidebar-header">
-          <h3>currently in rotation</h3>
+          <h3>currently in rotation ⚡</h3>
         </div>
         <div id="ongoingBox">
           <div class="ongoing-entry" style="opacity: 0.6">
@@ -5810,7 +5798,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         return "status-want-border";
       }
 
-      // builds the html for one queue card, including status, rating, priority, and edit controls
+      // builds the html for one queue card, including status, rating, and priority controls
       function createItemHTML(item, index, type) {
         const itemType = ["movie", "show", "game"].includes(item.type)
           ? item.type
@@ -5833,7 +5821,6 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
             </div>
             <div class="controls">
               <button class="priority-toggle ${item.priority ? "active" : ""}" onclick="togglePriority(\'${type}\', ${index}, ${item.priority ? "false" : "true"})">${item.priority ? "★" : "☆"}</button>
-              <button type="button" class="secondary-btn item-edit-btn" onclick="openEditModal('${type}', ${index})" aria-label="edit ${escapeAttribute(item.title)}">✎</button>
             </div>
           </div>
 
