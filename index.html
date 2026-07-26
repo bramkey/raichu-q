@@ -904,6 +904,15 @@
         border-left: 1px solid rgba(168, 134, 88, 0.35);
       }
 
+      .stats-loading {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        width: 100%;
+      }
+
       .stat-label {
         font-size: 11px;
         font-weight: 700;
@@ -4967,7 +4976,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         <h1 id="appTitle">⚡ raichu queue ⚡</h1>
 
         <div class="stats-bar" id="statsBar">
-          ⚡ loading stats and petting the raichu ...
+          <span class="stats-loading">⚡ loading stats and petting the raichu ...</span>
         </div>
 
         <div class="header-search-box">
@@ -5652,7 +5661,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         return serializePlanTags(tags);
       }
 
-      const QUEUE_TAG_OPTIONS = [
+      const QUEUE_GENRE_TAG_OPTIONS = [
         "horror",
         "comedy",
         "romance",
@@ -5661,12 +5670,18 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         "sci-fi",
         "fantasy",
         "thriller",
+      ];
+
+      const QUEUE_PLATFORM_TAG_OPTIONS = [
         "steam/pc",
         "xbox",
         "playstation",
         "mobile",
         "website",
         "switch",
+      ];
+
+      const QUEUE_GAME_TAG_OPTIONS = [
         "cozy",
         "co-op",
         "multiplayer",
@@ -5678,14 +5693,47 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         "story",
       ];
 
-      function renderQueueTagChips(containerId, selectedTags) {
+      const QUEUE_TAG_OPTIONS = [
+        ...QUEUE_GENRE_TAG_OPTIONS,
+        ...QUEUE_PLATFORM_TAG_OPTIONS,
+        ...QUEUE_GAME_TAG_OPTIONS,
+      ];
+
+      function getQueueTagOptionsForType(type) {
+        return type === "game"
+          ? QUEUE_TAG_OPTIONS
+          : QUEUE_GENRE_TAG_OPTIONS;
+      }
+
+      function getQueueTagTypeForMode(mode) {
+        if (mode === "edit") {
+          return editItemContext && editItemContext.listType === "game"
+            ? "game"
+            : "movie";
+        }
+
+        const typeInput = document.getElementById("typeInput");
+        return typeInput && typeInput.value === "game" ? "game" : "movie";
+      }
+
+      function getAllowedQueueTagsForType(tags, type) {
+        const tagOptions = getQueueTagOptionsForType(type);
+        return getQueueTags(serializeQueueTags(tags)).filter((tag) =>
+          tagOptions.includes(tag),
+        );
+      }
+
+      function renderQueueTagChips(containerId, selectedTags, type = "movie") {
         const container = document.getElementById(containerId);
         if (!container) return;
 
         const normalizedSelected = getQueueTags(serializeQueueTags(selectedTags));
+        const tagOptions = getQueueTagOptionsForType(type);
         const allTags = [
-          ...QUEUE_TAG_OPTIONS,
-          ...normalizedSelected.filter((tag) => !QUEUE_TAG_OPTIONS.includes(tag)),
+          ...tagOptions,
+          ...normalizedSelected.filter(
+            (tag) => type === "game" && !QUEUE_TAG_OPTIONS.includes(tag),
+          ),
         ];
 
         container.innerHTML = allTags
@@ -5716,10 +5764,21 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         }
 
         if (mode === "edit") {
-          renderQueueTagChips("editTagChips", editQueueTags);
+          renderQueueTagChips("editTagChips", editQueueTags, getQueueTagTypeForMode("edit"));
         } else {
-          renderQueueTagChips("addTagChips", draftQueueTags);
+          renderQueueTagChips("addTagChips", draftQueueTags, getQueueTagTypeForMode("add"));
         }
+      }
+
+      function refreshQueueTagChipsForMode(mode) {
+        if (mode === "edit") {
+          const type = getQueueTagTypeForMode("edit");
+          renderQueueTagChips("editTagChips", editQueueTags, type);
+          return;
+        }
+
+        const type = getQueueTagTypeForMode("add");
+        renderQueueTagChips("addTagChips", draftQueueTags, type);
       }
 
       function setupQueueTagChipControls() {
@@ -5741,8 +5800,8 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           });
         });
 
-        renderQueueTagChips("addTagChips", draftQueueTags);
-        renderQueueTagChips("editTagChips", editQueueTags);
+        refreshQueueTagChipsForMode("add");
+        refreshQueueTagChipsForMode("edit");
       }
 
       function renderQueueTags(tags) {
@@ -6029,6 +6088,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const title = toLowerSafe(titleInput.value.trim());
         const type = typeInput.value;
         const description = toLowerSafe(descriptionInput.value.trim());
+        draftQueueTags = getAllowedQueueTagsForType(draftQueueTags, type);
         const tags = serializeQueueTags(draftQueueTags);
 
         if (!title) return;
@@ -6059,7 +6119,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         titleInput.value = "";
         descriptionInput.value = "";
         draftQueueTags = [];
-        renderQueueTagChips("addTagChips", draftQueueTags);
+        refreshQueueTagChipsForMode("add");
         document.getElementById("descriptionBox").classList.remove("show");
         document.getElementById("toggleDescriptionBtn").textContent =
           "add summary";
@@ -6151,6 +6211,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const description = toLowerSafe(
           document.getElementById("editDescriptionInput").value.trim(),
         );
+        editQueueTags = getAllowedQueueTagsForType(editQueueTags, type);
         const tags = serializeQueueTags(editQueueTags);
         const rawRating = document.getElementById("editRatingInput").value;
         const rating = rawRating ? Number(rawRating) : null;
@@ -6323,7 +6384,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const titleInput = document.getElementById("titleInput");
         if (!overlay) return;
 
-        renderQueueTagChips("addTagChips", draftQueueTags);
+        refreshQueueTagChipsForMode("add");
         overlay.classList.remove("hidden");
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("add-modal-open");
@@ -6379,7 +6440,6 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         document.getElementById("editTitleInput").value = item.title || "";
         document.getElementById("editDescriptionInput").value = item.description || "";
         editQueueTags = getQueueTags(item.tags);
-        renderQueueTagChips("editTagChips", editQueueTags);
         document.getElementById("editRatingInput").value = item.rating || "";
 
         const typeField = document.getElementById("editTypeField");
@@ -6394,6 +6454,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
         const statusInput = document.getElementById("editStatusInput");
         statusInput.innerHTML = getStatusOptionsForType(itemType, item.status);
+        refreshQueueTagChipsForMode("edit");
 
         overlay.classList.remove("hidden");
         overlay.setAttribute("aria-hidden", "false");
@@ -6421,7 +6482,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         document.body.classList.remove("add-modal-open");
         editItemContext = null;
         editQueueTags = [];
-        renderQueueTagChips("editTagChips", editQueueTags);
+        refreshQueueTagChipsForMode("edit");
       }
 
       // upthings the saved star rating for an item and refreshes the list
@@ -6571,7 +6632,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         if (appTitle) appTitle.textContent = titleText;
         if (activityTitle) activityTitle.textContent = `activity log ${themeIcon}`;
         if (statsBar && statsBar.textContent.includes("loading stats")) {
-          statsBar.textContent = `${themeIcon} loading stats and petting the raichu ...`;
+          statsBar.innerHTML = `<span class="stats-loading">${themeIcon} loading stats and petting the raichu ...</span>`;
         }
         if (addButton) addButton.textContent = `add to queue ${themeIcon}`;
         if (searchInput) searchInput.placeholder = `${themeIcon} search the queue`;
@@ -7228,6 +7289,12 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
             event.target.value,
             statusInput.value,
           );
+          refreshQueueTagChipsForMode("edit");
+        });
+      document
+        .getElementById("typeInput")
+        .addEventListener("change", () => {
+          refreshQueueTagChipsForMode("add");
         });
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
