@@ -5838,6 +5838,15 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         <option value="sci-fi"></option>
         <option value="fantasy"></option>
         <option value="thriller"></option>
+        <option value="animation"></option>
+        <option value="adventure"></option>
+        <option value="mystery"></option>
+        <option value="crime"></option>
+        <option value="documentary"></option>
+        <option value="musical"></option>
+        <option value="slice of life"></option>
+        <option value="supernatural"></option>
+        <option value="anime"></option>
         <option value="cozy"></option>
         <option value="co-op"></option>
         <option value="multiplayer"></option>
@@ -5847,12 +5856,24 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         <option value="platformer"></option>
         <option value="open world"></option>
         <option value="story"></option>
+        <option value="online"></option>
+        <option value="short"></option>
+        <option value="long"></option>
+        <option value="replay"></option>
+        <option value="casual"></option>
+        <option value="competitive"></option>
+        <option value="sandbox"></option>
+        <option value="farming sim"></option>
+        <option value="life sim"></option>
+        <option value="visual novel"></option>
         <option value="steam/pc"></option>
         <option value="switch"></option>
         <option value="xbox"></option>
         <option value="playstation"></option>
         <option value="mobile"></option>
-        <option value="website"></option>
+        <option value="browser"></option>
+        <option value="nintendo ds/3ds"></option>
+        <option value="wii/wii u"></option>
       </datalist>
 
       <div class="queue-browser-box">
@@ -5869,7 +5890,6 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
               <select id="statusFilter">
                 <option value="all">all statuses</option>
                 <option value="finished">finished</option>
-                <option value="in progress">in progress / currently playing</option>
                 <option value="hiatus">out of rotation</option>
                 <option value="want">want to watch / play</option>
               </select>
@@ -5883,6 +5903,15 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
                 <option value="sci-fi">sci-fi</option>
                 <option value="fantasy">fantasy</option>
                 <option value="thriller">thriller</option>
+                <option value="animation">animation</option>
+                <option value="adventure">adventure</option>
+                <option value="mystery">mystery</option>
+                <option value="crime">crime</option>
+                <option value="documentary">documentary</option>
+                <option value="musical">musical</option>
+                <option value="slice of life">slice of life</option>
+                <option value="supernatural">supernatural</option>
+                <option value="anime">anime</option>
               </select>
               <select id="platformFilter" aria-label="filter by platform">
                 <option value="all">all platforms</option>
@@ -5890,8 +5919,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
                 <option value="xbox">xbox</option>
                 <option value="playstation">playstation</option>
                 <option value="mobile">mobile</option>
-                <option value="website">website</option>
+                <option value="browser">browser</option>
                 <option value="switch">switch</option>
+                <option value="nintendo ds/3ds">nintendo ds/3ds</option>
+                <option value="wii/wii u">wii/wii u</option>
               </select>
               <select id="tagFilter" aria-label="filter by tag">
                 <option value="all">all tags</option>
@@ -5904,6 +5935,16 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
                 <option value="platformer">platformer</option>
                 <option value="open world">open world</option>
                 <option value="story">story</option>
+                <option value="online">online</option>
+                <option value="short">short</option>
+                <option value="long">long</option>
+                <option value="replay">replay</option>
+                <option value="casual">casual</option>
+                <option value="competitive">competitive</option>
+                <option value="sandbox">sandbox</option>
+                <option value="farming sim">farming sim</option>
+                <option value="life sim">life sim</option>
+                <option value="visual novel">visual novel</option>
               </select>
             </label>
           </div>
@@ -6531,6 +6572,15 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         "sci-fi",
         "fantasy",
         "thriller",
+        "animation",
+        "adventure",
+        "mystery",
+        "crime",
+        "documentary",
+        "musical",
+        "slice of life",
+        "supernatural",
+        "anime",
       ];
 
       const QUEUE_PLATFORM_TAG_OPTIONS = [
@@ -6538,8 +6588,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         "xbox",
         "playstation",
         "mobile",
-        "website",
+        "browser",
         "switch",
+        "nintendo ds/3ds",
+        "wii/wii u",
       ];
 
       const QUEUE_GAME_TAG_OPTIONS = [
@@ -6552,6 +6604,16 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         "platformer",
         "open world",
         "story",
+        "online",
+        "short",
+        "long",
+        "replay",
+        "casual",
+        "competitive",
+        "sandbox",
+        "farming sim",
+        "life sim",
+        "visual novel",
       ];
 
       const QUEUE_TAG_OPTIONS = [
@@ -6946,6 +7008,18 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         updateStats();
       }
 
+      function queueHasDuplicateTitleForType(title, type, excludeId = null) {
+        const normalizedTitle = String(title || "").toLowerCase();
+        const normalizedType = String(type || "").toLowerCase();
+
+        return [...movies, ...games].some(
+          (queueItem) =>
+            queueItem.id !== excludeId &&
+            String(queueItem.type || "").toLowerCase() === normalizedType &&
+            String(queueItem.title || "").toLowerCase() === normalizedTitle,
+        );
+      }
+
       // adds a new movie/show or game to the database, then refreshes the ui and activity log
       async function addItem() {
         const titleInput = document.getElementById("titleInput");
@@ -6959,11 +7033,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
         if (!title) return;
 
-        const normalizedTitle = title.toLowerCase();
-
-        const alreadyExists =
-          movies.some((item) => item.title.toLowerCase() === normalizedTitle) ||
-          games.some((item) => item.title.toLowerCase() === normalizedTitle);
+        const alreadyExists = queueHasDuplicateTitleForType(title, type);
 
         if (alreadyExists) {
           alert("⚠️ that's already in your queue!");
@@ -7055,10 +7125,15 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           return;
         }
 
-        const duplicateExists = [...movies, ...games].some(
-          (queueItem) =>
-            queueItem.id !== item.id &&
-            String(queueItem.title || "").toLowerCase() === title,
+        const pendingType =
+          editItemContext.listType === "game"
+            ? "game"
+            : document.getElementById("editTypeInput").value;
+
+        const duplicateExists = queueHasDuplicateTitleForType(
+          title,
+          pendingType,
+          item.id,
         );
 
         if (duplicateExists) {
@@ -7069,7 +7144,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         const type =
           editItemContext.listType === "game"
             ? "game"
-            : document.getElementById("editTypeInput").value;
+            : pendingType;
         if (!["movie", "show", "game"].includes(type)) {
           alert("please choose a valid type.");
           return;
@@ -7185,11 +7260,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           return;
         }
 
-        const normalizedTitle = title.toLowerCase();
-        const duplicateExists = [...movies, ...games].some(
-          (queueItem) =>
-            queueItem.id !== item.id &&
-            String(queueItem.title || "").toLowerCase() === normalizedTitle,
+        const duplicateExists = queueHasDuplicateTitleForType(
+          title,
+          item.type,
+          item.id,
         );
 
         if (duplicateExists) {
