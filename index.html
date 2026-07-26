@@ -1365,7 +1365,8 @@
         }
       }
 
-      .raichu-container:hover .raichu-bubble {
+      .raichu-container:hover .raichu-bubble,
+      .raichu-container:focus-visible .raichu-bubble {
         opacity: 1;
         transform: translateY(0);
       }
@@ -5794,8 +5795,8 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
     <footer class="footer">
       <div class="footer-mascot">
-        <div class="raichu-container" id="raichu">
-          <img src="raichu.ico" class="raichu-img" id="themeMascot" />
+        <div class="raichu-container" id="raichu" tabindex="0" aria-label="mascot message">
+          <img src="raichu.ico" class="raichu-img" id="themeMascot" alt="raichu" />
           <div class="raichu-bubble" id="raichuBubble" data-default="hi gf">
             hi gf
           </div>
@@ -7041,6 +7042,31 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
         await loadItems();
       }
+      const MASCOT_HOVER_MESSAGES = [
+        "hi gf",
+        "i love you",
+        "you're the best",
+        "hi baby",
+        "mwah",
+        "ur so gay",
+      ];
+
+      function getRandomMascotMessage() {
+        const currentText = document.getElementById("raichuBubble")?.textContent?.trim();
+        const availableMessages = MASCOT_HOVER_MESSAGES.filter((message) => message !== currentText);
+        const messages = availableMessages.length ? availableMessages : MASCOT_HOVER_MESSAGES;
+        return messages[Math.floor(Math.random() * messages.length)];
+      }
+
+      function showRandomMascotHoverMessage() {
+        const bubble = document.getElementById("raichuBubble");
+        if (!bubble) return;
+
+        const message = getRandomMascotMessage();
+        bubble.dataset.default = message;
+        bubble.textContent = message;
+      }
+
       // handles raichu speech bubble popups for friendly feedback after user actions
       function showRaichuMessage(text) {
         const bubble = document.getElementById("raichuBubble");
@@ -7966,6 +7992,11 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             : "bulbasaur";
           setTheme(nextTheme);
         });
+      }
+      const mascot = document.getElementById("raichu");
+      if (mascot) {
+        mascot.addEventListener("mouseenter", showRandomMascotHoverMessage);
+        mascot.addEventListener("focus", showRandomMascotHoverMessage);
       }
       const savedActivePage = localStorage.getItem(ACTIVE_PAGE_STORAGE_KEY);
       setActivePage(savedActivePage === "plansPage" ? "plansPage" : "queuePage");
