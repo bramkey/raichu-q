@@ -168,6 +168,10 @@
       .add-modal .add-box {
         max-width: none;
         margin: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        padding: 0;
       }
 
       .add-modal .toolbar {
@@ -321,6 +325,17 @@
       select,
       textarea {
         background: white;
+      }
+
+      body:not(.bulbasaur-theme) .add-modal #titleInput,
+      body:not(.bulbasaur-theme) .add-modal #titleInput:focus,
+      body:not(.bulbasaur-theme) .add-modal #titleInput:focus-visible {
+        background: #fff7df !important;
+        color: #5e3f24 !important;
+        border-color: #9f7340 !important;
+        outline: 0 !important;
+        box-shadow: 0 0 0 3px rgba(185, 139, 71, 0.18) !important;
+        caret-color: #7a4f2a !important;
       }
 
       textarea {
@@ -4415,6 +4430,98 @@ body.bulbasaur-theme .draft-tag-remove:hover {
   background: #707762 !important;
 }
 
+/* Bulbasaur queue details: avoid Raichu amber/copper bleed-through */
+body.bulbasaur-theme .status-want {
+  color: #5f6f2f !important;
+}
+
+body.bulbasaur-theme .status-progress {
+  color: #356d66 !important;
+}
+
+body.bulbasaur-theme .status-hiatus {
+  color: #707762 !important;
+}
+
+body.bulbasaur-theme .status-finished {
+  color: #33693b !important;
+}
+
+body.bulbasaur-theme .type-badge {
+  background: #edf7d8 !important;
+  color: #3f5949 !important;
+  border-color: rgba(95, 147, 77, 0.42) !important;
+}
+
+body.bulbasaur-theme .type-badge.type-show {
+  background: #dcefd5 !important;
+  color: #2f6036 !important;
+  border-color: rgba(79, 143, 70, 0.42) !important;
+}
+
+body.bulbasaur-theme .type-badge.type-game {
+  background: #e5f1dd !important;
+  color: #356d66 !important;
+  border-color: rgba(106, 167, 160, 0.42) !important;
+}
+
+body.bulbasaur-theme .queue-tag {
+  color: #5f6f5f !important;
+}
+
+body.bulbasaur-theme .filter-control {
+  background: rgba(232, 227, 207, 0.72) !important;
+  border-color: rgba(143, 146, 121, 0.48) !important;
+  color: #2f5034 !important;
+}
+
+body.bulbasaur-theme .page-btn,
+body.bulbasaur-theme .activity-log-toggle {
+  background: #ddd9c4 !important;
+  color: #3f5949 !important;
+  border-color: #96977e !important;
+}
+
+body.bulbasaur-theme .page-btn:hover:not(:disabled),
+body.bulbasaur-theme .activity-log-toggle:hover {
+  background: #cbc6aa !important;
+  color: #334d40 !important;
+  border-color: #7f826d !important;
+}
+
+body.bulbasaur-theme .stats-bar {
+  background: #dff0c8 !important;
+  border-color: #77a95d !important;
+  color: #2f5034 !important;
+  box-shadow: 0 2px 7px rgba(47, 80, 52, 0.12) !important;
+}
+
+body.bulbasaur-theme .add-modal,
+body.bulbasaur-theme .edit-modal {
+  background: #e5f3d3 !important;
+  border-color: #77a95d !important;
+  color: #2f5034 !important;
+}
+
+body.bulbasaur-theme .add-modal .add-box {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+body.bulbasaur-theme .open-add-modal-btn {
+  background: #4f8f46 !important;
+  color: #fbfff5 !important;
+  border: 2px solid #33693b !important;
+  box-shadow: 0 3px 8px rgba(47, 80, 52, 0.14) !important;
+}
+
+body.bulbasaur-theme .open-add-modal-btn:hover {
+  background: #3f7d45 !important;
+  color: #fbfff5 !important;
+  border-color: #2f6036 !important;
+}
+
 /* Bulbasaur summary boxes + smoother motion */
 body.bulbasaur-theme .summary-text {
   background: #fafafa !important;
@@ -4845,6 +4952,17 @@ body.bulbasaur-theme .draft-tag-remove:focus-visible {
   box-shadow: 0 0 0 4px rgba(112, 119, 98, 0.18) !important;
 }
 
+body.bulbasaur-theme .add-modal #titleInput,
+body.bulbasaur-theme .add-modal #titleInput:focus,
+body.bulbasaur-theme .add-modal #titleInput:focus-visible {
+  background: #eef8df !important;
+  color: #244a2b !important;
+  border: 2px solid #5f934d !important;
+  outline: 0 !important;
+  box-shadow: 0 0 0 3px rgba(95, 147, 77, 0.18) !important;
+  caret-color: #33693b !important;
+}
+
 body.bulbasaur-theme .plan-check {
   accent-color: #5f934d !important;
 }
@@ -4937,38 +5055,418 @@ body.bulbasaur-theme .footer .raichu-bubble {
 }
 
 /* Bulbasaur mascot keeps Raichu behavior, only larger art */
+body.bulbasaur-theme .footer-mascot {
+  top: -58px !important;
+  width: 82px !important;
+  height: 82px !important;
+}
+
+body.bulbasaur-theme .footer .raichu-container {
+  width: 82px !important;
+}
+
+body.bulbasaur-theme .footer .raichu-img {
+  width: 82px !important;
+  height: 82px !important;
+  image-rendering: auto !important;
+  transform: translateZ(0);
+}
+
+body.bulbasaur-theme .footer .raichu-bubble {
+  bottom: 86px !important;
+}
+
 body.bulbasaur-theme .queue-browser-box .raichu-container {
-  top: -80px !important;
+  top: -78px !important;
   right: 8px !important;
-  width: 136px !important;
+  width: 164px !important;
 }
 
 body.bulbasaur-theme .queue-browser-box .raichu-img {
-  width: 136px !important;
-  height: 136px !important;
+  width: 164px !important;
+  height: 164px !important;
   object-fit: contain !important;
+  image-rendering: auto !important;
+  transform: translateZ(0);
 }
 
 body.bulbasaur-theme .queue-browser-box .raichu-bubble {
-  bottom: 122px !important;
+  bottom: 148px !important;
 }
 
 @media (max-width: 700px) {
+  body.bulbasaur-theme .footer-mascot {
+    top: -48px !important;
+    width: 66px !important;
+    height: 66px !important;
+  }
+
+  body.bulbasaur-theme .footer .raichu-container {
+    width: 66px !important;
+  }
+
+  body.bulbasaur-theme .footer .raichu-img {
+    width: 66px !important;
+    height: 66px !important;
+  }
+
+  body.bulbasaur-theme .footer .raichu-bubble {
+    bottom: 70px !important;
+  }
+
   body.bulbasaur-theme .queue-browser-box .raichu-container {
     top: -60px !important;
     right: 8px !important;
-    width: 104px !important;
+    width: 132px !important;
   }
 
   body.bulbasaur-theme .queue-browser-box .raichu-img {
-    width: 104px !important;
-    height: 104px !important;
+    width: 132px !important;
+    height: 132px !important;
   }
 
   body.bulbasaur-theme .queue-browser-box .raichu-bubble {
-    bottom: 92px !important;
+    bottom: 118px !important;
   }
 }
+
+/* Background-level sidebar toggle: same behavior as the old floating control. */
+.sidebar-bg-toggle {
+  position: fixed !important;
+  top: 100px !important;
+  right: 430px !important;
+  width: 36px !important;
+  height: 34px !important;
+  min-width: 36px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #7a5a34 !important;
+  box-shadow: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  z-index: 1200 !important;
+}
+
+.sidebar-bg-toggle:hover {
+  background: transparent !important;
+  color: #5f4328 !important;
+  box-shadow: none !important;
+}
+
+.sidebar-bg-toggle:focus,
+.sidebar-bg-toggle:focus-visible {
+  background: transparent !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+.sidebar-bg-toggle .sidebar-toggle-icon {
+  position: relative;
+  display: block;
+  width: 25px;
+  height: 22px;
+  color: currentColor;
+  transform: translateY(-1px);
+}
+
+.sidebar-bg-toggle .sidebar-toggle-icon::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 2px;
+  height: 14px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.sidebar-bg-toggle .sidebar-toggle-icon::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  border-radius: 3px;
+  transform: rotate(-45deg);
+}
+
+.sidebar-bg-toggle.is-collapsed .sidebar-toggle-icon::before {
+  right: auto;
+  left: 4px;
+}
+
+.sidebar-bg-toggle.is-collapsed .sidebar-toggle-icon::after {
+  left: auto;
+  right: 5px;
+  transform: rotate(135deg);
+}
+
+body.bulbasaur-theme .sidebar-bg-toggle {
+  background: transparent !important;
+  color: #527d59 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+body.bulbasaur-theme .sidebar-bg-toggle:hover {
+  background: transparent !important;
+  color: #3f6847 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 1380px) {
+  .sidebar-bg-toggle {
+    right: 18px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar-bg-toggle {
+    top: 64px !important;
+    right: 12px !important;
+  }
+}
+
+body.sidebar-collapsed .sidebar-bg-toggle {
+  top: 90px !important;
+  right: 24px !important;
+}
+
+@media (max-width: 1380px) {
+  body.sidebar-collapsed .sidebar-bg-toggle {
+    right: 24px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  body.sidebar-collapsed .sidebar-bg-toggle {
+    top: 64px !important;
+    right: 12px !important;
+  }
+}
+
+/* Final header alignment: keep controls grouped on the right. */
+.container > .site-sticky-header {
+  justify-content: flex-start !important;
+}
+
+.container > .site-sticky-header h1 {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+.container > .site-sticky-header .stats-bar {
+  margin-left: auto !important;
+}
+
+.header-page-tabs {
+  margin: 0 !important;
+  justify-content: flex-end !important;
+}
+
+@media (max-width: 700px) {
+  .container > .site-sticky-header {
+    padding-right: 12px !important;
+  }
+
+  .header-page-tabs {
+    margin: 0 !important;
+  }
+}
+/* Final mobile/accessibility pass for the latest queue + sidebar controls. */
+@media (max-width: 700px) {
+  .container {
+    width: min(100%, calc(100vw - 20px)) !important;
+    padding: 14px 12px 18px !important;
+    overflow-x: hidden !important;
+  }
+
+  .container > .site-sticky-header {
+    min-height: 54px !important;
+    padding: 10px 52px 10px 10px !important;
+    gap: 8px !important;
+  }
+
+  .header-page-tabs .page-tab,
+  .theme-toggle,
+  .open-add-modal-btn,
+  #searchInput,
+  #planSearchInput,
+  #titleInput,
+  #typeInput,
+  #addButton,
+  #toggleDescriptionBtn,
+  .controls select,
+  .controls button,
+  .page-btn,
+  .activity-log-toggle,
+  .add-modal-close,
+  .edit-modal-close {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+
+  .sidebar-bg-toggle {
+    top: 58px !important;
+    right: 10px !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  body.sidebar-collapsed .sidebar-bg-toggle {
+    top: 58px !important;
+    right: 10px !important;
+  }
+
+  .sidebar-bg-toggle .sidebar-toggle-icon {
+    transform: translateY(-2px);
+  }
+
+  .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
+    filter: drop-shadow(0 0 3px rgba(122, 90, 52, 0.42));
+  }
+
+  body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
+    filter: drop-shadow(0 0 3px rgba(82, 125, 89, 0.42));
+  }
+
+  .queue-browser-top,
+  .queue-filter-box,
+  .filter-control,
+  .plans-add-box,
+  .plan-main-row,
+  .edit-row,
+  .edit-modal-actions {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .queue-action-group,
+  .queue-action-group .open-add-modal-btn,
+  .filter-control select,
+  .plans-add-box input,
+  .plans-add-box select,
+  .plans-add-box button,
+  .plan-main-row input,
+  .plan-main-row select,
+  .plan-main-row button,
+  .edit-field,
+  .edit-field input,
+  .edit-field select,
+  .edit-field textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .filter-control {
+    border-radius: 14px !important;
+    gap: 7px !important;
+  }
+
+  .add-overlay,
+  .edit-overlay {
+    align-items: flex-start !important;
+    padding: 12px !important;
+    overflow-y: auto !important;
+  }
+
+  .add-modal,
+  .edit-modal {
+    width: 100% !important;
+    max-height: calc(100dvh - 24px) !important;
+    overflow-y: auto !important;
+    border-radius: 14px !important;
+    padding: 14px !important;
+  }
+
+  .add-modal-header,
+  .edit-modal-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-bottom: 10px;
+    background: inherit;
+  }
+
+  .add-row,
+  .controls-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .tag-chip-grid {
+    max-height: 168px !important;
+    gap: 8px !important;
+  }
+
+  .tag-chip {
+    min-height: 38px !important;
+    padding: 8px 11px !important;
+  }
+
+  .pagination {
+    gap: 10px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .page-btn {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.25rem !important;
+  }
+
+  .page-info {
+    flex: 1 1 auto;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .title-button {
+    min-height: 40px !important;
+    text-align: left !important;
+  }
+
+  .stats-loading {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+body.bulbasaur-theme .sidebar-bg-toggle,
+body.bulbasaur-theme .sidebar-bg-toggle:hover,
+body.bulbasaur-theme .sidebar-bg-toggle:active,
+body.bulbasaur-theme .sidebar-bg-toggle:focus,
+body.bulbasaur-theme .sidebar-bg-toggle:focus-visible {
+  background: transparent !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  appearance: none !important;
+}
+
+body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
+  filter: none !important;
+  color: #3f6847 !important;
+}
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -5010,20 +5508,17 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       </div>
     </div>
 
+    <button
+      type="button"
+      class="sidebar-bg-toggle"
+      id="sidebarFloatingToggle"
+      aria-expanded="true"
+      aria-label="collapse activity log"
+    >
+      <span class="sidebar-toggle-icon" aria-hidden="true"></span>
+    </button>
+
     <div class="container">
-      <button
-        type="button"
-        class="sidebar-floating-toggle"
-        id="sidebarFloatingToggle"
-        aria-expanded="true"
-        aria-label="collapse activity log"
-      >
-        <span class="menu-lines" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
-      </button>
       <!-- sticky full-width header band -->
       <div class="header site-sticky-header">
         <h1 id="appTitle">⚡ raichu queue ⚡</h1>
@@ -5084,7 +5579,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
               <div class="add-row">
                 <div class="edit-field">
                   <label>tags</label>
-                  <div class="tag-chip-grid" id="addTagChips" aria-label="choose tags"></div>
+                  <div class="tag-chip-grid" id="addTagChips" role="group" aria-label="choose tags"></div>
                 </div>
               </div>
             </div>
@@ -5133,7 +5628,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
             </div>
             <div class="edit-field">
               <label>tags</label>
-              <div class="tag-chip-grid" id="editTagChips" aria-label="choose tags"></div>
+              <div class="tag-chip-grid" id="editTagChips" role="group" aria-label="choose tags"></div>
             </div>
             <div class="edit-modal-actions">
               <button type="button" class="delete-btn-inline secondary-btn" id="editDeleteButton">delete</button>
@@ -5490,25 +5985,83 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
 
       
-      async function updateActivityLogsForTitle(oldTitle, newTitle) {
+      function getTitleDistance(a, b) {
+        const left = toLowerSafe(a).trim();
+        const right = toLowerSafe(b).trim();
+        if (left === right) return 0;
+        if (!left || !right) return Math.max(left.length, right.length);
+
+        const distances = Array.from({ length: right.length + 1 }, (_, index) => index);
+        for (let i = 1; i <= left.length; i++) {
+          let previous = distances[0];
+          distances[0] = i;
+          for (let j = 1; j <= right.length; j++) {
+            const saved = distances[j];
+            distances[j] =
+              left[i - 1] === right[j - 1]
+                ? previous
+                : Math.min(previous + 1, distances[j] + 1, distances[j - 1] + 1);
+            previous = saved;
+          }
+        }
+
+        return distances[right.length];
+      }
+
+      function isCloseActivityTitle(entryTitle, targetTitle) {
+        const normalizedEntryTitle = toLowerSafe(entryTitle).trim();
+        const normalizedTargetTitle = toLowerSafe(targetTitle).trim();
+        if (!normalizedEntryTitle || !normalizedTargetTitle) return false;
+
+        const distance = getTitleDistance(normalizedEntryTitle, normalizedTargetTitle);
+        const allowedDistance = Math.max(1, Math.floor(normalizedTargetTitle.length * 0.15));
+        return distance <= allowedDistance;
+      }
+
+      function replaceActivityTitleInMessage(message, oldTitle, newTitle, fallbackTitle = "") {
+        const normalizedNewTitle = toLowerSafe(newTitle).trim();
+        let updatedMessage = String(message || "");
+        [oldTitle, fallbackTitle]
+          .map((title) => toLowerSafe(title).trim())
+          .filter(Boolean)
+          .forEach((title) => {
+            updatedMessage = updatedMessage.replace(
+              new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
+              normalizedNewTitle,
+            );
+          });
+        return updatedMessage;
+      }
+
+      async function updateActivityLogsForTitle(oldTitle, newTitle, itemType = "") {
         const normalizedOldTitle = toLowerSafe(oldTitle).trim();
         const normalizedNewTitle = toLowerSafe(newTitle).trim();
+        const normalizedItemType = toLowerSafe(itemType).trim();
 
-        if (!normalizedOldTitle || !normalizedNewTitle || normalizedOldTitle === normalizedNewTitle) {
+        if (!normalizedOldTitle || !normalizedNewTitle) {
+          return;
+        }
+
+        if (normalizedOldTitle === normalizedNewTitle && !normalizedItemType) {
           return;
         }
 
         activityLog = activityLog.map((entry) => {
           const entryTitle = toLowerSafe(entry.title || "");
           const entryMessage = String(entry.message || entry || "");
+          const matchesTitle =
+            entryTitle === normalizedOldTitle ||
+            isCloseActivityTitle(entryTitle, normalizedNewTitle);
 
-          if (entryTitle === normalizedOldTitle || entryMessage.toLowerCase().includes(normalizedOldTitle)) {
+          if (matchesTitle || entryMessage.toLowerCase().includes(normalizedOldTitle)) {
             return {
               ...entry,
               title: normalizedNewTitle,
-              message: entryMessage.replace(
-                new RegExp(normalizedOldTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
+              message: replaceActivityTitleInMessage(
+                entryMessage,
+                normalizedOldTitle,
                 normalizedNewTitle,
+                matchesTitle ? entryTitle : "",
               ),
             };
           }
@@ -5518,33 +6071,102 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
         renderLog();
 
-        const { data, error } = await supabaseClient
-          .from("activity_log")
-          .select("id, title, message")
-          .or(`title.eq.${normalizedOldTitle},message.ilike.%${normalizedOldTitle}%`);
+        const [titleMatchResult, messageMatchResult] = await Promise.all([
+          supabaseClient
+            .from("activity_log")
+            .select("id, title, message, item_type, event_type, rating, created_at")
+            .eq("title", normalizedOldTitle),
+          supabaseClient
+            .from("activity_log")
+            .select("id, title, message, item_type, event_type, rating, created_at")
+            .ilike("message", `%${normalizedOldTitle}%`),
+        ]);
 
-        if (error) {
-          console.error("error finding activity logs to update:", error);
+        if (titleMatchResult.error || messageMatchResult.error) {
+          console.error(
+            "error finding activity logs to update:",
+            titleMatchResult.error || messageMatchResult.error,
+          );
           return;
         }
 
-        const matchingRows = data || [];
+        const rowsById = new Map();
+        [...(titleMatchResult.data || []), ...(messageMatchResult.data || [])].forEach((row) => {
+          rowsById.set(row.id, row);
+        });
+
+        if (normalizedItemType) {
+          const { data: typeRows, error: typeRowsError } = await supabaseClient
+            .from("activity_log")
+            .select("id, title, message, item_type, event_type, rating, created_at")
+            .eq("item_type", normalizedItemType)
+            .limit(200);
+
+          if (typeRowsError) {
+            console.error("error finding same-type activity logs to update:", typeRowsError);
+          } else {
+            (typeRows || [])
+              .filter((row) => isCloseActivityTitle(row.title, normalizedNewTitle))
+              .forEach((row) => rowsById.set(row.id, row));
+          }
+        }
+
+        const matchingRows = [...rowsById.values()];
 
         await Promise.all(
-          matchingRows.map((row) => {
+          matchingRows.map(async (row) => {
             const oldMessage = String(row.message || "");
-            const updatedMessage = oldMessage.replace(
-              new RegExp(normalizedOldTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
+            const rowTitle = toLowerSafe(row.title || "").trim();
+            const updatedMessage = replaceActivityTitleInMessage(
+              oldMessage,
+              normalizedOldTitle,
               normalizedNewTitle,
+              rowTitle !== normalizedNewTitle ? rowTitle : "",
             );
 
-            return supabaseClient
+            const { data: updatedRows, error: updateError } = await supabaseClient
               .from("activity_log")
               .update({
                 title: normalizedNewTitle,
                 message: updatedMessage,
               })
+              .eq("id", row.id)
+              .select("id");
+
+            if (updateError) {
+              console.error("error updating activity log row:", updateError);
+              return;
+            }
+
+            if (updatedRows && updatedRows.length) return;
+
+            const { error: deleteError } = await supabaseClient
+              .from("activity_log")
+              .delete()
               .eq("id", row.id);
+
+            if (deleteError) {
+              console.error("error replacing old activity log row:", deleteError);
+              return;
+            }
+
+            const replacementRow = {
+              title: normalizedNewTitle,
+              item_type: row.item_type,
+              event_type: row.event_type,
+              rating: row.rating,
+              message: updatedMessage,
+            };
+
+            if (row.created_at) replacementRow.created_at = row.created_at;
+
+            const { error: insertError } = await supabaseClient
+              .from("activity_log")
+              .insert([replacementRow]);
+
+            if (insertError) {
+              console.error("error inserting corrected activity log row:", insertError);
+            }
           }),
         );
 
@@ -6044,13 +6666,13 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
 
         const prevButton =
           currentPage > 1
-            ? `<button class="page-btn secondary-btn" aria-label="previous page" onclick="changePage('${type}', -1)">‹</button>`
+            ? `<button type="button" class="page-btn secondary-btn" aria-label="previous page" onclick="changePage('${type}', -1)">‹</button>`
             : "";
 
         paginationEl.innerHTML = `
         ${prevButton}
         <span class="page-info">page ${currentPage} of ${totalPages}</span>
-        <button class="page-btn secondary-btn" aria-label="next page" ${currentPage === totalPages ? "disabled" : ""} onclick="changePage('${type}', 1)">›</button>
+        <button type="button" class="page-btn secondary-btn" aria-label="next page" ${currentPage === totalPages ? "disabled" : ""} onclick="changePage('${type}', 1)">›</button>
       `;
       }
 
@@ -6238,6 +6860,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           return;
         }
 
+        const oldTitle = item.title;
         const title = toLowerSafe(document.getElementById("editTitleInput").value.trim());
         if (!title) {
           alert("please enter a title.");
@@ -6288,6 +6911,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           return;
         }
 
+        await updateActivityLogsForTitle(oldTitle, title, item.type || type);
         closeEditModal();
         await loadItems();
         showRaichuMessage("saved");
@@ -6366,6 +6990,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         const input = document.getElementById(`${type}-title-input-${index}`);
         if (!item || !input) return;
 
+        const oldTitle = item.title;
         const title = toLowerSafe(input.value.trim());
         if (!title) {
           alert("please enter a title.");
@@ -6394,6 +7019,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           return;
         }
 
+        await updateActivityLogsForTitle(oldTitle, title, item.type || type);
         await loadItems();
       }
 
@@ -6618,6 +7244,27 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
       }
 
       // collapses or expands the activity log and remembers the choice with localStorage
+      function positionSidebarToggle(collapsed) {
+        const toggleBtn = document.getElementById("sidebarFloatingToggle");
+        if (!toggleBtn) return;
+
+        if (!collapsed) {
+          toggleBtn.style.left = "";
+          toggleBtn.style.right = "";
+          toggleBtn.style.top = "";
+          return;
+        }
+
+        const buttonWidth = toggleBtn.offsetWidth || 36;
+        const edgeInset = window.innerWidth <= 700 ? 10 : 24;
+        const topOffset = window.innerWidth <= 700 ? 58 : 90;
+        const leftOffset = Math.max(12, window.innerWidth - buttonWidth - edgeInset);
+
+        toggleBtn.style.left = `${leftOffset}px`;
+        toggleBtn.style.right = "auto";
+        toggleBtn.style.top = `${topOffset}px`;
+      }
+
       function setActivityLogCollapsed(collapsed) {
         const sidebar = document.getElementById("logSidebar");
         const toggleBtn = document.getElementById("sidebarFloatingToggle");
@@ -6630,6 +7277,10 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
           "aria-label",
           collapsed ? "show activity log" : "collapse activity log",
         );
+        const toggleIcon = toggleBtn.querySelector(".sidebar-toggle-icon");
+        if (toggleIcon) toggleIcon.textContent = "";
+        toggleBtn.classList.toggle("is-collapsed", collapsed);
+        positionSidebarToggle(collapsed);
         localStorage.setItem(
           "activityLogCollapsed",
           collapsed ? "true" : "false",
@@ -6676,6 +7327,10 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         logToggleBtn.addEventListener("click", () => {
           const sidebar = document.getElementById("logSidebar");
           setActivityLogCollapsed(!sidebar.classList.contains("collapsed"));
+        });
+        window.addEventListener("resize", () => {
+          const sidebar = document.getElementById("logSidebar");
+          positionSidebarToggle(Boolean(sidebar && sidebar.classList.contains("collapsed")));
         });
       }
 
@@ -6810,9 +7465,9 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
         }
 
         paginationEl.innerHTML = `
-          <button class="page-btn secondary-btn" aria-label="previous page" ${currentPage === 1 ? "disabled" : ""} onclick="changePlanPage('${category}', -1)">‹</button>
+          <button type="button" class="page-btn secondary-btn" aria-label="previous page" ${currentPage === 1 ? "disabled" : ""} onclick="changePlanPage('${category}', -1)">‹</button>
           <span class="page-info">page ${currentPage} of ${totalPages}</span>
-          <button class="page-btn secondary-btn" aria-label="next page" ${currentPage === totalPages ? "disabled" : ""} onclick="changePlanPage('${category}', 1)">›</button>
+          <button type="button" class="page-btn secondary-btn" aria-label="next page" ${currentPage === totalPages ? "disabled" : ""} onclick="changePlanPage('${category}', 1)">›</button>
         `;
       }
 
