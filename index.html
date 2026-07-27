@@ -196,6 +196,74 @@
         opacity: 0.75;
       }
 
+      .media-suggest-wrap {
+        position: relative;
+        width: 100%;
+        flex: 1 1 100%;
+        min-width: 0;
+      }
+
+      .media-suggest-wrap > input {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .media-suggestions {
+        position: absolute;
+        z-index: 21000;
+        top: calc(100% + 6px);
+        left: 0;
+        right: 0;
+        display: none;
+        grid-template-columns: 1fr;
+        gap: 3px;
+        max-height: 210px;
+        overflow-y: auto;
+        padding: 6px;
+        background: #fffdf5;
+        border: 1px solid rgba(168, 134, 88, 0.42);
+        border-radius: 12px;
+        box-shadow: 0 12px 28px rgba(94, 71, 48, 0.2);
+      }
+
+      .media-suggestions.show {
+        display: grid;
+      }
+
+      .media-suggestion {
+        width: 100%;
+        min-height: 0;
+        padding: 8px 10px;
+        border: 0;
+        border-radius: 9px;
+        background: transparent;
+        color: #5e4730;
+        box-shadow: none;
+        text-align: left;
+        text-transform: lowercase;
+      }
+
+      .media-suggestion:hover,
+      .media-suggestion:focus-visible {
+        background: rgba(215, 180, 106, 0.28);
+        box-shadow: none;
+        transform: none;
+      }
+
+      .media-suggestion-title {
+        display: block;
+        font-weight: 800;
+        line-height: 1.25;
+      }
+
+      .media-suggestion-meta {
+        display: block;
+        margin-top: 2px;
+        color: rgba(94, 71, 48, 0.7);
+        font-size: 11px;
+        font-weight: 700;
+      }
+
       .tag-chip-grid {
         display: flex;
         flex-wrap: wrap;
@@ -453,6 +521,17 @@
         word-break: break-word;
         flex: 1;
         min-width: 0;
+      }
+
+      .title-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
+        min-width: 0;
+      }
+
+      .title-line {
         display: flex;
         align-items: center;
         gap: 8px;
@@ -673,6 +752,13 @@
       .type-badge.type-game {
         background: #fff1ee;
         color: #9b3f2f;
+      }
+
+      .media-meta {
+        color: rgba(94, 71, 48, 0.72);
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.2;
       }
 
       .type-select {
@@ -1190,6 +1276,37 @@
       .section > #movieList,
       .section > #gameList {
         flex: 1;
+      }
+
+      .lists.watchlist-only {
+        display: block;
+        width: 100%;
+      }
+
+      .lists.watchlist-only .section:first-child {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .lists.watchlist-only #movieList {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .lists.watchlist-only #movieList .item {
+        margin-bottom: 0;
+        min-width: 0;
+      }
+
+      @media (max-width: 760px) {
+        .lists.watchlist-only #movieList {
+          grid-template-columns: 1fr;
+        }
       }
 
       .priority-toggle {
@@ -5162,6 +5279,7 @@ body.bulbasaur-theme .queue-browser-box .raichu-bubble {
   min-width: 124px;
 }
 
+.filter-custom[data-filter-id="mediaTypeFilter"],
 .filter-custom[data-filter-id="genreFilter"],
 .filter-custom[data-filter-id="platformFilter"],
 .filter-custom[data-filter-id="tagFilter"],
@@ -5563,6 +5681,7 @@ body.sidebar-collapsed .sidebar-bg-toggle {
     min-width: 124px !important;
   }
 
+  .filter-control #mediaTypeFilter,
   .filter-control #genreFilter,
   .filter-control #platformFilter,
   .filter-control #tagFilter,
@@ -5605,6 +5724,7 @@ body.sidebar-collapsed .sidebar-bg-toggle {
 
   .filter-control select,
   .filter-control #statusFilter,
+  .filter-control #mediaTypeFilter,
   .filter-control #genreFilter,
   .filter-control #platformFilter,
   .filter-control #tagFilter,
@@ -6507,6 +6627,96 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
   }
 }
 
+/* Queue card final layout: star stays top-right; type badge follows title text. */
+.item .item-top {
+  position: relative !important;
+  display: block !important;
+  padding-right: 38px !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.item .item-top .title {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.item .title-stack {
+  display: block !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.item .title-line {
+  display: grid !important;
+  grid-template-columns: max-content minmax(0, 1fr) !important;
+  align-items: baseline !important;
+  column-gap: 7px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  max-width: 100% !important;
+}
+
+.item .title-button {
+  display: inline !important;
+  min-height: 0 !important;
+  vertical-align: baseline !important;
+}
+
+.item .title-body {
+  display: inline !important;
+  min-width: 0 !important;
+}
+
+.item .title-text {
+  display: inline !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
+.item .type-badge {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  margin-right: 0 !important;
+  vertical-align: 0.08em !important;
+  align-self: start !important;
+}
+
+.item .media-meta {
+  display: inline-block !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  text-align: left !important;
+}
+
+.item .item-meta-row {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  margin-top: 6px !important;
+  min-height: 14px !important;
+}
+
+.item .item-top .controls {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+.item .controls .priority-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -6592,11 +6802,15 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             <!-- add form: users create new movie/show or game entries here -->
             <div class="add-box">
               <div class="add-row">
-                <input
-                  type="text"
-                  id="titleInput"
-                  placeholder="add a movie, show, or game"
-                />
+                <div class="media-suggest-wrap">
+                  <input
+                    type="text"
+                    id="titleInput"
+                    placeholder="add a movie, show, or game"
+                    autocomplete="off"
+                  />
+                  <div class="media-suggestions" id="addMediaSuggestions"></div>
+                </div>
               </div>
 
               <div class="add-row controls-row">
@@ -6642,7 +6856,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           <div class="edit-form">
             <div class="edit-field">
               <label for="editTitleInput">title</label>
-              <input type="text" id="editTitleInput" placeholder="title" />
+              <div class="media-suggest-wrap">
+                <input type="text" id="editTitleInput" placeholder="title" autocomplete="off" />
+                <div class="media-suggestions" id="editMediaSuggestions"></div>
+              </div>
             </div>
             <div class="edit-row">
               <div class="edit-field" id="editTypeField">
@@ -6752,6 +6969,11 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
                 <option value="finished">finished</option>
                 <option value="hiatus">out of rotation</option>
                 <option value="want">want to watch / play</option>
+              </select>
+              <select id="mediaTypeFilter" aria-label="filter by media type">
+                <option value="all">all types</option>
+                <option value="movie">movies</option>
+                <option value="show">shows</option>
               </select>
               <select id="genreFilter" aria-label="filter by genre">
                 <option value="all">all genres</option>
@@ -6906,6 +7128,8 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       // ===== data setup + shared state =====
       const SUPABASE_URL = "https://ncqcqtfnaamcrbhncocv.supabase.co";
       const SUPABASE_KEY = "sb_publishable_0XjUw1Y6h99mUso6uJT_uw_dt8sFSHh";
+      const MEDIA_LOOKUP_API_KEY = "90ac58cabf68cf5afed778c87c192084";
+      const MEDIA_LOOKUP_BASE_URL = "https://api.themoviedb.org/3";
 
       if (!window.supabase) {
         console.error("Supabase library failed to load.");
@@ -6929,11 +7153,17 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       //
       // queue_items also uses:
       // tags text null
+      // media_lookup_id text null
+      // media_lookup_type text null
+      // media_runtime_minutes integer null
+      // media_season_count integer null
+      // media_episode_count integer null
 
       let movies = [];
       let games = [];
       let searchTerm = "";
       let statusFilter = "all";
+      let mediaTypeFilter = "all";
       let genreFilter = "all";
       let platformFilter = "all";
       let tagFilter = "all";
@@ -6943,10 +7173,19 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       let moviePage = 1;
       let gamePage = 1;
       const QUEUE_ITEMS_PER_PAGE = 6;
+      const FILTERED_WATCHLIST_ITEMS_PER_PAGE = 10;
       const PLAN_ITEMS_PER_PAGE = 5;
       let activityLog = [];
       let planSearchTerm = "";
       let editItemContext = null;
+      let mediaMetadataColumnsAvailable = true;
+      const pendingMetadataBackfills = new Set();
+      let mediaMetadataBackfillRunning = false;
+      let mediaMetadataReloadTimer = null;
+      const mediaSuggestionState = {
+        add: { timer: null, requestId: 0, selected: null, results: [] },
+        edit: { timer: null, requestId: 0, selected: null, results: [] },
+      };
 
       // keeps all stored/displayed text lowercase so the site stays visually consistent
       function toLowerSafe(value) {
@@ -6965,6 +7204,299 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             ? storedType
             : "movie",
         };
+      }
+
+      function getNumberValue(value) {
+        const number = Number(value);
+        return Number.isFinite(number) && number > 0 ? number : null;
+      }
+
+      function formatMinutes(totalMinutes) {
+        const minutes = getNumberValue(totalMinutes);
+        if (!minutes) return "";
+        const roundedMinutes = Math.round(minutes);
+        const hours = Math.floor(roundedMinutes / 60);
+        const remainingMinutes = roundedMinutes % 60;
+        if (!hours) return `${remainingMinutes}m`;
+        if (!remainingMinutes) return `${hours}h`;
+        return `${hours}h ${remainingMinutes}m`;
+      }
+
+      function renderMediaMetadata(item) {
+        if (!item || item.type === "game") return "";
+
+        if (item.type === "show") {
+          const seasonCount = getNumberValue(item.media_season_count);
+          const episodeCount = getNumberValue(item.media_episode_count);
+          const parts = [];
+
+          if (seasonCount) parts.push(`${seasonCount} season${seasonCount === 1 ? "" : "s"}`);
+          if (episodeCount) parts.push(`${episodeCount} episode${episodeCount === 1 ? "" : "s"}`);
+
+          return parts.length ? `<span class="media-meta">${escapeHtml(parts.join(" • "))}</span>` : "";
+        }
+
+        const runtime = formatMinutes(item.media_runtime_minutes);
+        if (!runtime && item.media_lookup_id) {
+          return `<span class="media-meta">runtime tbd</span>`;
+        }
+        return runtime ? `<span class="media-meta">${escapeHtml(runtime)}</span>` : "";
+      }
+
+      function getMediaLookupUrl(path, params = {}) {
+        const url = new URL(`${MEDIA_LOOKUP_BASE_URL}${path}`);
+        url.searchParams.set("api_key", MEDIA_LOOKUP_API_KEY);
+        url.searchParams.set("language", "en-US");
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            url.searchParams.set(key, value);
+          }
+        });
+        return url.toString();
+      }
+
+      function cleanLookupTitle(value) {
+        return String(value || "")
+          .replace(/\([^)]*\)/g, " ")
+          .replace(/\[[^\]]*\]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+
+      function getLookupScore(result, title, type) {
+        const resultTitle = cleanLookupTitle(
+          type === "show" ? result.name || result.original_name : result.title || result.original_title,
+        ).toLowerCase();
+        const targetTitle = cleanLookupTitle(title).toLowerCase();
+        if (!resultTitle || !targetTitle) return 999;
+        if (resultTitle === targetTitle) return 0;
+        if (resultTitle.includes(targetTitle) || targetTitle.includes(resultTitle)) return 1;
+        return getTitleDistance(resultTitle, targetTitle);
+      }
+
+      function pickBestLookupMatch(results, title, type) {
+        const matches = (results || [])
+          .filter((result) => result && !result.adult)
+          .map((result) => ({ result, score: getLookupScore(result, title, type) }))
+          .sort((a, b) => a.score - b.score || (b.result.popularity || 0) - (a.result.popularity || 0));
+
+        const bestMatch = matches[0];
+        if (!bestMatch) return null;
+
+        const allowedDistance = Math.max(2, Math.floor(cleanLookupTitle(title).length * 0.22));
+        return bestMatch.score <= allowedDistance ? bestMatch.result : null;
+      }
+
+      function getLookupResultTitle(result, type) {
+        return type === "show"
+          ? result.name || result.original_name || ""
+          : result.title || result.original_title || "";
+      }
+
+      function getLookupResultYear(result, type) {
+        const date = type === "show" ? result.first_air_date : result.release_date;
+        return String(date || "").slice(0, 4);
+      }
+
+      function getMediaSuggestionLabel(result, type) {
+        const year = getLookupResultYear(result, type);
+        return [getLookupResultTitle(result, type), year, type].filter(Boolean).join(" • ");
+      }
+
+      async function searchMediaSuggestions(title, type) {
+        if (!MEDIA_LOOKUP_API_KEY || !["movie", "show"].includes(type)) return [];
+
+        try {
+          const lookupType = type === "show" ? "tv" : "movie";
+          const response = await fetch(
+            getMediaLookupUrl(`/search/${lookupType}`, {
+              query: cleanLookupTitle(title),
+              include_adult: "false",
+            }),
+          );
+          if (!response.ok) return [];
+
+          const data = await response.json();
+          return (data.results || [])
+            .filter((result) => result && !result.adult)
+            .map((result) => ({ result, score: getLookupScore(result, title, type) }))
+            .sort((a, b) => a.score - b.score || (b.result.popularity || 0) - (a.result.popularity || 0))
+            .slice(0, 5)
+            .map(({ result }) => result);
+        } catch (error) {
+          console.error("media suggestion lookup failed:", error);
+          return [];
+        }
+      }
+
+      async function fetchMediaMetadataById(mediaId, type) {
+        if (!MEDIA_LOOKUP_API_KEY || !mediaId || !["movie", "show"].includes(type)) return null;
+
+        try {
+          const lookupType = type === "show" ? "tv" : "movie";
+          const detailResponse = await fetch(getMediaLookupUrl(`/${lookupType}/${mediaId}`));
+          if (!detailResponse.ok) return null;
+          const details = await detailResponse.json();
+
+          if (type === "show") {
+            return {
+              media_lookup_id: String(details.id || mediaId),
+              media_lookup_type: "show",
+              media_runtime_minutes: null,
+              media_season_count: getNumberValue(details.number_of_seasons),
+              media_episode_count: getNumberValue(details.number_of_episodes),
+            };
+          }
+
+          return {
+            media_lookup_id: String(details.id || mediaId),
+            media_lookup_type: "movie",
+            media_runtime_minutes: getNumberValue(details.runtime),
+            media_season_count: null,
+            media_episode_count: null,
+          };
+        } catch (error) {
+          console.error("media detail lookup failed:", error);
+          return null;
+        }
+      }
+
+      function getSelectedMediaSuggestion(mode, title, type) {
+        const selected = mediaSuggestionState[mode]?.selected;
+        if (!selected) return null;
+        const sameType = selected.type === type;
+        const sameTitle = cleanLookupTitle(selected.inputTitle) === cleanLookupTitle(title);
+        return sameType && sameTitle ? selected : null;
+      }
+
+      async function fetchMediaMetadata(title, type) {
+        if (!MEDIA_LOOKUP_API_KEY || !["movie", "show"].includes(type)) return null;
+
+        try {
+          const lookupType = type === "show" ? "tv" : "movie";
+          const searchResponse = await fetch(
+            getMediaLookupUrl(`/search/${lookupType}`, {
+              query: cleanLookupTitle(title),
+              include_adult: "false",
+            }),
+          );
+          if (!searchResponse.ok) return null;
+
+          const searchData = await searchResponse.json();
+          const match = pickBestLookupMatch(searchData.results, title, type);
+          if (!match || !match.id) return null;
+          return fetchMediaMetadataById(match.id, type);
+        } catch (error) {
+          console.error("media lookup failed:", error);
+          return null;
+        }
+      }
+
+      async function getMediaMetadataForSave(mode, title, type) {
+        const selected = getSelectedMediaSuggestion(mode, title, type);
+        if (selected) {
+          return fetchMediaMetadataById(selected.id, type);
+        }
+        return fetchMediaMetadata(title, type);
+      }
+
+      function hasMediaMetadata(item) {
+        return Boolean(
+          getNumberValue(item.media_runtime_minutes) ||
+            getNumberValue(item.media_season_count) ||
+            getNumberValue(item.media_episode_count),
+        );
+      }
+
+      function isMissingMediaColumnError(error) {
+        const message = String(error && error.message ? error.message : "").toLowerCase();
+        return message.includes("media_") && message.includes("column");
+      }
+
+      async function insertQueueItemWithOptionalMetadata(payload) {
+        const { error } = await supabaseClient.from("queue_items").insert([payload]);
+        if (!error || !isMissingMediaColumnError(error)) return { error };
+
+        mediaMetadataColumnsAvailable = false;
+        const {
+          media_lookup_id,
+          media_lookup_type,
+          media_runtime_minutes,
+          media_season_count,
+          media_episode_count,
+          ...fallbackPayload
+        } = payload;
+
+        return supabaseClient.from("queue_items").insert([fallbackPayload]);
+      }
+
+      async function updateQueueItemWithOptionalMetadata(itemId, payload) {
+        if (!mediaMetadataColumnsAvailable) {
+          const {
+            media_lookup_id,
+            media_lookup_type,
+            media_runtime_minutes,
+            media_season_count,
+            media_episode_count,
+            ...fallbackPayload
+          } = payload;
+          return supabaseClient.from("queue_items").update(fallbackPayload).eq("id", itemId);
+        }
+
+        const { error } = await supabaseClient.from("queue_items").update(payload).eq("id", itemId);
+        if (!error || !isMissingMediaColumnError(error)) return { error };
+
+        mediaMetadataColumnsAvailable = false;
+        const {
+          media_lookup_id,
+          media_lookup_type,
+          media_runtime_minutes,
+          media_season_count,
+          media_episode_count,
+          ...fallbackPayload
+        } = payload;
+
+        return supabaseClient.from("queue_items").update(fallbackPayload).eq("id", itemId);
+      }
+
+      async function backfillMissingMediaMetadata(items) {
+        if (
+          !MEDIA_LOOKUP_API_KEY ||
+          !mediaMetadataColumnsAvailable ||
+          mediaMetadataBackfillRunning
+        ) {
+          return;
+        }
+
+        const missingItems = (items || [])
+          .filter((item) => ["movie", "show"].includes(item.type))
+          .filter((item) => !hasMediaMetadata(item))
+          .filter((item) => !pendingMetadataBackfills.has(item.id))
+          .slice(0, 6);
+
+        if (!missingItems.length) return;
+
+        mediaMetadataBackfillRunning = true;
+        let shouldReload = false;
+
+        try {
+          for (const item of missingItems) {
+            pendingMetadataBackfills.add(item.id);
+            const metadata = await fetchMediaMetadata(item.title, item.type);
+            if (metadata && mediaMetadataColumnsAvailable) {
+              const { error } = await updateQueueItemWithOptionalMetadata(item.id, metadata);
+              if (error) console.error("metadata save error:", error);
+              if (!error) shouldReload = true;
+            }
+          }
+        } finally {
+          mediaMetadataBackfillRunning = false;
+        }
+
+        clearTimeout(mediaMetadataReloadTimer);
+        mediaMetadataReloadTimer = setTimeout(() => {
+          loadItems();
+        }, shouldReload ? 500 : 900);
       }
 
       function normalizeLogEntry(entry) {
@@ -7666,15 +8198,22 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             ? ""
             : `<span class="type-badge type-${itemType}">${itemType}</span>`;
         const hasSummary = item.description && item.description.trim();
+        const mediaMetadata = renderMediaMetadata(item);
 
         return `
         <div class="item ${finishedClass} ${getBorderClass(item.status)}">
           <div class="item-top">
             <div class="title">
-              <button type="button" class="title-button" onclick="openEditModal('${type}', ${index})" aria-label="edit ${escapeHtml(item.title)}">
-                <span class="title-text">${escapeHtml(item.title)}</span>
-              </button>
-              ${typeBadge}
+              <div class="title-stack">
+                <div class="title-line">
+                  ${typeBadge}
+                  <span class="title-body">
+                    <button type="button" class="title-button" onclick="openEditModal('${type}', ${index})" aria-label="edit ${escapeHtml(item.title)}">
+                      <span class="title-text">${escapeHtml(item.title)}</span>
+                    </button>
+                  </span>
+                </div>
+              </div>
             </div>
             <div class="controls">
               <button class="priority-toggle ${item.priority ? "active" : ""}" onclick="togglePriority(\'${type}\', ${index}, ${item.priority ? "false" : "true"})">${item.priority ? "★" : "☆"}</button>
@@ -7693,6 +8232,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             }
           </div>
           ${renderQueueTags(item.tags)}
+          ${mediaMetadata ? `<div class="item-meta-row">${mediaMetadata}</div>` : ""}
         </div>
       `;
       }
@@ -7723,6 +8263,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             !searchTerm ||
             title.includes(searchTerm) ||
             description.includes(searchTerm);
+
+          const matchesMediaType =
+            mediaTypeFilter === "all" ||
+            String(item.type || "").toLowerCase() === mediaTypeFilter;
 
           let matchesStatus = true;
           if (statusFilter === "finished") {
@@ -7759,6 +8303,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
           return (
             matchesSearch &&
+            matchesMediaType &&
             matchesStatus &&
             matchesGenre &&
             matchesPlatform &&
@@ -7769,15 +8314,15 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       }
 
       // splits long lists into pages so the ui stays compact and easier to scan
-      function paginateItems(items, page) {
+      function paginateItems(items, page, itemsPerPage = QUEUE_ITEMS_PER_PAGE) {
         const totalPages = Math.max(
           1,
-          Math.ceil(items.length / QUEUE_ITEMS_PER_PAGE),
+          Math.ceil(items.length / itemsPerPage),
         );
         const safePage = Math.min(page, totalPages);
-        const start = (safePage - 1) * QUEUE_ITEMS_PER_PAGE;
+        const start = (safePage - 1) * itemsPerPage;
         return {
-          pageItems: items.slice(start, start + QUEUE_ITEMS_PER_PAGE),
+          pageItems: items.slice(start, start + itemsPerPage),
           totalPages,
           currentPage: safePage,
         };
@@ -7811,6 +8356,8 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       function render() {
         const movieList = document.getElementById("movieList");
         const gameList = document.getElementById("gameList");
+        const gameSection = gameList ? gameList.closest(".section") : null;
+        const listContainer = movieList ? movieList.closest(".lists") : null;
         const shouldShowFinished =
           Boolean(searchTerm) || statusFilter === "finished";
 
@@ -7825,11 +8372,21 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             (shouldShowFinished || item.status !== "finished"),
         );
 
-        const movieData = paginateItems(filteredMovies, moviePage);
+        const movieItemsPerPage =
+          mediaTypeFilter === "all"
+            ? QUEUE_ITEMS_PER_PAGE
+            : FILTERED_WATCHLIST_ITEMS_PER_PAGE;
+        const movieData = paginateItems(filteredMovies, moviePage, movieItemsPerPage);
         const gameData = paginateItems(filteredGames, gamePage);
 
         moviePage = movieData.currentPage;
         gamePage = gameData.currentPage;
+        const watchlistEmptyLabel =
+          mediaTypeFilter === "movie"
+            ? "movies"
+            : mediaTypeFilter === "show"
+              ? "shows"
+              : "watchlist items";
 
         movieList.innerHTML = movieData.pageItems.length
           ? movieData.pageItems
@@ -7841,7 +8398,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
                 ),
               )
               .join("")
-          : `<div class="empty">no matching movies found ✨</div>`;
+          : `<div class="empty">no matching ${watchlistEmptyLabel} found ✨</div>`;
 
         gameList.innerHTML = gameData.pageItems.length
           ? gameData.pageItems
@@ -7855,8 +8412,19 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
               .join("")
           : `<div class="empty">no matching games found 🎮</div>`;
 
+        if (gameSection) {
+          gameSection.style.display = mediaTypeFilter === "all" ? "" : "none";
+        }
+        if (listContainer) {
+          listContainer.classList.toggle("watchlist-only", mediaTypeFilter !== "all");
+        }
+
         renderPagination("movie", movieData.currentPage, movieData.totalPages);
-        renderPagination("game", gameData.currentPage, gameData.totalPages);
+        renderPagination(
+          "game",
+          gameData.currentPage,
+          mediaTypeFilter === "all" ? gameData.totalPages : 1,
+        );
         updateStats();
         renderOngoing();
       }
@@ -7887,6 +8455,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         games = normalizedData.filter((item) => item.type === "game");
         render();
         updateStats();
+        backfillMissingMediaMetadata(movies);
       }
 
       function queueHasDuplicateTitleForType(title, type, excludeId = null) {
@@ -7923,10 +8492,17 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
         const defaultStatus =
           type === "game" ? "want to play" : "want to watch";
+        const metadata = await getMediaMetadataForSave("add", title, type);
+        const insertPayload = {
+          title,
+          type,
+          status: defaultStatus,
+          description,
+          tags,
+          ...(metadata || {}),
+        };
 
-        const { error } = await supabaseClient
-          .from("queue_items")
-          .insert([{ title, type, status: defaultStatus, description, tags }]);
+        const { error } = await insertQueueItemWithOptionalMetadata(insertPayload);
 
         if (error) {
           console.error("Insert error:", error);
@@ -7936,6 +8512,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         titleInput.value = "";
         descriptionInput.value = "";
         draftQueueTags = [];
+        clearMediaSuggestions("add");
         refreshQueueTagChipsForMode("add");
         document.getElementById("descriptionBox").classList.remove("show");
         document.getElementById("toggleDescriptionBtn").textContent =
@@ -8038,16 +8615,22 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         const tags = serializeQueueTags(editQueueTags);
         const rawRating = document.getElementById("editRatingInput").value;
         const rating = rawRating ? Number(rawRating) : null;
-        const updatePayload = { title, type, status, description, tags };
+        const selectedEditMedia = getSelectedMediaSuggestion("edit", title, type);
+        const shouldRefreshMetadata =
+          Boolean(selectedEditMedia) ||
+          type !== item.type ||
+          cleanLookupTitle(title) !== cleanLookupTitle(oldTitle) ||
+          !hasMediaMetadata(item);
+        const metadata = shouldRefreshMetadata
+          ? await getMediaMetadataForSave("edit", title, type)
+          : null;
+        const updatePayload = { title, type, status, description, tags, ...(metadata || {}) };
 
         if (rawRating || item.rating !== null) {
           updatePayload.rating = rating;
         }
 
-        const { error } = await supabaseClient
-          .from("queue_items")
-          .update(updatePayload)
-          .eq("id", itemId);
+        const { error } = await updateQueueItemWithOptionalMetadata(itemId, updatePayload);
 
         if (error) {
           console.error("Edit update error:", error);
@@ -8284,6 +8867,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         const overlay = document.getElementById("addOverlay");
         if (!overlay) return;
 
+        clearMediaSuggestions("add");
         overlay.classList.add("hidden");
         overlay.setAttribute("aria-hidden", "true");
         document.body.classList.remove("add-modal-open");
@@ -8369,10 +8953,134 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         overlay.classList.add("hidden");
         overlay.setAttribute("aria-hidden", "true");
         document.body.classList.remove("add-modal-open");
+        clearMediaSuggestions("edit");
         editItemContext = null;
         editQueueTags = [];
         refreshQueueTagChipsForMode("edit");
         restoreMascotToFooter();
+      }
+
+      function getMediaSuggestionElements(mode) {
+        return {
+          input: document.getElementById(mode === "edit" ? "editTitleInput" : "titleInput"),
+          typeInput: document.getElementById(mode === "edit" ? "editTypeInput" : "typeInput"),
+          box: document.getElementById(mode === "edit" ? "editMediaSuggestions" : "addMediaSuggestions"),
+        };
+      }
+
+      function clearMediaSuggestions(mode) {
+        const state = mediaSuggestionState[mode];
+        const { box } = getMediaSuggestionElements(mode);
+        if (state) {
+          clearTimeout(state.timer);
+          state.selected = null;
+          state.results = [];
+        }
+        if (box) {
+          box.classList.remove("show");
+          box.innerHTML = "";
+        }
+      }
+
+      function renderMediaSuggestions(mode, results, type, title) {
+        const { box, input } = getMediaSuggestionElements(mode);
+        if (!box || !input || !results.length) {
+          clearMediaSuggestions(mode);
+          return;
+        }
+
+        mediaSuggestionState[mode].results = results;
+        box.innerHTML = results
+          .map((result, index) => {
+            const resultTitle = getLookupResultTitle(result, type);
+            const meta = [getLookupResultYear(result, type), type].filter(Boolean).join(" • ");
+            return `
+              <button type="button" class="media-suggestion" data-index="${index}">
+                <span class="media-suggestion-title">${escapeHtml(resultTitle)}</span>
+                <span class="media-suggestion-meta">${escapeHtml(meta)}</span>
+              </button>
+            `;
+          })
+          .join("");
+        box.classList.add("show");
+
+        box.querySelectorAll(".media-suggestion").forEach((button) => {
+          button.addEventListener("click", () => {
+            const result = results[Number(button.dataset.index)];
+            if (!result) return;
+            const selectedTitle = toLowerSafe(getLookupResultTitle(result, type));
+            input.value = selectedTitle;
+            mediaSuggestionState[mode].selected = {
+              id: result.id,
+              type,
+              inputTitle: selectedTitle,
+              label: getMediaSuggestionLabel(result, type),
+            };
+            box.classList.remove("show");
+            box.innerHTML = "";
+          });
+        });
+      }
+
+      function queueMediaSuggestionSearch(mode) {
+        const state = mediaSuggestionState[mode];
+        const { input, typeInput } = getMediaSuggestionElements(mode);
+        if (!state || !input || !typeInput) return;
+
+        clearTimeout(state.timer);
+        state.selected = null;
+
+        const title = input.value.trim();
+        const type =
+          mode === "edit" && editItemContext?.listType === "game"
+            ? "game"
+            : typeInput.value;
+
+        if (!MEDIA_LOOKUP_API_KEY || !["movie", "show"].includes(type) || cleanLookupTitle(title).length < 2) {
+          clearMediaSuggestions(mode);
+          return;
+        }
+
+        const requestId = state.requestId + 1;
+        state.requestId = requestId;
+        state.timer = setTimeout(async () => {
+          const results = await searchMediaSuggestions(title, type);
+          if (state.requestId !== requestId) return;
+          renderMediaSuggestions(mode, results, type, title);
+        }, 260);
+      }
+
+      function setupMediaSuggestionControls() {
+        [
+          { mode: "add", inputId: "titleInput", typeId: "typeInput" },
+          { mode: "edit", inputId: "editTitleInput", typeId: "editTypeInput" },
+        ].forEach(({ mode, inputId, typeId }) => {
+          const input = document.getElementById(inputId);
+          const typeInput = document.getElementById(typeId);
+          if (!input || input.dataset.mediaSuggestReady === "true") return;
+
+          input.dataset.mediaSuggestReady = "true";
+          input.addEventListener("input", () => queueMediaSuggestionSearch(mode));
+          input.addEventListener("focus", () => queueMediaSuggestionSearch(mode));
+          input.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") clearMediaSuggestions(mode);
+          });
+
+          if (typeInput && typeInput.dataset.mediaSuggestReady !== "true") {
+            typeInput.dataset.mediaSuggestReady = "true";
+            typeInput.addEventListener("change", () => queueMediaSuggestionSearch(mode));
+          }
+        });
+
+        document.addEventListener("click", (event) => {
+          ["add", "edit"].forEach((mode) => {
+            const { box, input } = getMediaSuggestionElements(mode);
+            if (!box || !input) return;
+            if (!box.contains(event.target) && event.target !== input) {
+              box.classList.remove("show");
+            }
+          });
+        });
       }
 
       // upthings the saved star rating for an item and refreshes the list
@@ -9238,6 +9946,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       loadPlans();
       setupDraftPlanTagInput();
       setupQueueTagChipControls();
+      setupMediaSuggestionControls();
 
       document.getElementById("addButton").addEventListener("click", addItem);
       document.getElementById("mobileAddButton").addEventListener("click", addItem);
@@ -9300,6 +10009,15 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         .getElementById("statusFilter")
         .addEventListener("change", (event) => {
           statusFilter = event.target.value;
+          moviePage = 1;
+          gamePage = 1;
+          render();
+        });
+
+      document
+        .getElementById("mediaTypeFilter")
+        .addEventListener("change", (event) => {
+          mediaTypeFilter = event.target.value;
           moviePage = 1;
           gamePage = 1;
           render();
@@ -9409,9 +10127,14 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         });
       }
 
-      ["statusFilter", "genreFilter", "platformFilter", "tagFilter", "moodFilter"].forEach(
-        setupCustomFilter,
-      );
+      [
+        "statusFilter",
+        "mediaTypeFilter",
+        "genreFilter",
+        "platformFilter",
+        "tagFilter",
+        "moodFilter",
+      ].forEach(setupCustomFilter);
 
       document.addEventListener("click", (event) => {
         customFilterMenus.forEach(({ customFilter, customButton }) => {
