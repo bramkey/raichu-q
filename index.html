@@ -136,15 +136,17 @@
         border-radius: 18px;
         padding: 16px;
         box-shadow: 0 18px 46px rgba(0, 0, 0, 0.22);
+        position: relative;
       }
 
       .add-modal-header,
       .edit-modal-header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
         gap: 12px;
         margin-bottom: 12px;
+        padding-right: 34px;
       }
 
       .add-modal-title,
@@ -156,6 +158,9 @@
 
       .add-modal-close,
       .edit-modal-close {
+        position: absolute;
+        top: -11px;
+        right: -11px;
         width: 30px;
         height: 30px;
         padding: 0;
@@ -1666,6 +1671,387 @@
         padding: 16px;
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
         box-sizing: border-box;
+      }
+
+      .account-card {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        background: linear-gradient(135deg, #f6ecd1 0%, #fff8e5 58%, #efd99c 100%);
+        border-color: #d5b56f;
+        box-shadow: 0 5px 14px rgba(168, 113, 28, 0.1);
+      }
+
+      .account-card .sidebar-header {
+        display: none;
+      }
+
+      .account-form,
+      .profile-form {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        width: min(230px, 100%);
+        margin: 0 auto;
+      }
+
+      .account-signed-in {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .account-form.hidden,
+      .account-signed-in.hidden,
+      .profile-form.hidden {
+        display: none;
+      }
+
+      .account-form input,
+      .profile-form input {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        border-radius: 10px;
+        border: 1px solid rgba(168, 134, 88, 0.5);
+        padding: 7px 9px;
+        background: #fffdf5;
+        color: #5e4730;
+        font: 600 12px "Poppins", Arial, sans-serif;
+        text-transform: none;
+      }
+
+      .account-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+
+      .account-actions button,
+      .profile-form button,
+      .account-signed-in button {
+        min-height: 30px;
+        border-radius: 10px;
+        padding: 6px 8px;
+        font-size: 11px;
+      }
+
+      .account-name {
+        font-weight: 800;
+        font-size: 14px;
+        line-height: 1.2;
+        text-align: left;
+        overflow-wrap: anywhere;
+      }
+
+      .account-identity {
+        display: grid;
+        grid-template-columns: 68px minmax(0, 1fr);
+        gap: 12px;
+        align-items: center;
+        padding: 2px 0;
+      }
+
+      .account-avatar {
+        width: 64px;
+        height: 64px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 2px solid rgba(168, 134, 88, 0.5);
+        background: #fffdf5;
+        color: #7a5a34;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        font-weight: 800;
+        overflow: hidden;
+        box-sizing: border-box;
+        cursor: pointer;
+        padding: 0;
+        position: relative;
+      }
+
+      .account-avatar:hover,
+      .account-avatar:focus-visible {
+        transform: none;
+        background: #fff7df;
+        box-shadow: 0 0 0 2px rgba(168, 134, 88, 0.18);
+      }
+
+      .account-avatar img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        border-radius: 50%;
+      }
+
+      .account-avatar.has-profile-image {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+      }
+
+      .account-avatar.has-profile-image::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 2px solid rgba(168, 134, 88, 0.78);
+        border-radius: 50%;
+        box-sizing: border-box;
+        pointer-events: none;
+      }
+
+      .account-avatar.has-profile-image:hover,
+      .account-avatar.has-profile-image:focus-visible {
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .account-avatar.has-profile-image:hover::after,
+      .account-avatar.has-profile-image:focus-visible::after {
+        border-color: rgba(168, 134, 88, 0.9);
+      }
+
+      .account-copy {
+        display: grid;
+        gap: 8px;
+        align-content: center;
+        justify-items: start;
+        min-width: 0;
+      }
+
+      .account-copy .account-name,
+      .account-copy .account-email {
+        text-align: left;
+      }
+
+      .account-email,
+      .account-message {
+        color: rgba(94, 71, 48, 0.72);
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.35;
+        text-align: center;
+        overflow-wrap: anywhere;
+      }
+
+      #signOutButton {
+        width: auto;
+        min-width: 78px;
+      }
+
+      #myAddsButton.is-active {
+        box-shadow: inset 0 0 0 2px rgba(94, 71, 48, 0.18);
+      }
+
+      .account-button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .account-settings-form {
+        display: grid;
+        gap: 14px;
+      }
+
+      #accountSettingsOverlay .add-modal {
+        width: min(340px, calc(100vw - 36px));
+      }
+
+      .account-settings-field {
+        display: grid;
+        gap: 6px;
+      }
+
+      .account-settings-field label {
+        font-size: 12px;
+        font-weight: 800;
+        opacity: 0.75;
+      }
+
+      .account-settings-field input,
+      .account-settings-field select,
+      .account-settings-field .filter-custom,
+      .account-settings-field .filter-button {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .account-settings-field input,
+      .account-settings-field select {
+        box-sizing: border-box;
+        border-radius: 10px;
+        border: 1px solid rgba(168, 134, 88, 0.5);
+        padding: 9px 10px;
+        background: #fffdf5;
+        color: #5e4730;
+        font: 600 12px "Poppins", Arial, sans-serif;
+        text-transform: lowercase;
+      }
+
+      .account-settings-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      #saveAccountSettingsButton {
+        width: auto;
+        min-width: 76px;
+        padding-inline: 14px;
+      }
+
+      .account-settings-message {
+        color: rgba(94, 71, 48, 0.72);
+        font-size: 11px;
+        font-weight: 700;
+        text-align: center;
+        overflow-wrap: anywhere;
+      }
+
+      .account-settings-message:empty {
+        display: none;
+      }
+
+      #accountSettingsOverlay {
+        z-index: 1000000 !important;
+      }
+
+      #signOutConfirmOverlay {
+        z-index: 1000000 !important;
+      }
+
+      #signOutConfirmOverlay .add-modal {
+        width: min(300px, calc(100vw - 36px));
+      }
+
+      .sign-out-confirm-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 4px;
+      }
+
+      #accountSettingsOverlay .filter-custom {
+        position: relative;
+      }
+
+      #accountSettingsOverlay .filter-button {
+        border-radius: 10px;
+        padding-top: 9px;
+        padding-bottom: 9px;
+      }
+
+      #accountSettingsOverlay .filter-menu {
+        left: 0 !important;
+        right: 0 !important;
+        width: auto;
+        min-width: 0;
+        z-index: 1000001 !important;
+      }
+
+      .account-message:empty {
+        display: none;
+      }
+
+      .avatar-popover {
+        position: fixed;
+        inset: 0;
+        z-index: 1000000;
+        display: none;
+        place-items: center;
+        padding: 18px;
+        background: rgba(94, 71, 48, 0.24);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+      }
+
+      .avatar-popover.show {
+        display: grid;
+      }
+
+      .avatar-dialog {
+        width: min(380px, 100%);
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 14px;
+        border: 2px solid rgba(168, 134, 88, 0.5);
+        border-radius: 16px;
+        background: #fffdf5;
+        box-shadow: 0 18px 42px rgba(94, 71, 48, 0.22);
+        position: relative;
+      }
+
+      .avatar-dialog-header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        padding-right: 34px;
+      }
+
+      .avatar-dialog-title {
+        margin: 0;
+        font-family: "Fredoka", cursive;
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: #7a5a34;
+      }
+
+      .avatar-action-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .avatar-action-row button {
+        min-width: 0;
+        white-space: nowrap;
+      }
+
+      #profileImageUrlInput {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        border-radius: 10px;
+        border: 1px solid rgba(168, 134, 88, 0.5);
+        padding: 7px 9px;
+        background: #fffdf5;
+        color: #5e4730;
+        font: 600 12px "Poppins", Arial, sans-serif;
+        text-transform: none;
+      }
+
+      .avatar-popover button {
+        min-height: 30px;
+        border-radius: 10px;
+        padding: 6px 8px;
+        font-size: 11px;
+      }
+
+      .avatar-popover .avatar-dialog-close {
+        top: -11px;
+        right: -11px;
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        min-height: 30px;
+        padding: 0;
+        border-radius: 50%;
+        font-size: 13px;
+      }
+
+      .avatar-input {
+        display: none;
       }
 
       .sidebar h3 {
@@ -4166,15 +4552,56 @@ body:not(.bulbasaur-theme) .header-pill-tabs .page-tab.pill-tab:not(.active):hov
       body.bulbasaur-theme select,
       body.bulbasaur-theme textarea,
       body.bulbasaur-theme #searchInput,
-      body.bulbasaur-theme #planSearchInput {
+      body.bulbasaur-theme #planSearchInput,
+      body.bulbasaur-theme .account-form input,
+      body.bulbasaur-theme .profile-form input {
         background: #fbfff5 !important;
         border-color: #5f934d !important;
         color: #2f5034 !important;
       }
 
+      body.bulbasaur-theme .account-email,
+      body.bulbasaur-theme .account-message {
+        color: rgba(47, 80, 52, 0.72) !important;
+      }
+
+      body.bulbasaur-theme .media-suggestions {
+        background: #fbfff5 !important;
+        border-color: rgba(95, 147, 77, 0.48) !important;
+        box-shadow: 0 12px 28px rgba(47, 80, 52, 0.18) !important;
+      }
+
+      body.bulbasaur-theme .media-suggestion {
+        color: #2f5034 !important;
+      }
+
+      body.bulbasaur-theme .media-suggestion:hover,
+      body.bulbasaur-theme .media-suggestion:focus-visible {
+        background: rgba(117, 182, 111, 0.24) !important;
+      }
+
+      body.bulbasaur-theme .media-suggestion-meta {
+        color: rgba(47, 80, 52, 0.68) !important;
+      }
+
       body.bulbasaur-theme #addButton,
       body.bulbasaur-theme #mobileAddButton,
       body.bulbasaur-theme #addPlanButton,
+      body.bulbasaur-theme #signInButton,
+      body.bulbasaur-theme #signUpButton,
+      body.bulbasaur-theme #signOutButton,
+      body.bulbasaur-theme #myAddsButton,
+      body.bulbasaur-theme #editAccountButton,
+      body.bulbasaur-theme #saveAccountSettingsButton,
+      body.bulbasaur-theme #closeAccountSettingsButton,
+      body.bulbasaur-theme #confirmSignOutButton,
+      body.bulbasaur-theme #cancelSignOutButton,
+      body.bulbasaur-theme #closeSignOutConfirmButton,
+      body.bulbasaur-theme #saveProfileButton,
+      body.bulbasaur-theme #chooseProfileImageButton,
+      body.bulbasaur-theme #saveProfileImageUrlButton,
+      body.bulbasaur-theme #removeProfileImageButton,
+      body.bulbasaur-theme #closeAvatarPopoverButton,
       body.bulbasaur-theme .delete-btn,
       body.bulbasaur-theme .plan-delete-btn,
       body.bulbasaur-theme .save-title-btn,
@@ -4193,6 +4620,21 @@ body:not(.bulbasaur-theme) .header-pill-tabs .page-tab.pill-tab:not(.active):hov
       body.bulbasaur-theme #addButton:hover,
       body.bulbasaur-theme #mobileAddButton:hover,
       body.bulbasaur-theme #addPlanButton:hover,
+      body.bulbasaur-theme #signInButton:hover,
+      body.bulbasaur-theme #signUpButton:hover,
+      body.bulbasaur-theme #signOutButton:hover,
+      body.bulbasaur-theme #myAddsButton:hover,
+      body.bulbasaur-theme #editAccountButton:hover,
+      body.bulbasaur-theme #saveAccountSettingsButton:hover,
+      body.bulbasaur-theme #closeAccountSettingsButton:hover,
+      body.bulbasaur-theme #confirmSignOutButton:hover,
+      body.bulbasaur-theme #cancelSignOutButton:hover,
+      body.bulbasaur-theme #closeSignOutConfirmButton:hover,
+      body.bulbasaur-theme #saveProfileButton:hover,
+      body.bulbasaur-theme #chooseProfileImageButton:hover,
+      body.bulbasaur-theme #saveProfileImageUrlButton:hover,
+      body.bulbasaur-theme #removeProfileImageButton:hover,
+      body.bulbasaur-theme #closeAvatarPopoverButton:hover,
       body.bulbasaur-theme .delete-btn:hover,
       body.bulbasaur-theme .plan-delete-btn:hover,
       body.bulbasaur-theme .save-title-btn:hover,
@@ -4210,6 +4652,60 @@ body:not(.bulbasaur-theme) .header-pill-tabs .page-tab.pill-tab:not(.active):hov
         border-color: #5f934d !important;
       }
 
+      body.bulbasaur-theme .account-avatar {
+        background: #fbfff5 !important;
+        color: #2f5034 !important;
+        border-color: rgba(95, 147, 77, 0.62) !important;
+      }
+
+      body.bulbasaur-theme .account-avatar.has-profile-image {
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+      }
+
+      body.bulbasaur-theme .account-avatar.has-profile-image::after {
+        border-color: rgba(95, 147, 77, 0.8) !important;
+      }
+
+      body.bulbasaur-theme .account-avatar.has-profile-image:hover,
+      body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+
+      body.bulbasaur-theme .account-avatar.has-profile-image:hover::after,
+      body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible::after {
+        border-color: rgba(95, 147, 77, 0.92) !important;
+      }
+
+      body.bulbasaur-theme .account-avatar:hover,
+      body.bulbasaur-theme .account-avatar:focus-visible {
+        background: #e5f3d3 !important;
+        box-shadow: 0 0 0 2px rgba(95, 147, 77, 0.2) !important;
+      }
+
+      body.bulbasaur-theme .avatar-popover {
+        background: rgba(47, 80, 52, 0.22) !important;
+        border-color: rgba(95, 147, 77, 0.48) !important;
+      }
+
+      body.bulbasaur-theme .avatar-dialog {
+        background: #fbfff5 !important;
+        border-color: rgba(95, 147, 77, 0.56) !important;
+        box-shadow: 0 18px 42px rgba(47, 80, 52, 0.2) !important;
+      }
+
+      body.bulbasaur-theme .avatar-dialog-title {
+        color: #2f5034 !important;
+      }
+
+      body.bulbasaur-theme #profileImageUrlInput {
+        background: #fbfff5 !important;
+        color: #2f5034 !important;
+        border-color: rgba(95, 147, 77, 0.52) !important;
+      }
+
       body.bulbasaur-theme .header-pill-tabs .page-tab.pill-tab.active,
       body.bulbasaur-theme .theme-toggle.is-active {
         color: #fbfff5 !important;
@@ -4223,6 +4719,12 @@ body:not(.bulbasaur-theme) .header-pill-tabs .page-tab.pill-tab:not(.active):hov
       body.bulbasaur-theme .sidebar-card {
         background: #e8e3cf !important;
         border-color: #9f9a82 !important;
+      }
+
+      body.bulbasaur-theme .account-card {
+        background: linear-gradient(135deg, #e5efd8 0%, #fbfff5 58%, #cfe5b8 100%) !important;
+        border-color: #8cae73 !important;
+        box-shadow: 0 5px 14px rgba(47, 80, 52, 0.1) !important;
       }
 
       body.bulbasaur-theme #ongoingBox {
@@ -5954,6 +6456,7 @@ body.bulbasaur-theme .ongoing-title-button:focus-visible {
     overflow-y: auto !important;
     border-radius: 14px !important;
     padding: 14px !important;
+    position: relative !important;
   }
 
   .add-modal-header,
@@ -5963,6 +6466,13 @@ body.bulbasaur-theme .ongoing-title-button:focus-visible {
     z-index: 2;
     padding-bottom: 10px;
     background: inherit;
+  }
+
+  .add-modal-close,
+  .edit-modal-close {
+    position: absolute !important;
+    top: -10px !important;
+    right: -10px !important;
   }
 
   .add-row,
@@ -6160,11 +6670,23 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
     box-shadow: none !important;
   }
 
+  .account-card {
+    background: linear-gradient(135deg, #f6ecd1 0%, #fff8e5 58%, #efd99c 100%) !important;
+    border-color: #d5b56f !important;
+    box-shadow: 0 5px 14px rgba(168, 113, 28, 0.1) !important;
+  }
+
   body.bulbasaur-theme .sidebar-card,
   body.bulbasaur-theme .plans-add-box {
     background: #e8e3cf !important;
     border-color: #9f9a82 !important;
     box-shadow: 0 4px 12px rgba(61, 70, 55, 0.12) !important;
+  }
+
+  body.bulbasaur-theme .account-card {
+    background: linear-gradient(135deg, #e5efd8 0%, #fbfff5 58%, #cfe5b8 100%) !important;
+    border-color: #8cae73 !important;
+    box-shadow: 0 5px 14px rgba(47, 80, 52, 0.1) !important;
   }
 
   body.bulbasaur-theme .mobile-sidebar-stats {
@@ -6636,6 +7158,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
   padding-top: 0 !important;
 }
 
+.item.has-media-meta {
+  padding-bottom: 30px !important;
+}
+
 .item .item-top .title {
   display: block !important;
   width: 100% !important;
@@ -6693,11 +7219,16 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 }
 
 .item .item-meta-row {
+  position: absolute !important;
+  right: 12px !important;
+  bottom: 8px !important;
   display: flex !important;
   justify-content: flex-end !important;
   align-items: center !important;
-  margin-top: 6px !important;
+  margin: 0 !important;
+  max-width: calc(100% - 24px) !important;
   min-height: 14px !important;
+  pointer-events: none !important;
 }
 
 .item .item-top .controls {
@@ -6717,6 +7248,31 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
   justify-content: center !important;
 }
 
+.account-avatar.has-profile-image:hover,
+.account-avatar.has-profile-image:focus,
+.account-avatar.has-profile-image:focus-visible,
+body.bulbasaur-theme .account-avatar.has-profile-image:hover,
+body.bulbasaur-theme .account-avatar.has-profile-image:focus,
+body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+@media (min-width: 701px) {
+  body.sidebar-page-scroll {
+    min-height: var(--sidebar-page-height, 100vh) !important;
+  }
+
+  body.sidebar-page-scroll .sidebar:not(.collapsed) {
+    position: absolute !important;
+    top: 110px !important;
+    bottom: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin-bottom: 56px !important;
+  }
+}
+
 </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka:wght@400;600&display=swap"
@@ -6726,6 +7282,93 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
   <body>
     <!-- activity log sidebar: shows latest actions and can be collapsed -->
     <div class="sidebar" id="logSidebar">
+      <div class="sidebar-card account-card">
+        <div class="sidebar-header">
+          <h3>account</h3>
+        </div>
+          <div class="account-form" id="accountForm">
+            <input type="email" id="accountEmailInput" placeholder="email" autocomplete="email" />
+            <input type="password" id="accountPasswordInput" placeholder="password" autocomplete="current-password" />
+            <div class="account-actions">
+              <button type="button" id="signInButton">sign in</button>
+              <button type="button" class="secondary-btn" id="signUpButton">create</button>
+            </div>
+          </div>
+        <div class="profile-form hidden" id="profileForm">
+          <input type="text" id="profileNameInput" placeholder="display name" autocomplete="nickname" />
+          <button type="button" class="secondary-btn" id="saveProfileButton">save name</button>
+        </div>
+        <div class="account-signed-in hidden" id="accountSignedIn">
+          <div class="account-identity">
+            <button type="button" class="account-avatar" id="accountAvatar" aria-label="edit profile picture">?</button>
+            <div class="account-copy">
+              <div class="account-name" id="accountDisplayName">signed in</div>
+              <div class="account-button-row">
+                <button type="button" class="secondary-btn" id="myAddsButton">my adds</button>
+                <button type="button" class="secondary-btn" id="editAccountButton">edit account</button>
+                <button type="button" class="secondary-btn" id="signOutButton">sign out</button>
+              </div>
+            </div>
+          </div>
+          <input type="file" class="avatar-input" id="profileImageInput" accept="image/*" />
+          <div class="avatar-popover" id="avatarPopover">
+            <div class="avatar-dialog" role="dialog" aria-modal="true" aria-labelledby="avatarDialogTitle">
+              <div class="avatar-dialog-header">
+                <div class="avatar-dialog-title" id="avatarDialogTitle">profile picture</div>
+                <button type="button" class="secondary-btn add-modal-close avatar-dialog-close" id="closeAvatarPopoverButton" aria-label="close profile picture">✕</button>
+              </div>
+              <input type="text" id="profileImageUrlInput" placeholder="image link" />
+              <div class="avatar-action-row">
+                <button type="button" class="secondary-btn" id="chooseProfileImageButton">upload</button>
+                <button type="button" class="secondary-btn" id="saveProfileImageUrlButton">save</button>
+                <button type="button" class="secondary-btn" id="removeProfileImageButton">remove</button>
+              </div>
+            </div>
+          </div>
+          <div class="add-overlay hidden" id="accountSettingsOverlay" aria-hidden="true">
+            <div class="add-modal" role="dialog" aria-modal="true" aria-labelledby="accountSettingsTitle">
+              <div class="add-modal-header">
+                <div class="add-modal-title" id="accountSettingsTitle">edit account</div>
+                <button type="button" class="secondary-btn add-modal-close" id="closeAccountSettingsButton" aria-label="close edit account">✕</button>
+              </div>
+              <div class="account-settings-form">
+                <div class="account-settings-field">
+                  <label for="accountSettingsNameInput">display name</label>
+                  <input type="text" id="accountSettingsNameInput" autocomplete="nickname" />
+                </div>
+                <div class="account-settings-field">
+                  <label for="accountSettingsThemeInput">theme</label>
+                  <select id="accountSettingsThemeInput">
+                    <option value="raichu">raichu</option>
+                    <option value="bulbasaur">bulbasaur</option>
+                  </select>
+                </div>
+                <div class="account-settings-field">
+                  <label for="accountSettingsPasswordInput">new password</label>
+                  <input type="password" id="accountSettingsPasswordInput" autocomplete="new-password" placeholder="leave blank to keep current password" />
+                </div>
+                <div class="account-settings-actions">
+                  <button type="button" class="secondary-btn" id="saveAccountSettingsButton">save</button>
+                </div>
+                <div class="account-settings-message" id="accountSettingsMessage"></div>
+              </div>
+            </div>
+          </div>
+          <div class="add-overlay hidden" id="signOutConfirmOverlay" aria-hidden="true">
+            <div class="add-modal" role="dialog" aria-modal="true" aria-labelledby="signOutConfirmTitle">
+              <div class="add-modal-header">
+                <div class="add-modal-title" id="signOutConfirmTitle">sign out?</div>
+                <button type="button" class="secondary-btn add-modal-close" id="closeSignOutConfirmButton" aria-label="close sign out confirmation">✕</button>
+              </div>
+              <div class="sign-out-confirm-actions">
+                <button type="button" class="secondary-btn" id="cancelSignOutButton">stay signed in</button>
+                <button type="button" class="secondary-btn" id="confirmSignOutButton">sign out</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="account-message" id="accountMessage"></div>
+      </div>
       <div class="sidebar-card mobile-stats-card">
         <div class="stats-bar mobile-sidebar-stats" id="sidebarStatsBar">
           <span class="stats-loading">⚡ loading stats and petting the raichu ...</span>
@@ -7120,7 +7763,6 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         </div>
       </div>
       <span>made with love for my gf <span class="theme-heart" id="footerHeart">💛</span></span>
-      <button type="button" class="secondary-btn theme-toggle" id="themeToggle" aria-pressed="false">bulba mode</button>
     </footer>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
@@ -7158,6 +7800,18 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       // media_runtime_minutes integer null
       // media_season_count integer null
       // media_episode_count integer null
+      // added_by uuid null references auth.users on delete set null
+      // added_by_name text null
+      //
+      // public.profiles:
+      // id uuid primary key references auth.users on delete cascade
+      // display_name text
+      // theme text default 'raichu'
+      // preferences jsonb default '{}'::jsonb
+      //
+      // activity_log also uses:
+      // actor_id uuid null references auth.users on delete set null
+      // actor_name text null
 
       let movies = [];
       let games = [];
@@ -7168,6 +7822,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       let platformFilter = "all";
       let tagFilter = "all";
       let moodFilter = "all";
+      let personalQueueOnly = false;
       let draftQueueTags = [];
       let editQueueTags = [];
       let moviePage = 1;
@@ -7178,6 +7833,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       let activityLog = [];
       let planSearchTerm = "";
       let editItemContext = null;
+      let currentUser = null;
+      let currentProfile = null;
+      let profileSaveTimer = null;
+      let accountMessageTimer = null;
       let mediaMetadataColumnsAvailable = true;
       const pendingMetadataBackfills = new Set();
       let mediaMetadataBackfillRunning = false;
@@ -7204,6 +7863,495 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             ? storedType
             : "movie",
         };
+      }
+
+      function getActorName() {
+        const profileName = toLowerSafe(currentProfile && currentProfile.display_name).trim();
+        if (profileName) return profileName;
+        const emailName = currentUser && currentUser.email
+          ? currentUser.email.split("@")[0]
+          : "";
+        return toLowerSafe(emailName).trim();
+      }
+
+      function needsDisplayNameSetup() {
+        return Boolean(currentUser) && !toLowerSafe(currentProfile?.display_name).trim();
+      }
+
+      function getActorPrefix() {
+        const actorName = getActorName();
+        return actorName ? `${escapeHtml(actorName)} ` : "";
+      }
+
+      function isItemAddedByCurrentUser(item) {
+        if (!currentUser || !item) return false;
+        if (item.added_by && item.added_by === currentUser.id) return true;
+        const actorName = toLowerSafe(getActorName()).trim();
+        const itemActorName = toLowerSafe(item.added_by_name).trim();
+        return Boolean(actorName && itemActorName && actorName === itemActorName);
+      }
+
+      function getQueueItemsForCurrentMode(items) {
+        return personalQueueOnly ? items.filter(isItemAddedByCurrentUser) : items;
+      }
+
+      function setPersonalQueueOnly(enabled) {
+        if (enabled && !currentUser) {
+          setAccountMessage("sign in to see your adds.");
+          return;
+        }
+        personalQueueOnly = Boolean(enabled);
+        moviePage = 1;
+        gamePage = 1;
+        setActivePage("queuePage");
+        renderAccountPanel();
+        render();
+      }
+
+      function togglePersonalQueueOnly() {
+        setPersonalQueueOnly(!personalQueueOnly);
+      }
+
+      function getCurrentPreferences() {
+        return {
+          activePage: localStorage.getItem(ACTIVE_PAGE_STORAGE_KEY) || "queuePage",
+          activityLogCollapsed: localStorage.getItem("activityLogCollapsed") === "true",
+          activityEntriesCollapsed: localStorage.getItem("activityEntriesCollapsed") !== "false",
+        };
+      }
+
+      function setAccountMessage(message) {
+        const messageEl = document.getElementById("accountMessage");
+        clearTimeout(accountMessageTimer);
+        if (messageEl) messageEl.textContent = message || "";
+        if (!message || String(message).trim().endsWith("...")) return;
+        accountMessageTimer = setTimeout(() => {
+          if (messageEl && messageEl.textContent === message) {
+            messageEl.textContent = "";
+          }
+        }, 3500);
+      }
+
+      function renderAccountPanel() {
+        const accountForm = document.getElementById("accountForm");
+        const profileForm = document.getElementById("profileForm");
+        const signedInBox = document.getElementById("accountSignedIn");
+        const displayName = document.getElementById("accountDisplayName");
+        const accountAvatar = document.getElementById("accountAvatar");
+        const removeImageButton = document.getElementById("removeProfileImageButton");
+        const myAddsButton = document.getElementById("myAddsButton");
+        const profileNameInput = document.getElementById("profileNameInput");
+
+        const isSignedIn = Boolean(currentUser);
+        const shouldPromptForName = needsDisplayNameSetup();
+        if (accountForm) accountForm.classList.toggle("hidden", isSignedIn);
+        if (signedInBox) signedInBox.classList.toggle("hidden", !isSignedIn);
+        if (profileForm) profileForm.classList.toggle("hidden", !shouldPromptForName);
+
+        if (!isSignedIn) return;
+
+        const actorName = shouldPromptForName ? "set up your name" : getActorName() || "signed in";
+        if (displayName) displayName.textContent = actorName;
+        if (myAddsButton) {
+          myAddsButton.textContent = personalQueueOnly ? "all queue" : "my adds";
+          myAddsButton.classList.toggle("is-active", personalQueueOnly);
+        }
+        if (profileNameInput && shouldPromptForName) profileNameInput.value = "";
+        if (accountAvatar) {
+          const imageUrl = currentProfile?.preferences?.profileImage || "";
+          accountAvatar.classList.toggle("has-profile-image", Boolean(imageUrl));
+          accountAvatar.innerHTML = imageUrl
+            ? `<img src="${escapeAttribute(imageUrl)}" alt="">`
+            : escapeHtml(actorName.slice(0, 1) || "?");
+        }
+        if (removeImageButton) {
+          removeImageButton.disabled = !currentProfile?.preferences?.profileImage;
+        }
+      }
+
+      async function saveProfilePreferences(partial = {}) {
+        if (!currentUser) return;
+
+        const preferences = {
+          ...(currentProfile?.preferences || {}),
+          ...getCurrentPreferences(),
+          ...partial,
+        };
+
+        const profilePayload = {
+          id: currentUser.id,
+          display_name: toLowerSafe(currentProfile?.display_name).trim() || null,
+          theme: localStorage.getItem(THEME_STORAGE_KEY) || "raichu",
+          preferences,
+        };
+
+        const { data, error } = await supabaseClient
+          .from("profiles")
+          .upsert(profilePayload, { onConflict: "id" })
+          .select()
+          .single();
+
+        if (error) {
+          console.error("profile save error:", error);
+          return;
+        }
+
+        currentProfile = data;
+        renderAccountPanel();
+      }
+
+      function queueProfilePreferenceSave(partial = {}) {
+        if (!currentUser) return;
+        clearTimeout(profileSaveTimer);
+        profileSaveTimer = setTimeout(() => {
+          saveProfilePreferences(partial);
+        }, 350);
+      }
+
+      async function loadCurrentProfile() {
+        if (!currentUser) {
+          currentProfile = null;
+          personalQueueOnly = false;
+          renderAccountPanel();
+          render();
+          return;
+        }
+
+        const { data: existingProfile, error: selectError } = await supabaseClient
+          .from("profiles")
+          .select("id, display_name, theme, preferences, created_at")
+          .eq("id", currentUser.id)
+          .maybeSingle();
+
+        if (selectError) {
+          console.error("profile load error:", selectError);
+          currentProfile = {
+            id: currentUser.id,
+            display_name: null,
+            theme: localStorage.getItem(THEME_STORAGE_KEY) || "raichu",
+            preferences: getCurrentPreferences(),
+          };
+          setAccountMessage("signed in. profile setup still needs database columns.");
+        } else {
+          currentProfile = existingProfile || {
+            id: currentUser.id,
+            display_name: null,
+            theme: localStorage.getItem(THEME_STORAGE_KEY) || "raichu",
+            preferences: getCurrentPreferences(),
+          };
+          if (!existingProfile) {
+            await saveProfilePreferences();
+          }
+          setAccountMessage("");
+        }
+
+        renderAccountPanel();
+        applyProfilePreferences();
+      }
+
+      function applyProfilePreferences() {
+        if (!currentProfile) return;
+
+        const profileTheme = currentProfile.theme === "bulbasaur" ? "bulbasaur" : "raichu";
+        setTheme(profileTheme, { savePreference: false });
+
+        const preferences = currentProfile.preferences || {};
+        if (preferences.activePage) {
+          setActivePage(preferences.activePage, { savePreference: false });
+        }
+        if (typeof preferences.activityLogCollapsed === "boolean") {
+          setActivityLogCollapsed(preferences.activityLogCollapsed, { savePreference: false });
+        }
+        if (typeof preferences.activityEntriesCollapsed === "boolean") {
+          setActivityEntriesCollapsed(preferences.activityEntriesCollapsed, { savePreference: false });
+        }
+      }
+
+      async function signInWithPassword() {
+        const email = document.getElementById("accountEmailInput")?.value.trim();
+        const password = document.getElementById("accountPasswordInput")?.value;
+        if (!email || !password) {
+          setAccountMessage("enter email and password.");
+          return;
+        }
+
+        setAccountMessage("signing in...");
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          setAccountMessage(error.message || "couldn't sign in.");
+          return;
+        }
+
+        currentUser = data.user;
+        await loadCurrentProfile();
+        setAccountMessage("signed in.");
+      }
+
+      async function signUpWithPassword() {
+        const email = document.getElementById("accountEmailInput")?.value.trim();
+        const password = document.getElementById("accountPasswordInput")?.value;
+        if (!email || !password) {
+          setAccountMessage("enter email and password.");
+          return;
+        }
+
+        setAccountMessage("creating account...");
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+        });
+
+        if (error) {
+          setAccountMessage(error.message || "couldn't create account.");
+          return;
+        }
+
+        currentUser = data.session?.user || null;
+        if (currentUser) {
+          currentProfile = {
+            id: currentUser.id,
+            display_name: null,
+            theme: localStorage.getItem(THEME_STORAGE_KEY) || "raichu",
+            preferences: getCurrentPreferences(),
+          };
+          await saveProfilePreferences();
+          setAccountMessage(data.session ? "account created. add your name." : "check your email to confirm.");
+        } else {
+          setAccountMessage("check your email to confirm.");
+        }
+        renderAccountPanel();
+      }
+
+      function openSignOutConfirmModal() {
+        if (!currentUser) return;
+        const overlay = document.getElementById("signOutConfirmOverlay");
+        if (!overlay) return;
+        overlay.classList.remove("hidden");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("add-modal-open");
+      }
+
+      function closeSignOutConfirmModal() {
+        const overlay = document.getElementById("signOutConfirmOverlay");
+        if (!overlay) return;
+        overlay.classList.add("hidden");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("add-modal-open");
+      }
+
+      async function signOutAccount() {
+        closeSignOutConfirmModal();
+        setAccountMessage("signing out...");
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) {
+          setAccountMessage(error.message || "couldn't sign out.");
+          return;
+        }
+
+        currentUser = null;
+        currentProfile = null;
+        personalQueueOnly = false;
+        toggleAvatarPopover(false);
+        closeAccountSettingsModal();
+        closeSignOutConfirmModal();
+        renderAccountPanel();
+        setAccountMessage("signed out.");
+      }
+
+      async function saveDisplayName() {
+        if (!currentUser) return;
+        const displayName = toLowerSafe(document.getElementById("profileNameInput")?.value.trim());
+        if (!displayName) {
+          setAccountMessage("enter a display name.");
+          return;
+        }
+
+        currentProfile = {
+          ...(currentProfile || {}),
+          id: currentUser.id,
+          display_name: displayName,
+        };
+        await saveProfilePreferences();
+        setAccountMessage("name saved.");
+      }
+
+      function setAccountSettingsMessage(message) {
+        const messageEl = document.getElementById("accountSettingsMessage");
+        if (messageEl) messageEl.textContent = message || "";
+      }
+
+      function openAccountSettingsModal() {
+        if (!currentUser) return;
+        const overlay = document.getElementById("accountSettingsOverlay");
+        const nameInput = document.getElementById("accountSettingsNameInput");
+        const themeInput = document.getElementById("accountSettingsThemeInput");
+        const passwordInput = document.getElementById("accountSettingsPasswordInput");
+        if (!overlay) return;
+
+        if (nameInput) nameInput.value = toLowerSafe(currentProfile?.display_name || getActorName()).trim();
+        if (themeInput) themeInput.value = document.body.classList.contains("bulbasaur-theme") ? "bulbasaur" : "raichu";
+        if (passwordInput) passwordInput.value = "";
+        customFilterMenus.find((menu) => menu.select === themeInput)?.refresh();
+        setAccountSettingsMessage("");
+
+        overlay.classList.remove("hidden");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("add-modal-open");
+        requestAnimationFrame(() => {
+          if (nameInput) nameInput.focus();
+        });
+      }
+
+      function closeAccountSettingsModal() {
+        const overlay = document.getElementById("accountSettingsOverlay");
+        if (!overlay) return;
+        overlay.classList.add("hidden");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("add-modal-open");
+        setAccountSettingsMessage("");
+      }
+
+      async function saveAccountSettings() {
+        if (!currentUser) return;
+        const nameInput = document.getElementById("accountSettingsNameInput");
+        const themeInput = document.getElementById("accountSettingsThemeInput");
+        const passwordInput = document.getElementById("accountSettingsPasswordInput");
+        const displayName = toLowerSafe(nameInput?.value.trim());
+        const theme = themeInput?.value === "bulbasaur" ? "bulbasaur" : "raichu";
+        const newPassword = String(passwordInput?.value || "");
+
+        if (!displayName) {
+          setAccountSettingsMessage("enter a display name.");
+          return;
+        }
+        if (newPassword && newPassword.length < 6) {
+          setAccountSettingsMessage("password needs at least 6 characters.");
+          return;
+        }
+
+        setAccountSettingsMessage("saving...");
+        currentProfile = {
+          ...(currentProfile || {}),
+          id: currentUser.id,
+          display_name: displayName,
+          theme,
+        };
+        setTheme(theme, { savePreference: false });
+        await saveProfilePreferences();
+
+        if (newPassword) {
+          const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
+          if (error) {
+            setAccountSettingsMessage(error.message || "couldn't update password.");
+            return;
+          }
+          if (passwordInput) passwordInput.value = "";
+        }
+
+        setAccountMessage("account updated.");
+        closeAccountSettingsModal();
+      }
+
+      function chooseProfileImage() {
+        const input = document.getElementById("profileImageInput");
+        if (input) input.click();
+      }
+
+      function toggleAvatarPopover(forceOpen = null) {
+        const popover = document.getElementById("avatarPopover");
+        const urlInput = document.getElementById("profileImageUrlInput");
+        if (!popover) return;
+        const shouldOpen = forceOpen === null ? !popover.classList.contains("show") : forceOpen;
+        popover.classList.toggle("show", shouldOpen);
+        if (shouldOpen && urlInput) {
+          urlInput.value = currentProfile?.preferences?.profileImage?.startsWith("data:")
+            ? ""
+            : currentProfile?.preferences?.profileImage || "";
+          requestAnimationFrame(() => urlInput.focus());
+        }
+      }
+
+      async function saveProfileImage(file) {
+        if (!currentUser || !file) return;
+        if (!file.type.startsWith("image/")) {
+          setAccountMessage("choose an image file.");
+          return;
+        }
+
+        if (file.size > 900000) {
+          setAccountMessage("choose a smaller picture.");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const imageUrl = String(reader.result || "");
+          currentProfile = {
+            ...(currentProfile || {}),
+            id: currentUser.id,
+            preferences: {
+              ...(currentProfile?.preferences || {}),
+              profileImage: imageUrl,
+            },
+          };
+          await saveProfilePreferences({ profileImage: imageUrl });
+          toggleAvatarPopover(false);
+          setAccountMessage("picture saved.");
+        };
+        reader.onerror = () => setAccountMessage("couldn't read that picture.");
+        reader.readAsDataURL(file);
+      }
+
+      async function saveProfileImageUrl() {
+        if (!currentUser) return;
+        const input = document.getElementById("profileImageUrlInput");
+        const imageUrl = String(input?.value || "").trim();
+        if (!imageUrl) {
+          setAccountMessage("paste an image link.");
+          return;
+        }
+
+        currentProfile = {
+          ...(currentProfile || {}),
+          id: currentUser.id,
+          preferences: {
+            ...(currentProfile?.preferences || {}),
+            profileImage: imageUrl,
+          },
+        };
+        await saveProfilePreferences({ profileImage: imageUrl });
+        toggleAvatarPopover(false);
+        setAccountMessage("picture saved.");
+      }
+
+      async function removeProfileImage() {
+        if (!currentUser) return;
+        currentProfile = {
+          ...(currentProfile || {}),
+          id: currentUser.id,
+          preferences: {
+            ...(currentProfile?.preferences || {}),
+            profileImage: "",
+          },
+        };
+        await saveProfilePreferences({ profileImage: "" });
+        toggleAvatarPopover(false);
+        setAccountMessage("picture removed.");
+      }
+
+      async function initializeAuth() {
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) {
+          console.error("session load error:", error);
+        }
+
+        currentUser = data?.session?.user || null;
+        await loadCurrentProfile();
+
+        supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+          currentUser = session?.user || null;
+          await loadCurrentProfile();
+        });
       }
 
       function getNumberValue(value) {
@@ -7415,17 +8563,22 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
       async function insertQueueItemWithOptionalMetadata(payload) {
         const { error } = await supabaseClient.from("queue_items").insert([payload]);
-        if (!error || !isMissingMediaColumnError(error)) return { error };
+        if (!error) return { error };
+        if (!isMissingMediaColumnError(error) && !isMissingActorColumnError(error)) return { error };
 
-        mediaMetadataColumnsAvailable = false;
-        const {
-          media_lookup_id,
-          media_lookup_type,
-          media_runtime_minutes,
-          media_season_count,
-          media_episode_count,
-          ...fallbackPayload
-        } = payload;
+        if (isMissingMediaColumnError(error)) mediaMetadataColumnsAvailable = false;
+        const fallbackPayload = { ...payload };
+        if (isMissingMediaColumnError(error)) {
+          delete fallbackPayload.media_lookup_id;
+          delete fallbackPayload.media_lookup_type;
+          delete fallbackPayload.media_runtime_minutes;
+          delete fallbackPayload.media_season_count;
+          delete fallbackPayload.media_episode_count;
+        }
+        if (isMissingActorColumnError(error)) {
+          delete fallbackPayload.added_by;
+          delete fallbackPayload.added_by_name;
+        }
 
         return supabaseClient.from("queue_items").insert([fallbackPayload]);
       }
@@ -7444,19 +8597,41 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         }
 
         const { error } = await supabaseClient.from("queue_items").update(payload).eq("id", itemId);
-        if (!error || !isMissingMediaColumnError(error)) return { error };
+        if (!error) return { error };
+        if (!isMissingMediaColumnError(error) && !isMissingActorColumnError(error)) return { error };
 
-        mediaMetadataColumnsAvailable = false;
-        const {
-          media_lookup_id,
-          media_lookup_type,
-          media_runtime_minutes,
-          media_season_count,
-          media_episode_count,
-          ...fallbackPayload
-        } = payload;
+        if (isMissingMediaColumnError(error)) mediaMetadataColumnsAvailable = false;
+        const fallbackPayload = { ...payload };
+        if (isMissingMediaColumnError(error)) {
+          delete fallbackPayload.media_lookup_id;
+          delete fallbackPayload.media_lookup_type;
+          delete fallbackPayload.media_runtime_minutes;
+          delete fallbackPayload.media_season_count;
+          delete fallbackPayload.media_episode_count;
+        }
+        if (isMissingActorColumnError(error)) {
+          delete fallbackPayload.added_by;
+          delete fallbackPayload.added_by_name;
+        }
 
         return supabaseClient.from("queue_items").update(fallbackPayload).eq("id", itemId);
+      }
+
+      function isMissingActorColumnError(error) {
+        const message = String(error && error.message ? error.message : "").toLowerCase();
+        return (
+          message.includes("actor_") ||
+          message.includes("added_by") ||
+          (message.includes("column") && message.includes("schema cache"))
+        );
+      }
+
+      async function insertActivityLogWithOptionalActor(payload) {
+        const { error } = await supabaseClient.from("activity_log").insert([payload]);
+        if (!error || !isMissingActorColumnError(error)) return { error };
+
+        const { actor_id, actor_name, ...fallbackPayload } = payload;
+        return supabaseClient.from("activity_log").insert([fallbackPayload]);
       }
 
       async function backfillMissingMediaMetadata(items) {
@@ -7501,26 +8676,35 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
       function normalizeLogEntry(entry) {
         if (!entry) return entry;
+        const actorName = toLowerSafe(entry.actor_name).trim();
+        const message = toLowerSafe(entry.message);
+        const messageWithActor =
+          actorName && message && !message.startsWith(`${actorName} `)
+            ? `${actorName} ${message}`
+            : message;
         return {
           ...entry,
           title: toLowerSafe(entry.title),
-          message: toLowerSafe(entry.message),
+          actor_name: actorName,
+          message: messageWithActor,
         };
       }
 
       function updateStats() {
-        const movieItems = movies.filter((item) => item.type === "movie");
-        const showItems = movies.filter((item) => item.type === "show");
+        const activeMovies = getQueueItemsForCurrentMode(movies);
+        const activeGames = getQueueItemsForCurrentMode(games);
+        const movieItems = activeMovies.filter((item) => item.type === "movie");
+        const showItems = activeMovies.filter((item) => item.type === "show");
         const totalMovies = movieItems.length;
         const totalShows = showItems.length;
-        const totalGames = games.length;
+        const totalGames = activeGames.length;
         const finishedMovies = movieItems.filter(
           (item) => item.status === "finished",
         ).length;
         const finishedShows = showItems.filter(
           (item) => item.status === "finished",
         ).length;
-        const finishedGames = games.filter(
+        const finishedGames = activeGames.filter(
           (item) => item.status === "finished",
         ).length;
 
@@ -7543,6 +8727,69 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         const sidebarStatsBar = document.getElementById("sidebarStatsBar");
         if (statsBar) statsBar.innerHTML = statsHtml;
         if (sidebarStatsBar) sidebarStatsBar.innerHTML = statsHtml;
+      }
+
+      function getActorNameFromLogMessage(message) {
+        const text = toLowerSafe(message).trim();
+        const addedIndex = text.indexOf(' added "');
+        return addedIndex > 0 ? text.slice(0, addedIndex).trim() : "";
+      }
+
+      function getActivityTypeKey(itemType) {
+        const normalizedType = toLowerSafe(itemType);
+        if (normalizedType === "movie" || normalizedType === "movies") return "movie";
+        if (normalizedType === "show" || normalizedType === "shows") return "show";
+        if (normalizedType === "game" || normalizedType === "games") return "game";
+        return normalizedType;
+      }
+
+      async function applyActivityOwnershipFallback(items) {
+        const itemsNeedingOwner = (items || []).filter((item) => !item.added_by && !item.added_by_name);
+        if (!itemsNeedingOwner.length) return items || [];
+
+        let { data, error } = await supabaseClient
+          .from("activity_log")
+          .select("title, item_type, event_type, actor_id, actor_name, message, created_at")
+          .eq("event_type", "added")
+          .order("created_at", { ascending: false })
+          .limit(200);
+
+        if (error && isMissingActorColumnError(error)) {
+          const fallback = await supabaseClient
+            .from("activity_log")
+            .select("title, item_type, event_type, message, created_at")
+            .eq("event_type", "added")
+            .order("created_at", { ascending: false })
+            .limit(200);
+          data = fallback.data;
+          error = fallback.error;
+        }
+
+        if (error) {
+          console.error("activity ownership fallback error:", error);
+          return items || [];
+        }
+
+        const ownerByItem = new Map();
+        (data || []).forEach((entry) => {
+          const title = toLowerSafe(entry.title).trim();
+          const typeKey = getActivityTypeKey(entry.item_type);
+          if (!title || !typeKey) return;
+          const key = `${typeKey}::${title}`;
+          if (ownerByItem.has(key)) return;
+          const actorName = toLowerSafe(entry.actor_name || getActorNameFromLogMessage(entry.message)).trim();
+          ownerByItem.set(key, {
+            added_by: entry.actor_id || null,
+            added_by_name: actorName || null,
+          });
+        });
+
+        return (items || []).map((item) => {
+          if (item.added_by || item.added_by_name) return item;
+          const key = `${getActivityTypeKey(item.type)}::${toLowerSafe(item.title).trim()}`;
+          const owner = ownerByItem.get(key);
+          return owner ? { ...item, ...owner } : item;
+        });
       }
 
       function dedupeActivityEntries(entries) {
@@ -7585,13 +8832,13 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         const ongoingBox = document.getElementById("ongoingBox");
         if (!ongoingBox) return;
 
-        const ongoingItems = [...movies, ...games]
+        const ongoingItems = [...getQueueItemsForCurrentMode(movies), ...getQueueItemsForCurrentMode(games)]
           .filter(isOngoingItem)
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
         if (ongoingItems.length === 0) {
           ongoingBox.innerHTML =
-            '<div class="ongoing-entry" style="opacity:0.6;">nothing in rotation right now</div>';
+            `<div class="ongoing-entry" style="opacity:0.6;">${personalQueueOnly ? "there is nothing from you in rotation right now!" : "nothing in rotation right now"}</div>`;
           return;
         }
 
@@ -7843,11 +9090,21 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
       // pulls recent activity log entries from supabase when the page loads or refreshes
       async function loadActivityLog() {
-        const { data, error } = await supabaseClient
+        let { data, error } = await supabaseClient
           .from("activity_log")
-          .select("id, title, message, created_at")
+          .select("id, title, item_type, event_type, actor_id, actor_name, message, created_at")
           .order("created_at", { ascending: false })
           .limit(20);
+
+        if (error && isMissingActorColumnError(error)) {
+          const fallback = await supabaseClient
+            .from("activity_log")
+            .select("id, title, item_type, event_type, message, created_at")
+            .order("created_at", { ascending: false })
+            .limit(20);
+          data = fallback.data;
+          error = fallback.error;
+        }
 
         if (error) {
           console.error("Error loading activity log:", error);
@@ -7881,7 +9138,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           "things";
         const normalizedCategory = toLowerSafe(selectedCategory);
         const dateOnly = new Date().toLocaleDateString();
-        const message = `added "${escapeHtml(normalizedTitle)}" to ${normalizedCategory} • ${dateOnly}`;
+        const message = `${getActorPrefix()}added "${escapeHtml(normalizedTitle)}" to ${normalizedCategory} • ${dateOnly}`;
 
         if (window.lastPlanLogMessage === message) return;
         window.lastPlanLogMessage = message;
@@ -7922,24 +9179,31 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
             category ||
             document.getElementById("planCategoryInput")?.value ||
             "things";
-          message = `added "${escapeHtml(normalizedTitle)}" to ${toLowerSafe(planCategory)} • ${dateOnly}`;
+          message = `${getActorPrefix()}added "${escapeHtml(normalizedTitle)}" to ${toLowerSafe(planCategory)} • ${dateOnly}`;
         } else if (eventType === "added") {
-          message = `added "${escapeHtml(normalizedTitle)}" to ${getQueueTypeLabel(itemType)} • ${dateOnly}`;
+          message = `${getActorPrefix()}added "${escapeHtml(normalizedTitle)}" to ${getQueueTypeLabel(itemType)} • ${dateOnly}`;
         } else if (eventType === "rated") {
-          message = `"${escapeHtml(normalizedTitle)}" in ${getQueueTypeLabel(itemType)} was rated ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
+          message = `${getActorPrefix()}rated "${escapeHtml(normalizedTitle)}" in ${getQueueTypeLabel(itemType)} ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
+        } else if (eventType === "deleted") {
+          const deletedFrom = itemType === "plan" && category
+            ? toLowerSafe(category)
+            : getQueueTypeLabel(itemType);
+          message = `${getActorPrefix()}deleted "${escapeHtml(normalizedTitle)}" from ${deletedFrom} • ${dateOnly}`;
         }
 
         message = toLowerSafe(message);
 
-        const { error } = await supabaseClient.from("activity_log").insert([
-          {
-            title: normalizedTitle,
-            item_type: itemType,
-            event_type: eventType,
-            rating,
-            message,
-          },
-        ]);
+        const logPayload = {
+          title: normalizedTitle,
+          item_type: itemType,
+          event_type: eventType,
+          rating,
+          message,
+          actor_id: currentUser?.id || null,
+          actor_name: getActorName() || null,
+        };
+
+        const { error } = await insertActivityLogWithOptionalActor(logPayload);
 
         if (error) {
           console.error("Error saving activity log:", error);
@@ -7952,6 +9216,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
       function getQueueTypeLabel(type) {
         if (type === "game") return "games";
         if (type === "show") return "shows";
+        if (type === "plan") return "plans";
         return "movies";
       }
 
@@ -8201,7 +9466,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         const mediaMetadata = renderMediaMetadata(item);
 
         return `
-        <div class="item ${finishedClass} ${getBorderClass(item.status)}">
+        <div class="item ${finishedClass} ${mediaMetadata ? "has-media-meta" : ""} ${getBorderClass(item.status)}">
           <div class="item-top">
             <div class="title">
               <div class="title-stack">
@@ -8248,7 +9513,9 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         return String(text)
           .replaceAll("&", "&amp;")
           .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;");
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
       }
 
       // applies the live search box and status dropdown to whichever list is being displayed
@@ -8361,12 +9628,16 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         const shouldShowFinished =
           Boolean(searchTerm) || statusFilter === "finished";
 
-        const filteredMovies = filterItems(sortQueue(movies)).filter(
+        const activeMovies = getQueueItemsForCurrentMode(movies);
+        const activeGames = getQueueItemsForCurrentMode(games);
+        const hasNoPersonalWatchlist = personalQueueOnly && activeMovies.length === 0;
+        const hasNoPersonalGames = personalQueueOnly && activeGames.length === 0;
+        const filteredMovies = filterItems(sortQueue(activeMovies)).filter(
           (item) =>
             !isOngoingItem(item) &&
             (shouldShowFinished || item.status !== "finished"),
         );
-        const filteredGames = filterItems(sortQueue(games)).filter(
+        const filteredGames = filterItems(sortQueue(activeGames)).filter(
           (item) =>
             !isOngoingItem(item) &&
             (shouldShowFinished || item.status !== "finished"),
@@ -8381,12 +9652,13 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
         moviePage = movieData.currentPage;
         gamePage = gameData.currentPage;
-        const watchlistEmptyLabel =
+        const watchlistEmptyLabel = `${personalQueueOnly ? "your " : ""}${
           mediaTypeFilter === "movie"
             ? "movies"
             : mediaTypeFilter === "show"
               ? "shows"
-              : "watchlist items";
+              : "watchlist items"
+        }`;
 
         movieList.innerHTML = movieData.pageItems.length
           ? movieData.pageItems
@@ -8398,7 +9670,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
                 ),
               )
               .join("")
-          : `<div class="empty">no matching ${watchlistEmptyLabel} found ✨</div>`;
+          : `<div class="empty">${hasNoPersonalWatchlist ? "you haven't added anything yet!" : `no matching ${watchlistEmptyLabel} found ✨`}</div>`;
 
         gameList.innerHTML = gameData.pageItems.length
           ? gameData.pageItems
@@ -8410,7 +9682,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
                 ),
               )
               .join("")
-          : `<div class="empty">no matching games found 🎮</div>`;
+          : `<div class="empty">${hasNoPersonalGames ? "you haven't added anything yet!" : `no matching ${personalQueueOnly ? "your " : ""}games found 🎮`}</div>`;
 
         if (gameSection) {
           gameSection.style.display = mediaTypeFilter === "all" ? "" : "none";
@@ -8450,7 +9722,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           return;
         }
 
-        const normalizedData = (data || []).map(normalizeQueueItem);
+        const normalizedData = await applyActivityOwnershipFallback((data || []).map(normalizeQueueItem));
         movies = normalizedData.filter((item) => item.type === "movie" || item.type === "show");
         games = normalizedData.filter((item) => item.type === "game");
         render();
@@ -8499,6 +9771,8 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           status: defaultStatus,
           description,
           tags,
+          added_by: currentUser?.id || null,
+          added_by_name: getActorName() || null,
           ...(metadata || {}),
         };
 
@@ -8672,7 +9946,12 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         }
 
         await loadItems();
-        await deleteActivityLogsForTitle(item.title);
+        await saveActivityLog({
+          title: item.title,
+          itemType: item.type || type,
+          eventType: "deleted",
+        });
+        await loadActivityLog();
         showMascotActionMessage("delete");
 }
 
@@ -9181,7 +10460,43 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         toggleBtn.style.top = `${topOffset}px`;
       }
 
-      function setActivityLogCollapsed(collapsed) {
+      function updateSidebarPageScroll() {
+        const sidebar = document.getElementById("logSidebar");
+        const shouldMeasure =
+          sidebar &&
+          window.innerWidth > 700 &&
+          !sidebar.classList.contains("collapsed");
+
+        if (!shouldMeasure) {
+          document.body.classList.remove("sidebar-page-scroll");
+          document.body.style.removeProperty("--sidebar-page-height");
+          return;
+        }
+
+        const sidebarTop = 110;
+        const footer = document.querySelector(".footer");
+        const footerHeight = footer ? footer.offsetHeight : 0;
+        const bottomBreathingRoom = footerHeight + 56;
+        const availableHeight = window.innerHeight - sidebarTop - bottomBreathingRoom;
+        const sidebarHeight = sidebar.scrollHeight;
+        const needsPageScroll = sidebarHeight > availableHeight;
+
+        document.body.classList.toggle("sidebar-page-scroll", needsPageScroll);
+        if (needsPageScroll) {
+          document.body.style.setProperty(
+            "--sidebar-page-height",
+            `${sidebarTop + sidebarHeight + bottomBreathingRoom}px`,
+          );
+        } else {
+          document.body.style.removeProperty("--sidebar-page-height");
+        }
+      }
+
+      function scheduleSidebarPageScrollUpdate() {
+        requestAnimationFrame(updateSidebarPageScroll);
+      }
+
+      function setActivityLogCollapsed(collapsed, options = {}) {
         const sidebar = document.getElementById("logSidebar");
         const toggleBtn = document.getElementById("sidebarFloatingToggle");
         if (!sidebar || !toggleBtn) return;
@@ -9201,9 +10516,13 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           "activityLogCollapsed",
           collapsed ? "true" : "false",
         );
+        if (options.savePreference !== false) {
+          queueProfilePreferenceSave({ activityLogCollapsed: collapsed });
+        }
+        scheduleSidebarPageScrollUpdate();
       }
 
-      function setActivityEntriesCollapsed(collapsed) {
+      function setActivityEntriesCollapsed(collapsed, options = {}) {
         const activityCard = document.querySelector(".activity-card");
         const toggleBtn = document.getElementById("activityLogToggle");
         if (!activityCard || !toggleBtn) return;
@@ -9219,6 +10538,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           "activityEntriesCollapsed",
           collapsed ? "true" : "false",
         );
+        if (options.savePreference !== false) {
+          queueProfilePreferenceSave({ activityEntriesCollapsed: collapsed });
+        }
+        scheduleSidebarPageScrollUpdate();
       }
 
       const activityLogToggle = document.getElementById("activityLogToggle");
@@ -9247,8 +10570,23 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         window.addEventListener("resize", () => {
           const sidebar = document.getElementById("logSidebar");
           positionSidebarToggle(Boolean(sidebar && sidebar.classList.contains("collapsed")));
-          setTheme(localStorage.getItem(THEME_STORAGE_KEY) || "raichu");
+          setTheme(localStorage.getItem(THEME_STORAGE_KEY) || "raichu", { savePreference: false });
+          scheduleSidebarPageScrollUpdate();
         });
+        const sidebarPanel = document.getElementById("logSidebar");
+        if (sidebarPanel) {
+          if ("ResizeObserver" in window) {
+            window.sidebarResizeObserver = new ResizeObserver(scheduleSidebarPageScrollUpdate);
+            window.sidebarResizeObserver.observe(sidebarPanel);
+          }
+          window.sidebarMutationObserver = new MutationObserver(scheduleSidebarPageScrollUpdate);
+          window.sidebarMutationObserver.observe(sidebarPanel, {
+            attributes: true,
+            childList: true,
+            subtree: true,
+          });
+          scheduleSidebarPageScrollUpdate();
+        }
         document.addEventListener("click", (event) => {
           const sidebar = document.getElementById("logSidebar");
           const target = event.target;
@@ -9282,7 +10620,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 
       const THEME_STORAGE_KEY = "raichuQueueTheme";
 
-      function setTheme(theme) {
+      function setTheme(theme, options = {}) {
         const isBulbasaur = theme === "bulbasaur";
         const themeIcon = isBulbasaur ? "\u{1F33F}" : "\u26A1";
         const heartIcon = isBulbasaur ? "\u{1F49A}" : "\u{1F49B}";
@@ -9306,6 +10644,9 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         document.body.classList.toggle("bulbasaur-theme", isBulbasaur);
         document.title = isBulbasaur ? `bulba queue ${themeIcon}` : `raichu queue ${themeIcon}`;
         localStorage.setItem(THEME_STORAGE_KEY, isBulbasaur ? "bulbasaur" : "raichu");
+        if (options.savePreference !== false) {
+          queueProfilePreferenceSave();
+        }
 
         if (appTitle) appTitle.textContent = titleText;
         if (activityTitle) activityTitle.textContent = `activity log ${themeIcon}`;
@@ -9362,7 +10703,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         };
       }
 
-      function setActivePage(pageId) {
+      function setActivePage(pageId, options = {}) {
         document.querySelectorAll(".app-page").forEach((page) => {
           page.classList.toggle("active", page.id === pageId);
         });
@@ -9374,6 +10715,9 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         });
 
         localStorage.setItem(ACTIVE_PAGE_STORAGE_KEY, pageId);
+        if (options.savePreference !== false) {
+          queueProfilePreferenceSave({ activePage: pageId });
+        }
       }
 
       async function loadPlans() {
@@ -9891,7 +11235,13 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           return;
         }
 
-        await deleteActivityLogsForTitle(planTitle);
+        await saveActivityLog({
+          title: planTitle,
+          itemType: "plan",
+          eventType: "deleted",
+          category: plan.category,
+        });
+        await loadActivityLog();
         await loadPlans();
         showMascotActionMessage("delete");
       }
@@ -9901,17 +11251,8 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         tab.addEventListener("click", () => setActivePage(tab.dataset.page));
       });
 
-      const themeToggle = document.getElementById("themeToggle");
       const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
       setTheme(savedTheme === "bulbasaur" ? "bulbasaur" : "raichu");
-      if (themeToggle) {
-        themeToggle.addEventListener("click", () => {
-          const nextTheme = document.body.classList.contains("bulbasaur-theme")
-            ? "raichu"
-            : "bulbasaur";
-          setTheme(nextTheme);
-        });
-      }
       document.querySelectorAll(".raichu-container").forEach((mascot) => {
         mascot.addEventListener("mouseenter", showRandomMascotHoverMessage);
         mascot.addEventListener("focus", showRandomMascotHoverMessage);
@@ -9942,6 +11283,91 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           }
         });
       }
+
+      const signInButton = document.getElementById("signInButton");
+      const signUpButton = document.getElementById("signUpButton");
+      const signOutButton = document.getElementById("signOutButton");
+      const confirmSignOutButton = document.getElementById("confirmSignOutButton");
+      const cancelSignOutButton = document.getElementById("cancelSignOutButton");
+      const closeSignOutConfirmButton = document.getElementById("closeSignOutConfirmButton");
+      const myAddsButton = document.getElementById("myAddsButton");
+      const editAccountButton = document.getElementById("editAccountButton");
+      const saveAccountSettingsButton = document.getElementById("saveAccountSettingsButton");
+      const closeAccountSettingsButton = document.getElementById("closeAccountSettingsButton");
+      const saveProfileButton = document.getElementById("saveProfileButton");
+      const accountAvatar = document.getElementById("accountAvatar");
+      const chooseProfileImageButton = document.getElementById("chooseProfileImageButton");
+      const removeProfileImageButton = document.getElementById("removeProfileImageButton");
+      const saveProfileImageUrlButton = document.getElementById("saveProfileImageUrlButton");
+      const closeAvatarPopoverButton = document.getElementById("closeAvatarPopoverButton");
+      const profileImageUrlInput = document.getElementById("profileImageUrlInput");
+      const profileImageInput = document.getElementById("profileImageInput");
+      const accountPasswordInput = document.getElementById("accountPasswordInput");
+      if (signInButton) signInButton.addEventListener("click", signInWithPassword);
+      if (signUpButton) signUpButton.addEventListener("click", signUpWithPassword);
+      if (signOutButton) signOutButton.addEventListener("click", openSignOutConfirmModal);
+      if (confirmSignOutButton) confirmSignOutButton.addEventListener("click", signOutAccount);
+      if (cancelSignOutButton) cancelSignOutButton.addEventListener("click", closeSignOutConfirmModal);
+      if (closeSignOutConfirmButton) closeSignOutConfirmButton.addEventListener("click", closeSignOutConfirmModal);
+      if (myAddsButton) myAddsButton.addEventListener("click", togglePersonalQueueOnly);
+      if (editAccountButton) editAccountButton.addEventListener("click", openAccountSettingsModal);
+      if (saveAccountSettingsButton) saveAccountSettingsButton.addEventListener("click", saveAccountSettings);
+      if (closeAccountSettingsButton) closeAccountSettingsButton.addEventListener("click", closeAccountSettingsModal);
+      if (saveProfileButton) saveProfileButton.addEventListener("click", saveDisplayName);
+      if (accountAvatar) accountAvatar.addEventListener("click", () => toggleAvatarPopover());
+      if (chooseProfileImageButton) chooseProfileImageButton.addEventListener("click", chooseProfileImage);
+      if (removeProfileImageButton) removeProfileImageButton.addEventListener("click", removeProfileImage);
+      if (saveProfileImageUrlButton) saveProfileImageUrlButton.addEventListener("click", saveProfileImageUrl);
+      if (closeAvatarPopoverButton) closeAvatarPopoverButton.addEventListener("click", () => toggleAvatarPopover(false));
+      if (profileImageUrlInput) {
+        profileImageUrlInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            saveProfileImageUrl();
+          }
+        });
+      }
+      document.addEventListener("click", (event) => {
+        const popover = document.getElementById("avatarPopover");
+        if (event.target === popover) {
+          toggleAvatarPopover(false);
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          const popover = document.getElementById("avatarPopover");
+          if (popover?.classList.contains("show")) {
+            toggleAvatarPopover(false);
+          }
+        }
+      });
+      if (profileImageInput) {
+        profileImageInput.addEventListener("change", (event) => {
+          const file = event.target.files && event.target.files[0];
+          saveProfileImage(file);
+          event.target.value = "";
+        });
+      }
+      if (accountPasswordInput) {
+        accountPasswordInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            signInWithPassword();
+          }
+        });
+      }
+      ["accountSettingsNameInput", "accountSettingsPasswordInput"].forEach((inputId) => {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            saveAccountSettings();
+          }
+        });
+      });
+      renderAccountPanel();
+      initializeAuth();
 
       loadPlans();
       setupDraftPlanTagInput();
@@ -9976,6 +11402,16 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
           if (event.target.id === "editOverlay") closeEditModal();
         });
       document
+        .getElementById("accountSettingsOverlay")
+        ?.addEventListener("click", (event) => {
+          if (event.target.id === "accountSettingsOverlay") closeAccountSettingsModal();
+        });
+      document
+        .getElementById("signOutConfirmOverlay")
+        ?.addEventListener("click", (event) => {
+          if (event.target.id === "signOutConfirmOverlay") closeSignOutConfirmModal();
+        });
+      document
         .getElementById("editTypeInput")
         .addEventListener("change", (event) => {
           const statusInput = document.getElementById("editStatusInput");
@@ -9994,6 +11430,8 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         if (event.key === "Escape") {
           closeAddModal();
           closeEditModal();
+          closeAccountSettingsModal();
+          closeSignOutConfirmModal();
         }
       });
       document
@@ -10113,7 +11551,15 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         customFilter.append(customButton, customMenu);
         select.classList.add("filter-native-hidden");
         select.insertAdjacentElement("afterend", customFilter);
-        customFilterMenus.push({ customFilter, customButton });
+        customFilterMenus.push({
+          customFilter,
+          customButton,
+          select,
+          refresh: () => {
+            setFilterLabel();
+            syncActiveOption();
+          },
+        });
 
         customButton.addEventListener("click", (event) => {
           event.stopPropagation();
@@ -10134,6 +11580,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
         "platformFilter",
         "tagFilter",
         "moodFilter",
+        "accountSettingsThemeInput",
       ].forEach(setupCustomFilter);
 
       document.addEventListener("click", (event) => {
