@@ -772,6 +772,50 @@
         letter-spacing: 0;
       }
 
+      .finished-rating-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        min-height: 24px;
+        padding: 2px 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: #9a6a22;
+        line-height: 1;
+        box-shadow: none;
+      }
+
+      .finished-rating-badge.unrated {
+        color: rgba(122, 90, 52, 0.62);
+      }
+
+      .rating-stars {
+        display: inline-flex;
+        align-items: center;
+        gap: 1px;
+        color: inherit;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .rating-stars svg {
+        display: block;
+        width: 12px;
+        height: 12px;
+        overflow: visible;
+      }
+
+      .finished-rating-badge .rating-stars svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      .rating-stars .empty-star {
+        opacity: 0.42;
+      }
+
       .type-select {
         background: #fff8dc;
         color: #7a5a34;
@@ -5133,6 +5177,17 @@ body.bulbasaur-theme .rating-meta {
   color: rgba(58, 111, 56, 0.82) !important;
 }
 
+body.bulbasaur-theme .finished-rating-badge {
+  background: transparent !important;
+  color: #46713e !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+body.bulbasaur-theme .finished-rating-badge.unrated {
+  color: rgba(70, 113, 62, 0.58) !important;
+}
+
 body.bulbasaur-theme .queue-tag {
   color: #5f6f5f !important;
 }
@@ -7265,6 +7320,11 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
   justify-content: center !important;
 }
 
+.item .controls .finished-rating-badge {
+  display: inline-flex !important;
+  transform: translateY(-4px) !important;
+}
+
 .account-avatar.has-profile-image:hover,
 .account-avatar.has-profile-image:focus,
 .account-avatar.has-profile-image:focus-visible,
@@ -8414,9 +8474,24 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
         const rating = getNumberValue(item && item.rating);
         if (!rating) return "";
         const normalizedRating = Math.max(1, Math.min(5, Math.round(rating)));
-        const filledStars = "★".repeat(normalizedRating);
-        const emptyStars = "☆".repeat(5 - normalizedRating);
-        return `<span class="rating-meta" aria-label="rated ${normalizedRating} out of 5">${filledStars}${emptyStars}</span>`;
+        return `<span class="rating-meta" aria-label="rated ${normalizedRating} out of 5">${renderRoundedStars(normalizedRating)}</span>`;
+      }
+
+      function renderRoundedStars(rating) {
+        const normalizedRating = Math.max(0, Math.min(5, Math.round(getNumberValue(rating) || 0)));
+        return `<span class="rating-stars" aria-hidden="true">${Array.from({ length: 5 }, (_, index) => {
+          const isFilled = index < normalizedRating;
+          return `<svg viewBox="0 0 24 24" class="${isFilled ? "filled-star" : "empty-star"}" focusable="false"><path d="M12 3.1l2.65 5.37 5.93.86-4.29 4.18 1.01 5.9L12 16.62l-5.3 2.79 1.01-5.9-4.29-4.18 5.93-.86L12 3.1z" fill="${isFilled ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+        }).join("")}</span>`;
+      }
+
+      function renderFinishedRatingBadge(item) {
+        const rating = getNumberValue(item && item.rating);
+        if (!rating) {
+          return `<span class="finished-rating-badge unrated" aria-label="not rated">${renderRoundedStars(0)}</span>`;
+        }
+        const normalizedRating = Math.max(1, Math.min(5, Math.round(rating)));
+        return `<span class="finished-rating-badge" aria-label="rated ${normalizedRating} out of 5">${renderRoundedStars(normalizedRating)}</span>`;
       }
 
       function getMediaLookupUrl(path, params = {}) {
@@ -9501,11 +9576,15 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
             : `<span class="type-badge type-${itemType}">${itemType}</span>`;
         const hasSummary = item.description && item.description.trim();
         const mediaMetadata = renderMediaMetadata(item);
-        const ratingMetadata = renderRatingMetadata(item);
+        const showFinishedRatingControl = item.status === "finished";
+        const ratingMetadata = showFinishedRatingControl ? "" : renderRatingMetadata(item);
         const cardMetadata = [mediaMetadata, ratingMetadata].filter(Boolean).join("");
         const cardMetaClass = cardMetadata
           ? `has-media-meta ${mediaMetadata && ratingMetadata ? "has-stacked-meta" : ""}`
           : "";
+        const topRightControl = showFinishedRatingControl
+          ? renderFinishedRatingBadge(item)
+          : `<button class="priority-toggle ${item.priority ? "active" : ""}" onclick="togglePriority(\'${type}\', ${index}, ${item.priority ? "false" : "true"})">${item.priority ? "★" : "☆"}</button>`;
 
         return `
         <div class="item ${finishedClass} ${cardMetaClass} ${getBorderClass(item.status)}">
@@ -9523,7 +9602,7 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
               </div>
             </div>
             <div class="controls">
-              <button class="priority-toggle ${item.priority ? "active" : ""}" onclick="togglePriority(\'${type}\', ${index}, ${item.priority ? "false" : "true"})">${item.priority ? "★" : "☆"}</button>
+              ${topRightControl}
             </div>
           </div>
 
