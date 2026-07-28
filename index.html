@@ -7837,6 +7837,8 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
       let currentProfile = null;
       let profileSaveTimer = null;
       let accountMessageTimer = null;
+      let activityLogRefreshTimer = null;
+      let activityLogPollTimer = null;
       let mediaMetadataColumnsAvailable = true;
       const pendingMetadataBackfills = new Set();
       let mediaMetadataBackfillRunning = false;
@@ -9116,6 +9118,13 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
         renderLog();
       }
 
+      function queueActivityLogRefresh(delay = 150) {
+        clearTimeout(activityLogRefreshTimer);
+        activityLogRefreshTimer = setTimeout(() => {
+          loadActivityLog();
+        }, delay);
+      }
+
       
       function addLocalActivityMessage(message) {
         const entry = normalizeLogEntry({ message });
@@ -9183,7 +9192,9 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
         } else if (eventType === "added") {
           message = `${getActorPrefix()}added "${escapeHtml(normalizedTitle)}" to ${getQueueTypeLabel(itemType)} • ${dateOnly}`;
         } else if (eventType === "rated") {
-          message = `${getActorPrefix()}rated "${escapeHtml(normalizedTitle)}" in ${getQueueTypeLabel(itemType)} ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
+          message = `${getActorPrefix()}rated "${escapeHtml(normalizedTitle)}" ${rating} star${rating === 1 ? "" : "s"} • ${dateOnly}`;
+        } else if (eventType === "finished") {
+          message = `${getActorPrefix()}marked "${escapeHtml(normalizedTitle)}" as finished • ${dateOnly}`;
         } else if (eventType === "deleted") {
           const deletedFrom = itemType === "plan" && category
             ? toLowerSafe(category)
@@ -9816,7 +9827,13 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
         selectElement.className = getStatusClass(status);
         await loadItems();
 
-        if (status === "finished") {
+        if (status === "finished" && item.status !== "finished") {
+          await saveActivityLog({
+            title: item.title,
+            itemType: item.type || type,
+            eventType: "finished",
+          });
+          await loadActivityLog();
           showRaichuMessage("was it any good?");
         }
       }
@@ -9913,6 +9930,23 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
         }
 
         await updateActivityLogsForTitle(oldTitle, title, item.type || type);
+        if (status === "finished" && item.status !== "finished") {
+          await saveActivityLog({
+            title,
+            itemType: type,
+            eventType: "finished",
+          });
+          await loadActivityLog();
+        }
+        if (rating && rating !== item.rating && status === "finished") {
+          await saveActivityLog({
+            title,
+            itemType: type,
+            eventType: "rated",
+            rating,
+          });
+          await loadActivityLog();
+        }
         closeEditModal();
         await loadItems();
         showMascotActionMessage("save");
@@ -10425,7 +10459,7 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
             "postgres_changes",
             { event: "*", schema: "public", table: "activity_log" },
             () => {
-              loadActivityLog();
+              queueActivityLogRefresh();
             },
           )
           .on(
@@ -10435,7 +10469,17 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
               loadPlans();
             },
           )
-          .subscribe();
+          .subscribe((_status) => {
+            queueActivityLogRefresh(500);
+          });
+
+        if (!activityLogPollTimer) {
+          activityLogPollTimer = setInterval(() => {
+            if (document.visibilityState !== "hidden") {
+              queueActivityLogRefresh(0);
+            }
+          }, 5000);
+        }
       }
 
       // collapses or expands the activity log and remembers the choice with localStorage
@@ -11249,6 +11293,11 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
       // ===== startup event listeners + initial page load =====
       document.querySelectorAll(".page-tab").forEach((tab) => {
         tab.addEventListener("click", () => setActivePage(tab.dataset.page));
+      });
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState !== "hidden") {
+          queueActivityLogRefresh(0);
+        }
       });
 
       const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
