@@ -759,11 +759,17 @@
         color: #9b3f2f;
       }
 
-      .media-meta {
+      .media-meta,
+      .rating-meta {
         color: rgba(94, 71, 48, 0.72);
         font-size: 11px;
         font-weight: 700;
         line-height: 1.2;
+      }
+
+      .rating-meta {
+        color: rgba(137, 92, 37, 0.82);
+        letter-spacing: 0;
       }
 
       .type-select {
@@ -5123,6 +5129,10 @@ body.bulbasaur-theme .type-badge.type-game {
   border-color: rgba(106, 167, 160, 0.42) !important;
 }
 
+body.bulbasaur-theme .rating-meta {
+  color: rgba(58, 111, 56, 0.82) !important;
+}
+
 body.bulbasaur-theme .queue-tag {
   color: #5f6f5f !important;
 }
@@ -7162,6 +7172,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
   padding-bottom: 30px !important;
 }
 
+.item.has-stacked-meta {
+  padding-bottom: 44px !important;
+}
+
 .item .item-top .title {
   display: block !important;
   width: 100% !important;
@@ -7211,7 +7225,8 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
   align-self: start !important;
 }
 
-.item .media-meta {
+.item .media-meta,
+.item .rating-meta {
   display: inline-block !important;
   margin: 0 !important;
   white-space: nowrap !important;
@@ -7223,8 +7238,10 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
   right: 12px !important;
   bottom: 8px !important;
   display: flex !important;
+  flex-direction: column !important;
   justify-content: flex-end !important;
-  align-items: center !important;
+  align-items: flex-end !important;
+  gap: 2px !important;
   margin: 0 !important;
   max-width: calc(100% - 24px) !important;
   min-height: 14px !important;
@@ -8393,6 +8410,15 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
         return runtime ? `<span class="media-meta">${escapeHtml(runtime)}</span>` : "";
       }
 
+      function renderRatingMetadata(item) {
+        const rating = getNumberValue(item && item.rating);
+        if (!rating) return "";
+        const normalizedRating = Math.max(1, Math.min(5, Math.round(rating)));
+        const filledStars = "★".repeat(normalizedRating);
+        const emptyStars = "☆".repeat(5 - normalizedRating);
+        return `<span class="rating-meta" aria-label="rated ${normalizedRating} out of 5">${filledStars}${emptyStars}</span>`;
+      }
+
       function getMediaLookupUrl(path, params = {}) {
         const url = new URL(`${MEDIA_LOOKUP_BASE_URL}${path}`);
         url.searchParams.set("api_key", MEDIA_LOOKUP_API_KEY);
@@ -9475,9 +9501,14 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
             : `<span class="type-badge type-${itemType}">${itemType}</span>`;
         const hasSummary = item.description && item.description.trim();
         const mediaMetadata = renderMediaMetadata(item);
+        const ratingMetadata = renderRatingMetadata(item);
+        const cardMetadata = [mediaMetadata, ratingMetadata].filter(Boolean).join("");
+        const cardMetaClass = cardMetadata
+          ? `has-media-meta ${mediaMetadata && ratingMetadata ? "has-stacked-meta" : ""}`
+          : "";
 
         return `
-        <div class="item ${finishedClass} ${mediaMetadata ? "has-media-meta" : ""} ${getBorderClass(item.status)}">
+        <div class="item ${finishedClass} ${cardMetaClass} ${getBorderClass(item.status)}">
           <div class="item-top">
             <div class="title">
               <div class="title-stack">
@@ -9508,7 +9539,7 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
             }
           </div>
           ${renderQueueTags(item.tags)}
-          ${mediaMetadata ? `<div class="item-meta-row">${mediaMetadata}</div>` : ""}
+          ${cardMetadata ? `<div class="item-meta-row">${cardMetadata}</div>` : ""}
         </div>
       `;
       }
