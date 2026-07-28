@@ -2406,7 +2406,18 @@ function positionSidebarToggle(collapsed) {
   toggleBtn.style.right = "auto";
   toggleBtn.style.top = `${topOffset}px`;
 }
+function getHeaderDrawerTop() {
+  const header = document.querySelector(".site-sticky-header");
+  if (!header) return window.innerWidth <= 700 ? 54 : 70;
+  const headerBottom = header.getBoundingClientRect().bottom;
+  return Math.max(0, Math.round(headerBottom));
+}
+function updateSidebarDrawerTop() {
+  const drawerTop = getHeaderDrawerTop();
+  document.documentElement.style.setProperty("--sidebar-drawer-top", `${drawerTop}px`);
+}
  function updateSidebarPageScroll() {
+  updateSidebarDrawerTop();
   const sidebar = document.getElementById("logSidebar");
   const shouldMeasure =
     sidebar &&
@@ -2417,7 +2428,7 @@ function positionSidebarToggle(collapsed) {
     document.body.style.removeProperty("--sidebar-page-height");
     return;
   }
-   const sidebarTop = 110;
+   const sidebarTop = getHeaderDrawerTop();
   const footer = document.querySelector(".footer");
   const footerHeight = footer ? footer.offsetHeight : 0;
   const bottomBreathingRoom = footerHeight + 56;
@@ -2434,7 +2445,7 @@ function positionSidebarToggle(collapsed) {
     document.body.style.removeProperty("--sidebar-page-height");
   }
 }
- function scheduleSidebarPageScrollUpdate() {
+function scheduleSidebarPageScrollUpdate() {
   requestAnimationFrame(updateSidebarPageScroll);
 }
  function setActivityLogCollapsed(collapsed, options = {}) {
