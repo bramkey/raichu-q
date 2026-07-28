@@ -7243,6 +7243,7 @@ body.bulbasaur-theme .sidebar-bg-toggle:focus-visible .sidebar-toggle-icon {
 .item .item-top {
   position: relative !important;
   display: block !important;
+  box-sizing: border-box !important;
   padding-right: 38px !important;
   margin-top: 0 !important;
   padding-top: 0 !important;
@@ -7403,6 +7404,50 @@ body.bulbasaur-theme .item .controls .priority-toggle:not(.active):focus-visible
   transform: translateY(-4px) !important;
 }
 
+@media (max-width: 700px) {
+  .item.finished-item .item-top {
+    padding-right: 78px !important;
+  }
+
+  .item.finished-item.item-type-game .item-top {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    column-gap: 12px !important;
+    align-items: start !important;
+    padding-right: 0 !important;
+  }
+
+  .item.finished-item.item-type-game .item-top .title {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .item .finished-game-title {
+    display: block !important;
+    max-width: calc(100% - 74px) !important;
+  }
+
+  .item.finished-item.item-type-game .item-top .controls {
+    position: static !important;
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    justify-self: end !important;
+  }
+
+  .item.finished-item.item-type-game .controls .finished-rating-badge {
+    transform: translateY(-2px) !important;
+  }
+
+  .item.finished-item .title-line {
+    max-width: 100% !important;
+  }
+
+  .item .controls .finished-rating-badge .rating-stars svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+}
+
 .account-avatar.has-profile-image:hover,
 .account-avatar.has-profile-image:focus,
 .account-avatar.has-profile-image:focus-visible,
@@ -7414,6 +7459,33 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
 }
 
 @media (min-width: 701px) {
+  .sidebar {
+    transition:
+      transform 0.46s cubic-bezier(0.22, 0.61, 0.36, 1),
+      opacity 0.32s ease !important;
+    will-change: transform, opacity;
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(calc(100% + 52px)) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .sidebar.collapsed .sidebar-header h3,
+  .sidebar.collapsed #logBox,
+  .sidebar.collapsed .sidebar-card {
+    display: revert !important;
+  }
+
+  .sidebar-bg-toggle {
+    transition:
+      left 0.46s cubic-bezier(0.22, 0.61, 0.36, 1),
+      right 0.46s cubic-bezier(0.22, 0.61, 0.36, 1),
+      top 0.34s ease,
+      color 0.2s ease !important;
+  }
+
   body.sidebar-page-scroll {
     min-height: var(--sidebar-page-height, 100vh) !important;
   }
@@ -9662,6 +9734,7 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
         const hasSummary = item.description && item.description.trim();
         const mediaMetadata = renderMediaMetadata(item);
         const showFinishedRatingControl = item.status === "finished";
+        const isFinishedGame = showFinishedRatingControl && itemType === "game";
         const ratingMetadata = showFinishedRatingControl ? "" : renderRatingMetadata(item);
         const cardMetadata = [mediaMetadata, ratingMetadata].filter(Boolean).join("");
         const cardMetaClass = cardMetadata
@@ -9672,13 +9745,13 @@ body.bulbasaur-theme .account-avatar.has-profile-image:focus-visible {
           : `<button class="priority-toggle ${item.priority ? "active" : ""}" onclick="togglePriority(\'${type}\', ${index}, ${item.priority ? "false" : "true"})" aria-label="${item.priority ? "remove important" : "mark important"}">${renderPriorityStar(item.priority)}</button>`;
 
         return `
-        <div class="item ${finishedClass} ${hasSummary ? "has-summary" : ""} ${cardMetaClass} ${getBorderClass(item.status)}">
+        <div class="item item-type-${itemType} ${isFinishedGame ? "finished-game-card" : ""} ${finishedClass} ${hasSummary ? "has-summary" : ""} ${cardMetaClass} ${getBorderClass(item.status)}">
           <div class="item-top">
             <div class="title">
               <div class="title-stack">
                 <div class="title-line">
                   ${typeBadge}
-                  <span class="title-body">
+                  <span class="title-body ${isFinishedGame ? "finished-game-title" : ""}">
                     <button type="button" class="title-button" onclick="openEditModal('${type}', ${index})" aria-label="edit ${escapeHtml(item.title)}">
                       <span class="title-text">${escapeHtml(item.title)}</span>
                     </button>
