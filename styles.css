@@ -8382,3 +8382,97 @@ color 0.2s ease !important;
   }
 }
 
+/* Mobile game cards: keep long titles out of the rating stars. */
+@media (max-width: 700px) {
+  .item.item-type-game .title-line {
+    display: block !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .item.item-type-game .title-body,
+  .item.item-type-game .title-button,
+  .item.item-type-game .title-text {
+    display: block !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  .item.finished-item.item-type-game .item-top {
+    grid-template-columns: minmax(0, 1fr) max-content !important;
+    column-gap: 16px !important;
+  }
+
+  .item.finished-item.item-type-game .item-top .title {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .item.finished-item.item-type-game .controls .finished-rating-badge {
+    width: max-content !important;
+    flex: 0 0 auto !important;
+  }
+
+  .item.finished-item:not(.item-type-game) .item-top {
+    padding-right: 96px !important;
+  }
+
+  .item.finished-item:not(.item-type-game) .title-line {
+    grid-template-columns: max-content minmax(0, 1fr) !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .item.finished-item:not(.item-type-game) .title-body,
+  .item.finished-item:not(.item-type-game) .title-button,
+  .item.finished-item:not(.item-type-game) .title-text {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  .item.finished-item:not(.item-type-game) .item-top .controls {
+    width: 82px !important;
+  }
+
+  .item.finished-item:not(.item-type-game) .controls .finished-rating-badge {
+    width: max-content !important;
+    max-width: 82px !important;
+    margin-left: auto !important;
+  }
+}
+
+/* Finished cards on wider screens: reserve room for the rating stars. */
+@media (min-width: 701px) {
+  .item.finished-item .item-top {
+    padding-right: 96px !important;
+  }
+
+  .item.finished-item .title-line {
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .item.finished-item .title-body,
+  .item.finished-item .title-button,
+  .item.finished-item .title-text {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  .item.finished-item .item-top .controls {
+    width: 84px !important;
+  }
+
+  .item.finished-item .controls .finished-rating-badge {
+    width: max-content !important;
+    max-width: 84px !important;
+    margin-left: auto !important;
+  }
+}
+
