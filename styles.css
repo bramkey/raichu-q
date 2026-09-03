@@ -8476,3 +8476,67 @@ color 0.2s ease !important;
   }
 }
 
+/* Currently-in-rotation should read as the active accent for each theme. */
+body:not(.bulbasaur-theme) {
+  --rotation-text: #8f6421;
+  --rotation-border: #d7b46a;
+  --rotation-bg: #fff8dc;
+  --rotation-bg-soft: #fffdf5;
+  --rotation-hover: #5f3f22;
+  --rotation-scroll-track: #f3ead7;
+}
+
+body.bulbasaur-theme {
+  --rotation-text: #356d66;
+  --rotation-border: #7fbf78;
+  --rotation-bg: #e5f1dd;
+  --rotation-bg-soft: #f7fff0;
+  --rotation-hover: #24482c;
+  --rotation-scroll-track: #e4f0d8;
+}
+
+.status-progress {
+  color: var(--rotation-text) !important;
+}
+
+.status-progress-border {
+  border-left-color: var(--rotation-border) !important;
+}
+
+#ongoingBox {
+  scrollbar-color: var(--rotation-border) var(--rotation-scroll-track) !important;
+}
+
+#ongoingBox::-webkit-scrollbar-track {
+  background: var(--rotation-scroll-track) !important;
+}
+
+#ongoingBox::-webkit-scrollbar-thumb {
+  background: var(--rotation-border) !important;
+  border-color: var(--rotation-scroll-track) !important;
+}
+
+#ongoingBox::-webkit-scrollbar-thumb:hover {
+  background: var(--rotation-text) !important;
+}
+
+.ongoing-entry {
+  background: var(--rotation-bg-soft) !important;
+  border-color: var(--rotation-border) !important;
+  color: var(--rotation-text) !important;
+}
+
+.ongoing-title-button,
+.ongoing-entry-type {
+  color: var(--rotation-text) !important;
+}
+
+.ongoing-title-button:hover,
+.ongoing-title-button:focus-visible {
+  color: var(--rotation-hover) !important;
+}
+
+.item.status-progress-border {
+  background: var(--rotation-bg) !important;
+}
+
