@@ -1666,14 +1666,10 @@ function render() {
   const hasNoPersonalWatchlist = personalQueueOnly && activeMovies.length === 0;
   const hasNoPersonalGames = personalQueueOnly && activeGames.length === 0;
   const filteredMovies = filterItems(sortQueue(activeMovies)).filter(
-    (item) =>
-      !isOngoingItem(item) &&
-      (shouldShowFinished || item.status !== "finished"),
+    (item) => shouldShowFinished || item.status !== "finished",
   );
   const filteredGames = filterItems(sortQueue(activeGames)).filter(
-    (item) =>
-      !isOngoingItem(item) &&
-      (shouldShowFinished || item.status !== "finished"),
+    (item) => shouldShowFinished || item.status !== "finished",
   );
    const movieItemsPerPage =
     mediaTypeFilter === "all"
