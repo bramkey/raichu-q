@@ -1480,6 +1480,9 @@ async function saveActivityLog({
     const aPriority = a.priority ? 1 : 0;
     const bPriority = b.priority ? 1 : 0;
     if (aPriority !== bPriority) return bPriority - aPriority;
+    const aOngoing = isOngoingItem(a) ? 1 : 0;
+    const bOngoing = isOngoingItem(b) ? 1 : 0;
+    if (aOngoing !== bOngoing) return bOngoing - aOngoing;
     const aFinished = isFinishedStatus(a.status) ? 1 : 0;
     const bFinished = isFinishedStatus(b.status) ? 1 : 0;
      if (aFinished !== bFinished) {
