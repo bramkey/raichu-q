@@ -8540,3 +8540,51 @@ body.bulbasaur-theme {
   background: var(--rotation-bg) !important;
 }
 
+/* Sidebar-triggered popups are full-page modals, not sidebar panels. */
+#accountSettingsOverlay,
+#signOutConfirmOverlay,
+#avatarPopover {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2000000 !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: grid;
+  place-items: center;
+  padding: 22px !important;
+  box-sizing: border-box;
+  background: rgba(94, 71, 48, 0.24) !important;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  transform: none !important;
+}
+
+#accountSettingsOverlay.hidden,
+#signOutConfirmOverlay.hidden,
+#avatarPopover:not(.show) {
+  display: none !important;
+}
+
+#accountSettingsOverlay .add-modal,
+#signOutConfirmOverlay .add-modal,
+#avatarPopover .avatar-dialog {
+  position: relative !important;
+  inset: auto !important;
+  margin: 0 auto !important;
+  transform: none !important;
+}
+
+#accountSettingsOverlay .add-modal {
+  width: min(420px, calc(100vw - 44px)) !important;
+}
+
+#signOutConfirmOverlay .add-modal {
+  width: min(340px, calc(100vw - 44px)) !important;
+}
+
+#avatarPopover .avatar-dialog {
+  width: min(420px, calc(100vw - 44px)) !important;
+}
+

@@ -113,10 +113,20 @@ function toLowerSafe(value) {
   const itemActorName = toLowerSafe(item.added_by_name).trim();
   return Boolean(actorName && itemActorName && actorName === itemActorName);
 }
- function getQueueItemsForCurrentMode(items) {
+function getQueueItemsForCurrentMode(items) {
   return personalQueueOnly ? items.filter(isItemAddedByCurrentUser) : items;
 }
- function setPersonalQueueOnly(enabled) {
+function hoistSidebarPopups() {
+  ["avatarPopover", "accountSettingsOverlay", "signOutConfirmOverlay"].forEach(
+    (popupId) => {
+      const popup = document.getElementById(popupId);
+      if (popup && popup.parentElement !== document.body) {
+        document.body.appendChild(popup);
+      }
+    },
+  );
+}
+function setPersonalQueueOnly(enabled) {
   if (enabled && !currentUser) {
     setAccountMessage("sign in to see your adds.");
     return;
@@ -3202,6 +3212,7 @@ if (accountPasswordInput) {
 });
 renderAccountPanel();
 initializeAuth();
+hoistSidebarPopups();
  loadPlans();
 setupDraftPlanTagInput();
 setupQueueTagChipControls();
